@@ -1,0 +1,47 @@
+Linux version
+
+Using ReadLine
+
+Running 64Bit Version
+
+mothur v.1.23.1
+Last updated: 1/17/2012
+
+by
+Patrick D. Schloss
+
+Department of Microbiology & Immunology
+University of Michigan
+pschloss@umich.edu
+http://www.mothur.org
+
+When using, please cite:
+Schloss, P.D., et al., Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.
+
+Distributed under the GNU General Public License
+
+Type 'help()' for information on the commands that are available
+
+Type 'quit()' to exit program
+Script Mode
+
+
+mothur > summary.seqs(fasta=combinedSeqsForMothurAlign.unique.align, name=combinedSeqsForMothurAlign.names)
+
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1107	41459	1276	0	5	1
+2.5%-tile:	1107	41459	1276	0	5	1
+25%-tile:	1107	41459	1276	0	5	1
+Median: 	1120	41459	1279	0	5	2
+75%-tile:	1120	41459	1279	0	5	2
+97.5%-tile:	1120	41459	1279	0	5	2
+Maximum:	1120	41459	1279	0	5	2
+Mean:	1113.5	41459	1277.5	0	5
+# of unique seqs:	2
+total # of seqs:	2
+
+Output File Name: 
+combinedSeqsForMothurAlign.unique.align.summary
+
+
+mothur > quit()
