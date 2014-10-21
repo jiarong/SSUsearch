@@ -1,19 +1,30 @@
 # Makefile for  ssusearch
 # key parameters
 
-TERM?=linux
+
+### path of sequence file if not defined in CMD line. 
+#Seqfile?=./test/data/1c.fa
+
+### start and end for cutting alignment if not definded in CMD line.
+#Start?=
+#End?=
 
 Seqfile=$(realpath Seqfile)
 Seqfile_name=$(notdir $(Seqfile))
 Seqfile_name_parts=$(subst ., ,	$(Seqfile_name))
-Tag=$(word 1,$(Seqfile_name_parts))
+
+#Tag?=$(word 1,$(Seqfile_name_parts))
+Tag?=dummy
+
 Outdir=$(Seqfile).$(Gene).out
 
-ssusearch: qc hmmsearch mothur_align region_cut
+TERM?=linux
 
-ssusearch_no_qc: no_qc hmmsearch mothur_align region_cut
+ssusearch: qc mothur_align
 
-.PHONY: qc no_qc hmmsearch mothur_align region_cut clean
+ssusearch_no_qc: no_qc mothur_align
+
+.PHONY: qc no_qc hmmsearch mothur_align clean
 
 no_qc: $(Seqfile)
 	rm -f $(Tag).qc && ln -s $(Seqfile) $(Tag).qc
@@ -37,7 +48,9 @@ qc: $(Seqfile)
 	-(rm $(Tag).{extendedFrags,notCombined_1,notCombined_2}.fastq)
 
 
-hmmsearch: $(Tag).qc
+hmmsearch: $(Tag).qc.$(Gene)
+
+$(Tag).qc.$(Gene): $(Tag).qc
 	@echo
 	@echo "*** Starting hmmsearch"
 	python $(Script_dir)/add-rc.py $(Tag).qc - | \
@@ -54,7 +67,9 @@ hmmsearch: $(Tag).qc
 	) || (rm $(Tag).qc.$(Gene) && false)
 	@echo "hmm filter and MSA conversion done.."
 
-mothur_align: $(Tag).qc.$(Gene)
+mothur_align: $(Tag).qc.$(Gene).align.filter
+
+$(Tag).qc.$(Gene).align.filter: $(Tag).qc.$(Gene)
 	@echo
 	@echo "*** Starting mothur align"
 	cat $(Gene_model_org) $(Tag).qc.$(Gene) > \
@@ -80,18 +95,6 @@ mothur_align: $(Tag).qc.$(Gene)
 	fasta=$(Tag).qc.$(Gene).align.filter.fa, \
 	template=$(Gene_db), taxonomy=$(Gene_tax), cutoff=50, \
 	processors=1)"
-
-region_cut: $(Tag).qc.$(Gene).align.filter
-	@echo
-	@echo "*** Starting region cut"
-	@echo
-	### pay att to the average read length: 75, 100 , 125
-	### minLen are 2/3 of ave length
-	###
-	python $(Script_dir)/region-cut.py $< $(Start) $(End) $(Len_cutoff)
-	mv *.$(Start)to$(End).cut.lenscreen $(Tag)
-	@echo "ready for clustering.."
-	-(rm -f mothur.*.logfile)
 
 clean:
 	-(rm -f \
