@@ -24,14 +24,6 @@ def parser(f):
     return d
 
 if __name__ == '__main__':
-
-    '''
-    plot the ID (the percent of short read matched to ref aligment seqs)
-    distribution remove reads with <50% ID with seeds
-
-    Usage: python <thisFile><mothurAlign.report><file.align> <outfile.filter>
-    check percentage of short read matched to SEEDs
-    '''
     if len(sys.argv) != 4:
         mes = ('Usage: python'
                '{} <mothurAlign.report> <file.align> <outfile.filter>')
@@ -39,16 +31,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     MINID = 50
-    PLOT = True
-    try:
-        import matplotlib
-        matplotlib.use('Agg')
-        import matplotlib.pyplot as plt
-    except ImportError:
-        PLOT = False
-        pass
     d = parser(sys.argv[1])
-
     d_match = {}
     st_goodSeqs = set()
     for key in d:
@@ -67,35 +50,8 @@ if __name__ == '__main__':
         else:
             pass
 
-        ###get a set of good seqs
-        #if ID2 >= 50 or AL*ID/100.0 >= 400:  #for GOS data
-
-        ###two standards based on length
-        '''
-        if (qu_len < 150 and ID2 >= 75):
-            st_goodSeqs.add(qu)
-        elif (qu_len > 150 and ID2 > 50):
-            st_goodSeqs.add(qu)
-        '''
-
         if (ID2 >= MINID or AL*ID/100.0 >= 80): #for illu shotgun
             st_goodSeqs.add(qu)
-
-
-    if PLOT:
-        n, bins, batches = plt.hist(d_match.values(), 50, cumulative = False, histtype = 'step',label = 'SGvsSeeds')
-        plt.xlabel ('Identity')
-        plt.ylabel ('# of seqs')
-        plt.gca().xaxis.grid(False)
-        plt.gca().yaxis.grid(True)
-
-        leg = plt.legend(loc = 'upper left', shadow = True, borderpad = 0.1)
-        for t in leg.get_texts():
-            t.set_fontsize('small')
-        for l in leg.get_lines():
-            l.set_linewidth(5) 
-        plt.savefig('IDdist.png')
-        plt.clf()
 
     print >> sys.stderr, '%d bad seqs removed from alignment' %((len(d)-len(st_goodSeqs)))
     fw = open(sys.argv[3], 'wb')

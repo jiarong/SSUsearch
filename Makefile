@@ -7,11 +7,7 @@ Method=ssusearch_no_qc
 Seqfiles:=$(wildcard /mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/data/*.fa)
 Design=/mnt/lustre_scratch_2012/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/SS.design
 
-Hmm=/mnt/home/guojiaro/Documents/db/qiimeDB/Silva_108/hmm3.1/ssu.hmm
-Gene_db=/mnt/home/guojiaro/Documents/data/RefDB/qiimeSilva/Silva_108_rep_set.fna
-Gene_tax=/mnt/home/guojiaro/Documents/data/RefDB/qiimeSilva/Silva_RDP_taxa_mapping_family.tax
-Ali_template=/mnt/home/guojiaro/Documents/data/RefDB/silva.ssu.fasta
-Gene_model_org=/mnt/home/guojiaro/Documents/data/16s_ecoli_J01695_oneline.fa
+
 Otu_dist_cutoff=0.03
 Start=550
 #Start=1200
@@ -20,9 +16,7 @@ End=700
 Len_cutoff=100
 Phred=64            #64 or 33
 
-Gene_db_cc=/mnt/home/guojiaro/Documents/db/qiimeDB/gg_12_10_otus/rep_set/97_otus.fasta
-Gene_tax_cc=/mnt/home/guojiaro/Documents/db/qiimeDB/gg_12_10_otus/taxonomy/97_otu_taxonomy.mothurtax
-Copy_db=/mnt/home/guojiaro/Documents/db/copyrighter/tax_string_ssu_img40_gg201210.txt
+SSUsearch_db=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/SSUsearch_db
 
 Clust_dir=./clust.$(Gene)
 Diversity_dir=./diversity.$(Gene)
@@ -53,6 +47,17 @@ Dummyfiles_filter_cc_taxonomy=$(foreach outdir, $(Outdirs), $(outdir)$(Dummy_tag
 
 Tagfiles=$(join $(Outdirs),$(Tags))
 
+SSUsearch_db:=$(realpath $(SSUsearch_db))
+Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
+Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
+Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
+#Ali_template=$(SSUsearch_db)/Ali_template.silva_ssu.fasta
+Ali_template=/mnt/home/guojiaro/Documents/data/16s_ecoli_J01695_oneline.fa
+Gene_model_org=$(SSUsearch_db)/Gene_model_org.16s_ecoli_J01695.fasta
+Gene_db_cc=$(SSUsearch_db)/Gene_db_cc.greengene_97_otus.fasta
+Gene_tax_cc=$(SSUsearch_db)/Gene_tax_cc.greengene_97_otus.tax
+Copy_db=$(SSUsearch_db)/Copy_db.copyrighter.txt
+
 export
 
 #TARGETS
@@ -74,7 +79,7 @@ $(Dummyfiles_filter): %.$(Gene).out/$(Dummy_tag).qc.$(Gene).align.filter: %
 	make -f $(Script_dir)/ssusearch.Makefile $(Method) \
 	  Seqfile=$< -C $(dir $@) Tag=$(Dummy_tag)
 
-taxonomy: $(Dummyfiles_filter_nogap)
+degap: $(Dummyfiles_filter_nogap)
 
 $(Dummyfiles_filter_nogap): %.fa: %
 	python $(Script_dir)/remove-gap.py $< $@
@@ -91,8 +96,8 @@ $(Dummyfiles_filter_silva_taxonomy): %.wang.silva.taxonomy.count: %.fa
 	&& python $(Script_dir)/count-taxon.py \
 	  $(basename $<).wang.silva.taxonomy \
 	  $(basename $<).wang.silva.taxonomy.count \
-	&& rm -f mothur.*.logfile \ 
-	|| { rm -f $(basename $<).*.wang.taxonomy; exit 1; }
+	&& rm -f mothur.*.logfile \
+	|| { rm -f $@; exit 1; }
 
 taxonomy_cc: $(Dummyfiles_filter_cc_taxonomy)
 
@@ -109,7 +114,7 @@ $(Dummyfiles_filter_cc_taxonomy): %.wang.gg.taxonomy.cc.count: %.fa
 	  $(basename $<).wang.gg.taxonomy \
 	  $(basename $<).wang.gg.taxonomy.cc.count \
 	&& rm -f mothur.*.logfile \
-	|| { rm -f $(basename $<).*.wang.taxonomy; exit 1; }
+	|| { rm -f $@; exit 1; }
 
 region_cut: $(Dummyfiles_filter_cut)
 

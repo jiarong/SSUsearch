@@ -16,9 +16,8 @@ Mothur?=/mnt/home/guojiaro/Documents/software/mothur/Mothur.source/./mothur
 Gene?=ssu
 
 # refs
-Hmm?=/mnt/home/guojiaro/Documents/db/qiimeDB/Silva_108/hmm3.1/ssu.hmm
-Ali_template?=/mnt/home/guojiaro/Documents/data/RefDB/silva.ssu.fasta
-
+Hmm?=../SSUsearch_db/Hmm.bacarc+euk_ssu.hmm
+Ali_template?=../SSUsearch_db/Ali_template.silva_ssu.fasta
 
 Seqfile:=$(realpath $(Seqfile))
 Seqfile_name:=$(notdir $(Seqfile))
@@ -33,9 +32,9 @@ Hmmsearch_file?=$(Tag).qc.$(Gene)
 
 TERM?=linux
 
+ssusearch_no_qc: no_qc_setup hmmsearch mothur_align
 ssusearch_se_qc: se_qc_setup hmmsearch mothur_align
 ssusearch_pe_qc: pe_qc_setup hmmsearch mothur_align
-ssusearch_no_qc: no_qc_setup hmmsearch mothur_align
 align_only: align_only_setup mothur_align
 
 .PHONY: qc hmmsearch mothur_align clean
@@ -72,23 +71,24 @@ se_qc_setup: $(Seqfile)
 
 	python $(Script_dir)/fq2fa.py $(Tag).afterQC.fastq \
 		$(Qc_file) \
-	|| { rm $(Qc_file) && exit 1; }
+	|| { rm -f $(Qc_file) && exit 1; }
 
 hmmsearch: $(Qc_file)
 	@echo
 	@echo "*** Starting hmmsearch"
-	python $(Script_dir)/add-rc.py $(Qc_file) - | \
+	python $(Script_dir)/add-rc.py $(Qc_file) $(Tag).qc.RCadded
 	time $(Hmmsearch) --incE 10 --incdomE 10 --cpu 1 \
 		-A $(Tag).qc.$(Gene).sto \
 		-o $(Tag).qc.$(Gene).hmmout \
 		--tblout $(Tag).qc.$(Gene).hmmtblout \
-		--domtblout $(Tag).qc.$(Gene).hmmdomtblout $(Hmm) -
+		--domtblout $(Tag).qc.$(Gene).hmmdomtblout \
+		$(Hmm) $(Tag).qc.RCadded
 	@echo "hmmsearch done.."
 	python $(Script_dir)/get-seq-from-hmmout.py \
 		$(Tag).qc.$(Gene).hmmdomtblout \
 		$(Tag).qc.$(Gene).sto \
 		$(Tag).qc.$(Gene) \
-	|| { rm $(Tag).qc.$(Gene) && exit 1; }
+	|| { rm -f $(Tag).qc.$(Gene) && exit 1; }
 	@echo "hmm filter and MSA conversion done.."
 
 mothur_align: $(Hmmsearch_file)
