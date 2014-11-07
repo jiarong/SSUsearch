@@ -151,19 +151,27 @@ def main():
     g_taxonomy = read_mothur_taxonomy(taxonfile)
     d_count = collections.Counter(g_taxonomy)
     missing_taxon_cnt = 0
+    temp_summ = 0
+    temp_cnt = 0
+    for key in d_count:
+        if key in d_refcopy:
+            temp_cnt += 1
+            temp_summ += d_refcopy[key]
+
+    average_copy = temp_summ*1.0/temp_cnt
     for key in d_count:
         if key in d_refcopy:
             copy = d_refcopy[key]
         else:
-            copy = 1
+            copy = average_copy
             missing_taxon_cnt += 1
             print >> sys.stderr, '{} is missing in copyrighter'.format(
                 ';'.join(key))
 
         d_count[key] = d_count[key]/copy
 
-    _mes = '{} taxons are not found in copyrighter, 1 copy per genome is used'
-    print >> sys.stderr, _mes.format(missing_taxon_cnt)
+    _mes = '{0:d} taxons are not found in copyrighter, {1:.1f} copy per genome is used'
+    print >> sys.stderr, _mes.format(missing_taxon_cnt, average_copy)
 
     with open(outfile, 'wb') as fw:
         for key, cnt in sorted(d_count.items()):

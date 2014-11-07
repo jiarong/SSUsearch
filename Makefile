@@ -52,7 +52,7 @@ Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
 Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
 Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
 #Ali_template=$(SSUsearch_db)/Ali_template.silva_ssu.fasta
-Ali_template=/mnt/home/guojiaro/Documents/data/16s_ecoli_J01695_oneline.fa
+Ali_template=$(SSUsearch_db)/Ali_template.test.fasta
 Gene_model_org=$(SSUsearch_db)/Gene_model_org.16s_ecoli_J01695.fasta
 Gene_db_cc=$(SSUsearch_db)/Gene_db_cc.greengene_97_otus.fasta
 Gene_tax_cc=$(SSUsearch_db)/Gene_tax_cc.greengene_97_otus.tax
@@ -63,7 +63,8 @@ export
 #TARGETS
 all: tool_check diversity diversity_cc taxonomy_silva taxonomy_cc
 
-.PHONY: ssusearch region_cut clust diversity diversity_cc \
+.PHONY: ssusearch region_cut clust \
+	make_biom diversity make_biom_cc diversity_cc \
 	taxonomy_silva taxonomy_cc \
 	clean very_clean setup tool_check help
 
@@ -139,6 +140,7 @@ clust: $(Clust_dir).sub.clu/$(Name).list
 
 $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 	#collect seqs in another directory
+	rm -f $(Clust_dir)/* $(Clust_dir).sub/* $(Clust_dir).sub.clu/*
 	mkdir -p $(Clust_dir) \
 	&& cp $(Tagfiles) $(Clust_dir) \
 	|| { rm -rf $(Clust_dir) && exit 1; }
@@ -171,6 +173,7 @@ $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 	  (original illumina name has ':' in them)"
 
 
+make_biom: $(Diversity_dir)/$(Name).biom
 
 $(Diversity_dir)/$(Name).biom: $(Clust_dir).sub.clu/$(Name).list
 	{ mkdir -p $(Diversity_dir) \
@@ -180,7 +183,8 @@ $(Diversity_dir)/$(Name).biom: $(Clust_dir).sub.clu/$(Name).list
 	&& $(Mothur) "#make.shared(list=$(Name).list, group=$(Name).groups,\
 	  label=$(Otu_dist_cutoff));" \
 	&& $(Mothur) "#make.biom(shared=$(Name).shared)" \
-	&& mv $(Name).$(Otu_dist_cutoff).biom $(Name).biom; \
+	&& mv $(Name).$(Otu_dist_cutoff).biom $(Name).biom \
+	&& rm -f mothur.*.logfile; \
 	} || { rm -f $(Diversity_cc_dir)/$(Name).biom && exit 1; }
 
 diversity: $(Diversity_dir)/$(Name).biom
@@ -195,7 +199,8 @@ diversity: $(Diversity_dir)/$(Name).biom
 	  amova(phylip=$(Name).braycurtis.dummy.lt.dist, design=$(Design)); \
 	  tree.shared(calc=braycurtis); \
 	  unifrac.weighted(tree=$(Name).braycurtis.dummy.tre, \
-	    group=$(Design), random=T)"; \
+	    group=$(Design), random=T)" \
+	&& rm -f mothur.*.logfile; \
 	}
 
 $(Diversity_cc_dir)/$(Name).list: $(Clust_dir).sub.clu/$(Name).list
@@ -215,10 +220,13 @@ $(Diversity_cc_dir)/$(Name).$(Otu_dist_cutoff).cons.taxonomy: \
 	&& $(Mothur) "#classify.seqs(fasta=combined_seqs.fa, \
 	  template=$(Gene_db_cc), taxonomy=$(Gene_tax_cc), cutoff=50, \
 	  processors=1); \
-	  classify.otu(list=$(Name).list, label=$(Otu_dist_cutoff))"; \
+	  classify.otu(list=$(Name).list, label=$(Otu_dist_cutoff))" \
+	&& rm -f mothur.*.logfile; \
 	}
 
 # make biom file after copy correction
+make_biom_cc: $(Diversity_cc_dir)/$(Name).biom
+
 $(Diversity_cc_dir)/$(Name).biom: $(Diversity_cc_dir)/$(Name).list \
 	$(Diversity_cc_dir)/$(Name).$(Otu_dist_cutoff).cons.taxonomy
 
@@ -226,15 +234,18 @@ $(Diversity_cc_dir)/$(Name).biom: $(Diversity_cc_dir)/$(Name).list \
 	&& $(Mothur) "#make.shared(list=$(Name).list, group=$(Name).groups, \
 	  label=$(Otu_dist_cutoff));" \
 	&& python $(Script_dir)/copyrighter-otutable.py $(Copy_db) \
-	  $(Name).$(Otu_dist_cutoff).cons.taxonomy $(Name).shared $(Name).cc.shared \
+	  $(Name).$(Otu_dist_cutoff).cons.taxonomy \
+	  $(Name).shared $(Name).cc.shared \
+	&& mv $(Name).cc.shared $(Name).shared \
 	&& $(Mothur) "#make.biom(shared=$(Name).shared, \
 	  constaxonomy=$(Name).$(Otu_dist_cutoff).cons.taxonomy)" \
-	&& mv $(Name).$(Otu_dist_cutoff).biom $(Name).biom; \
+	&& mv $(Name).$(Otu_dist_cutoff).biom $(Name).biom \
+	&& rm -f mothur.*.logfile; \
 	} || { rm -f $(Diversity_cc_dir)/$(Name).biom && exit 1; }
 
 # diversity analysis with copy correction
 diversity_cc: $(Diversity_cc_dir)/$(Name).biom
-	{ cd $(Diversity_dir) \
+	{ cd $(Diversity_cc_dir) \
 	&& $(Mothur) "#make.shared(biom=$(Name).biom); \
 	  summary.single(calc=nseqs-coverage-sobs-chao-shannon-invsimpson); \
 	  dist.shared(calc=thetayc-braycurtis); \
@@ -245,11 +256,12 @@ diversity_cc: $(Diversity_cc_dir)/$(Name).biom
 	  amova(phylip=$(Name).braycurtis.dummy.lt.dist, design=$(Design)); \
 	  tree.shared(calc=braycurtis); \
 	  unifrac.weighted(tree=$(Name).braycurtis.dummy.tre, \
-	    group=$(Design),random=T)"; \
+	    group=$(Design),random=T)" \
+	&& rm -f mothur.*.logfile; \
 	}
 
 clean:
-	-@(rm -f $(filter-out $(foreach dir, $(Outdirs), $(wildcard $(dir)*.filter)),$(foreach dir, $(Outdirs), $(wildcard $(dir)*))))
+	-@(rm -f $(filter-out $(foreach dir, $(Outdirs), $(wildcard $(dir)*.filter) $(wildcard $(dir)*.filter.fa) $(wildcard $(dir)*.count)),$(foreach dir, $(Outdirs), $(wildcard $(dir)*))))
 	-@(rm -rf $(Clust_dir) $(Clust_dir).sub $(Clust_dir).sub.clu)
 	-@(rm -f $(Diversity_dir)/mothur.*.logfile $(Diversity_cc_dir)/mothur.*.logfile)
 

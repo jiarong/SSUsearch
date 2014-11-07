@@ -84,11 +84,12 @@ hmmsearch: $(Qc_file)
 		--domtblout $(Tag).qc.$(Gene).hmmdomtblout \
 		$(Hmm) $(Tag).qc.RCadded
 	@echo "hmmsearch done.."
-	python $(Script_dir)/get-seq-from-hmmout.py \
-		$(Tag).qc.$(Gene).hmmdomtblout \
-		$(Tag).qc.$(Gene).sto \
+	python $(Script_dir)/get-seq-from-hmmtblout.py \
+		$(Tag).qc.$(Gene).hmmtblout \
+		$(Qc_file) \
 		$(Tag).qc.$(Gene) \
 	|| { rm -f $(Tag).qc.$(Gene) && exit 1; }
+	rm -f $(Tag).qc.RCadded
 	@echo "hmm filter and MSA conversion done.."
 
 mothur_align: $(Hmmsearch_file)
