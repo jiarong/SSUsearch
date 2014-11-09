@@ -274,6 +274,7 @@ setup:
 
 tool_check:
 	@$(foreach cmd, $(Flash) $(Hmmsearch) $(Mothur), hash $(cmd) 2>/dev/null || { echo "$(cmd) not found. Please place $(cmd) in PATH or update variable in this script"; exit 1; };)
+	@echo -e "try: import sys,pandas,scipy,matplotlib,screed\nexcept ImportError: print '*** Make sure pandas,scipy,matplotlib and screed are installed';sys.exit(1)"|python
 
 help:
 	# ***This is a pipeline combining several tool. Thus there are many parameters, which can be changed in this Makefile or run as flag in command line (e.g. Make Method=ssusearch_no_qc Seqfiles=Path_to_sequence_files)
@@ -281,9 +282,10 @@ help:
 	# Parameters
 	# Name: Prefix of file names in diveristy analysis (default: SS)
 	# Gene: name of gene for search (default: ssu)
-	# Method: Method to use in ssusearch.Makefile, two options: 
-	#         ssusearch_no_qc search gene without read quality control
-	#         ssusearch search gene with read quality control
+	# Method: Method to use in ssusearch.Makefile, three options: 
+	#         ssusearch_no_qc: search gene without read quality control
+	#         ssusearch_pe_qc: search gene with PE read quality control
+	#         ssusearch_se_qc: search gene with SE read quality control
 	# Seqfiles: Sequence files for searching ssu
 	# Design: Tab delimited file with 1 col as sample name and 2 col as
 	#         treatment
