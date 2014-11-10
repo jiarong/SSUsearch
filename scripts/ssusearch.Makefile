@@ -7,7 +7,7 @@ Seqfile?=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/data/1c.
 
 Phred?=64
 # tools, dirs, etc
-Script_dir?=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/scripts
+Script_dir?=./scripts
 Flash?=/mnt/home/guojiaro/Documents/software/QC/FLASH/flash
 Flash_flags?=-m 10 -M 120 -x 0.08 -r 140 -f 250 -s 25 -d . -t 1 -p $(Phred)
 Hmmsearch?=hmmsearch
@@ -19,7 +19,7 @@ Gene?=ssu
 Hmm?=../SSUsearch_db/Hmm.bacarc+euk_ssu.hmm
 Ali_template?=../SSUsearch_db/Ali_template.silva_ssu.fasta
 
-Seqfile:=$(realpath $(Seqfile))
+override Seqfile:=$(realpath $(Seqfile))
 Seqfile_name:=$(notdir $(Seqfile))
 Seqfile_name_parts:=$(subst ., ,	$(Seqfile_name))
 

@@ -16,7 +16,7 @@ End=700
 Len_cutoff=100
 Phred=64            #64 or 33
 
-SSUsearch_db=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/SSUsearch_db
+SSUsearch_db=./SSUsearch_db
 
 Clust_dir=./clust.$(Gene)
 Diversity_dir=./diversity.$(Gene)
@@ -28,16 +28,15 @@ Flash=/mnt/home/guojiaro/Documents/software/QC/FLASH/flash
 Flash_flags=-m 10 -M 120 -x 0.08 -r 140 -f 250 -s 25 -d . -t 1 -p $(Phred)
 Hmmsearch=hmmsearch
 Mothur=/mnt/home/guojiaro/Documents/software/mothur/Mothur.source/./mothur
-Clustering_jar=/mnt/home/guojiaro/Documents/software/mcclust/Clustering.jar
-Py_virtenv=./py_vertenv
+Mcclust_jar=/mnt/home/guojiaro/Documents/software/mcclust/Clustering.jar
 TERM?=linux
 
-Method:=$(realpath $(Method))
-Seqfiles:=$(realpath $(Seqfiles))
-Design:=$(realpath $(Design))
-Script_dir:=$(realpath $(Script_dir))
+override Method:=$(realpath $(Method))
+override Seqfiles:=$(realpath $(Seqfiles))
+override Design:=$(realpath $(Design))
+override Script_dir:=$(realpath $(Script_dir))
 
-SSUsearch_db:=$(realpath $(SSUsearch_db))
+override SSUsearch_db:=$(realpath $(SSUsearch_db))
 Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
 Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
 Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
@@ -47,7 +46,8 @@ Gene_model_org=$(SSUsearch_db)/Gene_model_org.16s_ecoli_J01695.fasta
 Gene_db_cc=$(SSUsearch_db)/Gene_db_cc.greengene_97_otus.fasta
 Gene_tax_cc=$(SSUsearch_db)/Gene_tax_cc.greengene_97_otus.tax
 Copy_db=$(SSUsearch_db)/Copy_db.copyrighter.txt
-Seqfiles:=$(realpath $(Seqfiles))
+
+override Seqfiles:=$(realpath $(Seqfiles))
 Seqfile_names=$(notdir $(Seqfiles))
 Tags=$(foreach name, $(Seqfile_names), $(word 1,$(subst ., ,$(name))))
 Outdirs=$(foreach name, $(Seqfiles), $(name).$(Gene).out/)
@@ -61,7 +61,7 @@ Dummyfiles_filter_cc_taxonomy=$(foreach outdir, $(Outdirs), $(outdir)$(Dummy_tag
 
 Tagfiles=$(join $(Outdirs),$(Tags))
 
-
+MAKEOVERRIDES= 
 export
 
 #TARGETS
@@ -163,11 +163,11 @@ $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 
 	@echo "*** Starting mcclust"
 	(cd $(Clust_dir).sub.clu \
-	&& time java -jar $(Clustering_jar) derep -a -o derep.fasta \
+	&& time java -jar $(Mcclust_jar) derep -a -o derep.fasta \
 	  $(Name).names x combined_seqs.afa \
-	&& time java -jar $(Clustering_jar) dmatrix -l 25 -o matrix.bin \
+	&& time java -jar $(Mcclust_jar) dmatrix -l 25 -o matrix.bin \
 	  -i $(Name).names -I derep.fasta \
-	&& time java -jar $(Clustering_jar) cluster -i $(Name).names \
+	&& time java -jar $(Mcclust_jar) cluster -i $(Name).names \
 	  -s $(Name).groups -o complete.clust -d matrix.bin \
 	&& python $(Script_dir)/mcclust2mothur-list-cutoff.py complete.clust \
 	  $(Name).list 0.03 \
@@ -334,7 +334,7 @@ help:
 	#              -r 140 -f 250 -s 25 -d . -t 1 -p $(Phred) )
 	# Hmmsearch: path of hmmsearch binary
 	# Mothur: path of Mothur binary
-	# Clustering_jar: path of mcclust jar file
+	# Mcclust_jar: path of mcclust jar file
 	# Py_virtenv: path of virtualenv directory (default: ./py_vertenv)
 
 	# Dummy_tag: prefix as file names in ssusearch.Makefile

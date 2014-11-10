@@ -87,5 +87,5 @@ This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, 
 
 	# test if tools are properly installed
 	cd ..
-	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust=$MCCLUST_JAR
+	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
 	# modify the value of these variables in Makefile, so there is no need to put them in argument in future
