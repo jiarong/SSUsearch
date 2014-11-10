@@ -46,6 +46,10 @@ The diversity analysis can be found at:
 
 This pipeline includes PCoA, beta-diversity indces, weighted UNIFRAC and AMOVA. With SS.shared, SS.names, SS.groups, SS.design, most analysis in mothur can be done.
 
+Makefile includes many variables for steps in pipeline. To see a full list of variables in Makefile:
+
+	make -f Makefile help
+
 Install dependencies
 --------------------
 
