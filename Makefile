@@ -37,6 +37,7 @@ override Design:=$(realpath $(Design))
 override Script_dir:=$(realpath $(Script_dir))
 
 override SSUsearch_db:=$(realpath $(SSUsearch_db))
+
 Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
 Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
 Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
@@ -278,6 +279,7 @@ setup:
 
 tool_check:
 	@$(foreach cmd, $(Flash) $(Hmmsearch) $(Mothur), hash $(cmd) 2>/dev/null || { echo "$(cmd) not found. Please place $(cmd) in PATH or update variable in this script"; exit 1; };)
+	@(java -jar $(Mcclust_jar) &> /dev/null); if [ ! $$? -eq 0 ]; then echo "$(Mcclust_jar) is not valid jar file." && exit 1; fi
 	@echo -e "try: import sys,pandas,scipy,matplotlib,screed\nexcept ImportError: print '*** Make sure pandas,scipy,matplotlib and screed are installed';sys.exit(1)"|python
 	@echo "*** Dependencies are installed"
 

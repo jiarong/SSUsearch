@@ -3,19 +3,52 @@ SSUsearch
 
 SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The ssusearch_pe_qc method also need FLASH for PE merging. The pipeline is implemented in Makefile.
 
-A quick start
------------------
+Install dependencies
+--------------------
 
-###
-This tutorial assumes **HMMER3.1, mothur, and python numpy, pandas, scipy, matplotlib, and screed package** have been installed. First, set variables in Makefile (Hmmsearch and Mothur) to paths of the binary paths of their tools. If tools are installed system wide, just use **hmmsearch** and **mothur** for the values of these two variables. Alternatively variables can also be set in command line arguments. e.g. `Make -f Makefile Hmmsearch=path_to_hmmsearch_binary Mothur=path_to_mothur_binary`
-
-To check if tools are installed correctly, run:
+This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, scipy, matplotlib, and screed package. Following steps should work for linux machines.
 
 	git clone https://github.com/jiarong/SSUsearch.git
 	cd SSUsearch
-	Make -f Makefile tool_check
+	mkdir -p external_tools; cd external_tools
 
-Then several databases and hidden markov models are needed: 
+	wget http://selab.janelia.org/software/hmmer3/3.1b1/hmmer-3.1b1-linux-intel-x86_64.tar.gz -O hmmer-3.1b1-linux-intel-x86_64.tar.gz
+	tar -xzvf hmmer-3.1b1-linux-intel-x86_64.tar.gz
+	HMMSEARCH_BIN=$(readlink -f hmmer-3.1b1-linux-intel-x86_64/binaries/hmmsearch)
+
+	wget http://www.mothur.org/w/images/8/88/Mothur.cen_64.zip -O mothur.zip
+	unzip mothur.zip
+	MOTHUR_BIN=$(readlink -f mothur/mothur)
+
+	# add FLASH
+	wget http://sourceforge.net/projects/flashpage/files/FLASH-1.2.11.tar.gz/download -O FLASH-1.2.11.tar.gz
+	tar -xzvf FLASH-1.2.11.tar.gz
+	(cd FLASH-1.2.11/ && make)
+	FLASH_BIN=$(readlink -f FLASH-1.2.11/flash)
+
+	# RDP mcClust
+	# Updated version can be found github:  https://github.com/rdpstaff/RDPTools.git
+	# Here an older version is used
+	wget http://lyorn.idyll.org/~gjr/public2/misc/mcclust_20120119.tar.gz
+	tar -xzvf mcclust_20120119.tar.gz
+	MCCLUST_JAR=$(readlink -f mcclust/Clustering.jar)
+
+	# python packages, assuming virtualenv installed
+	# virtualenv installation guide: https://virtualenv.pypa.io/en/latest/virtualenv.html#installation
+	virtualenv ssusearch_pyenv
+	source ssusearch_pyenv/bin/activate
+	pip install numpy pandas scipy screed matplotlib
+
+	# test if tools are properly installed
+	cd ..
+	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
+
+In the above, variables are set in command line arguments. It is better to modify the value of these variables in Makefile, so there is no need to put them in argument in future. If tools are installed system wide, just use **hmmsearch**, **mothur** and **flash** for the values of these three variables. 
+
+An example:
+-----------------
+
+Several databases and hidden markov models are needed: 
 
 	wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
 	tar -xzvf SSUsearch_db.tgz
@@ -42,7 +75,7 @@ The diversity analysis can be found at:
 	# no copy correction
 	ls diversity.ssu
 	# copy correction
-	ls diverstiy_cc.ssu
+	ls diversity_cc.ssu
 
 This pipeline includes PCoA, beta-diversity indces, weighted UNIFRAC and AMOVA. With SS.shared, SS.names, SS.groups, SS.design, most analysis in mothur can be done.
 
@@ -50,42 +83,4 @@ Makefile includes many variables for steps in pipeline. To see a full list of va
 
 	make -f Makefile help
 
-Install dependencies
---------------------
 
-This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, scipy, matplotlib, and screed package. Following steps should work for linux machines.
-
-	git clone https://github.com/jiarong/SSUsearch.git
-	cd SSUsearch
-	mkdir -p external_tools; cd external_tools
-
-	wget http://selab.janelia.org/software/hmmer3/3.1b1/hmmer-3.1b1-linux-intel-x86_64.tar.gz -O hmmer-3.1b1-linux-intel-x86_64.tar.gz
-	tar -xzvf hmmer-3.1b1-linux-intel-x86_64.tar.gz
-	HMMSEARCH_BIN=$(readlink -f hmmer-3.1b1-linux-intel-x86_64/binaries/hmmsearch)
-
-	wget http://www.mothur.org/w/images/8/88/Mothur.cen_64.zip -O mothur.zip
-	unzip mothur.zip
-	MOTHUR_BIN=$(readlink -f mothur/mothur)
-
-	# add FLASH
-	wget http://sourceforge.net/projects/flashpage/files/FLASH-1.2.11.tar.gz/download -O FLASH-1.2.11.tar.gz
-	tar -xzvf FLASH-1.2.11.tar.gz
-	(cd FLASH-1.2.11/ && make)
-	FLASH_BIN=$(readlink -f FLASH-1.2.11/flash)
-
-	# RDP mcClust
-	# git clone https://github.com/rdpstaff/RDPTools.git
-	wget http://lyorn.idyll.org/~gjr/public2/misc/mcclust_20120119.tar.gz
-	tar -xzvf mcclust_20120119.tar.gz
-	MCCLUST_JAR=$(readlink -f mcclust/Clustering.jar)
-
-	# python packages, assuming virtualenv installed
-	# virtualenv installation guide: https://virtualenv.pypa.io/en/latest/virtualenv.html#installation
-	virtualenv ssusearch_pyenv
-	source ssusearch_pyenv/bin/activate
-	pip install numpy pandas scipy screed matplotlib
-
-	# test if tools are properly installed
-	cd ..
-	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
-	# modify the value of these variables in Makefile, so there is no need to put them in argument in future
