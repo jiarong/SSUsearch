@@ -1,13 +1,13 @@
 # Makefile for  ssusearch, clust , and mothur analysis
 # key parameters
 
+Method:=ssusearch_no_qc
+Seqfiles:=$(wildcard ./test/data/*.fa)
+Design:=./test/SS.design
+Script_dir:=./scripts
+
 Name=SS
 Gene=ssu
-Method=ssusearch_no_qc
-Seqfiles:=$(wildcard /mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/data/*.fa)
-Design=/mnt/lustre_scratch_2012/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/SS.design
-
-
 Otu_dist_cutoff=0.03
 Start=550
 #Start=1200
@@ -23,8 +23,7 @@ Diversity_dir=./diversity.$(Gene)
 Diversity_cc_dir=./diversity_cc.$(Gene)
 
 # tools, dirs, etc
-Script_dir=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/scripts
-#Flash=./external_tools/FLASH/.flash
+
 Flash=/mnt/home/guojiaro/Documents/software/QC/FLASH/flash
 Flash_flags=-m 10 -M 120 -x 0.08 -r 140 -f 250 -s 25 -d . -t 1 -p $(Phred)
 Hmmsearch=hmmsearch
@@ -33,6 +32,21 @@ Clustering_jar=/mnt/home/guojiaro/Documents/software/mcclust/Clustering.jar
 Py_virtenv=./py_vertenv
 TERM?=linux
 
+Method:=$(realpath $(Method))
+Seqfiles:=$(realpath $(Seqfiles))
+Design:=$(realpath $(Design))
+Script_dir:=$(realpath $(Script_dir))
+
+SSUsearch_db:=$(realpath $(SSUsearch_db))
+Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
+Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
+Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
+#Ali_template=$(SSUsearch_db)/Ali_template.silva_ssu.fasta
+Ali_template=$(SSUsearch_db)/Ali_template.test.fasta
+Gene_model_org=$(SSUsearch_db)/Gene_model_org.16s_ecoli_J01695.fasta
+Gene_db_cc=$(SSUsearch_db)/Gene_db_cc.greengene_97_otus.fasta
+Gene_tax_cc=$(SSUsearch_db)/Gene_tax_cc.greengene_97_otus.tax
+Copy_db=$(SSUsearch_db)/Copy_db.copyrighter.txt
 Seqfiles:=$(realpath $(Seqfiles))
 Seqfile_names=$(notdir $(Seqfiles))
 Tags=$(foreach name, $(Seqfile_names), $(word 1,$(subst ., ,$(name))))
@@ -47,16 +61,6 @@ Dummyfiles_filter_cc_taxonomy=$(foreach outdir, $(Outdirs), $(outdir)$(Dummy_tag
 
 Tagfiles=$(join $(Outdirs),$(Tags))
 
-SSUsearch_db:=$(realpath $(SSUsearch_db))
-Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
-Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
-Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
-#Ali_template=$(SSUsearch_db)/Ali_template.silva_ssu.fasta
-Ali_template=$(SSUsearch_db)/Ali_template.test.fasta
-Gene_model_org=$(SSUsearch_db)/Gene_model_org.16s_ecoli_J01695.fasta
-Gene_db_cc=$(SSUsearch_db)/Gene_db_cc.greengene_97_otus.fasta
-Gene_tax_cc=$(SSUsearch_db)/Gene_tax_cc.greengene_97_otus.tax
-Copy_db=$(SSUsearch_db)/Copy_db.copyrighter.txt
 
 export
 
@@ -275,13 +279,12 @@ setup:
 tool_check:
 	@$(foreach cmd, $(Flash) $(Hmmsearch) $(Mothur), hash $(cmd) 2>/dev/null || { echo "$(cmd) not found. Please place $(cmd) in PATH or update variable in this script"; exit 1; };)
 	@echo -e "try: import sys,pandas,scipy,matplotlib,screed\nexcept ImportError: print '*** Make sure pandas,scipy,matplotlib and screed are installed';sys.exit(1)"|python
+	@echo "*** Dependencies are installed"
 
 help:
 	# ***This is a pipeline combining several tool. Thus there are many parameters, which can be changed in this Makefile or run as flag in command line (e.g. Make Method=ssusearch_no_qc Seqfiles=Path_to_sequence_files)
 	#
 	# Parameters
-	# Name: Prefix of file names in diveristy analysis (default: SS)
-	# Gene: name of gene for search (default: ssu)
 	# Method: Method to use in ssusearch.Makefile, three options: 
 	#         ssusearch_no_qc: search gene without read quality control
 	#         ssusearch_pe_qc: search gene with PE read quality control
@@ -289,6 +292,9 @@ help:
 	# Seqfiles: Sequence files for searching ssu
 	# Design: Tab delimited file with 1 col as sample name and 2 col as
 	#         treatment
+	# Script_dir: directory for scripts 
+	# Name: Prefix of file names in diveristy analysis (default: SS)
+	# Gene: name of gene for search (default: ssu)
 
 	# Hmm: path to hmm file
 	# Gene_db: fasta sequence database of interest gene for classification
@@ -322,7 +328,7 @@ help:
 	# Diversity_cc_dir: output directory for copy corrected diversity 
 	#                   analysis (default: ./diversity_cc.$(Gene) )
 	#
-	# Script_dir: directory for scripts 
+
 	# Flash: path of Flash binary 
 	# Flash_flags: flags for Flash (default: -m 10 -M 120 -x 0.08 
 	#              -r 140 -f 250 -s 25 -d . -t 1 -p $(Phred) )
