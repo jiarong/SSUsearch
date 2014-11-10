@@ -64,13 +64,13 @@ Other than wgs data files, a design file is also needed for diversity analysis i
 	# check design file
 	cat test/SS.design
 	# run the pipeline
-	make -f Makefile Seqfiles="test/data/*.fa" Design=test/SS.design Method=ssusearch_no_qc
+	make -f Makefile Seqfiles="test/data/1c.fa test/data/1d.fa test/data/2c.fa test/data/2d.fa" Design=test/SS.design Script_dir=./scripts Method=ssusearch_no_qc Method=ssusearch_no_qc Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR 
 
 Taxonomy results are here:
 
 	ls test/data/*.fa.ssu.out/*.taxonomy
 
-The diversity analysis can be found at:
+By default, V4 will be used for OTU based analysis. The diversity analysis can be found at:
 
 	# no copy correction
 	ls diversity.ssu
