@@ -43,7 +43,7 @@ This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, 
 	cd ..
 	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
 
-In the above, variables are set in command line arguments. It is better to modify the value of these variables in Makefile, so there is no need to put them in argument in future. If tools are installed system wide, just use **hmmsearch**, **mothur** and **flash** for the values of these three variables. 
+In the above, variables are set in command line arguments. It is better to modify the value of these variables to absolute path of binaries in Makefile, so there is no need to put them in argument in future. If tools are installed system wide, just use **hmmsearch**, **mothur** and **flash** for the values of these three variables. 
 
 An example:
 -----------------
@@ -53,9 +53,9 @@ Several databases and hidden markov models are needed:
 	wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
 	tar -xzvf SSUsearch_db.tgz
 
-Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to paths of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
+Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to *absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
 
-Other than wgs data files, a design file is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
+Other than wgs data files, **a design file** is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
 
 	# download a test dataset and its design file
 	wget -r -np -nH --cut-dir=4 --reject="index.html*" http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch/test/
