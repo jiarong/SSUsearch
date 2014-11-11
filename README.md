@@ -6,7 +6,7 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 Install dependencies
 --------------------
 
-This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, scipy, matplotlib, and screed package. Following steps should work for linux machines.
+This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, scipy, matplotlib, and screed package. Following steps should work for **linux** machines.
 
 	git clone https://github.com/jiarong/SSUsearch.git
 	cd SSUsearch
@@ -77,7 +77,7 @@ By default, V4 will be used for OTU based analysis. The diversity analysis can b
 	# copy correction
 	ls diversity_cc.ssu
 
-This pipeline includes PCoA, beta-diversity indces, weighted UNIFRAC and AMOVA. With SS.shared, SS.names, SS.groups, SS.design, most analysis in mothur can be done.
+This pipeline includes PCoA, beta-diversity indces, weighted UNIFRAC and AMOVA. Familiarity with [mothur](http://www.mothur.org/wiki/Schloss_SOP) are needed to find and plot the specific results. With SS.shared, SS.names, SS.groups, SS.design, most analysis in mothur can be done.
 
 Makefile includes many variables for steps in pipeline. To see a full list of variables in Makefile:
 
