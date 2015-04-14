@@ -86,7 +86,7 @@ hmmsearch: $(Qc_file)
 	@echo "hmmsearch done.."
 	python $(Script_dir)/get-seq-from-hmmtblout.py \
 		$(Tag).qc.$(Gene).hmmtblout \
-		$(Qc_file) \
+		$(Tag).qc.RCadded \
 		$(Tag).qc.$(Gene) \
 	|| { rm -f $(Tag).qc.$(Gene) && exit 1; }
 	rm -f $(Tag).qc.RCadded
