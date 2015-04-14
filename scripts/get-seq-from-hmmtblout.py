@@ -23,7 +23,7 @@ def getDict_domain(fp):
         e_val = float(lis[5])
         bit = float(lis[6])
         if M:
-            if bit > M:
+            if bit < M:
                 continue  
         else:
             if e_val > N:
@@ -43,7 +43,7 @@ def getDict_wholeSeq(fp):
         e_val = float(lis[4])
         bit = float(lis[5])
         if M:
-            if bit > M:
+            if bit < M:
                 continue  
         else:
             if e_val > N:
@@ -69,7 +69,7 @@ def main():
     if len(d) == 0:
         print >> sys.stderr,'no hmmhits for %s' %(sys.argv[1])
         sys.exit(1)
-    
+
     for n, record in enumerate(screed.open(sys.argv[2])):
         name = record['name']
         if name in d:
