@@ -15,6 +15,9 @@ Start=550
 End=700
 Len_cutoff=100
 Phred=64            #64 or 33
+Cpu=1
+Java_xmx=10g
+Java_gc_threads=4
 
 SSUsearch_db=./SSUsearch_db
 
@@ -38,7 +41,7 @@ override Script_dir:=$(realpath $(Script_dir))
 
 override SSUsearch_db:=$(realpath $(SSUsearch_db))
 
-Hmm=$(SSUsearch_db)/Hmm.bacarc+euk_ssu.hmm
+Hmm=$(SSUsearch_db)/Hmm.ssu.hmm
 Gene_db=$(SSUsearch_db)/Gene_db.silva_108_rep_set.fasta
 Gene_tax=$(SSUsearch_db)/Gene_tax.silva_taxa_family.tax
 Ali_template=$(SSUsearch_db)/Ali_template.silva_ssu.fasta
@@ -83,7 +86,7 @@ ssusearch: $(Dummyfiles_filter)
 $(Dummyfiles_filter): %.$(Gene).out/$(Dummy_tag).qc.$(Gene).align.filter: %
 	mkdir -p $(dir $@)
 	make -f $(Script_dir)/ssusearch.Makefile $(Method) \
-	  Seqfile=$< -C $(dir $@) Tag=$(Dummy_tag)
+	  Seqfile=$< -C $(dir $@) Tag=$(Dummy_tag) Cpu=$(Cpu)
 
 degap: $(Dummyfiles_filter_nogap)
 
@@ -96,7 +99,7 @@ $(Dummyfiles_filter_silva_taxonomy): %.wang.silva.taxonomy.count: %.fa
 	rm -f $(basename $<).*.wang.taxonomy \
 	&& $(Mothur) "#classify.seqs(fasta=$<, \
 	  template=$(Gene_db), taxonomy=$(Gene_tax), cutoff=50, \
-	  processors=1)" \
+	  processors=$(Cpu))" \
 	&& mv $(basename $<).*.wang.taxonomy \
 	  $(basename $<).wang.silva.taxonomy \
 	&& python $(Script_dir)/count-taxon.py \
@@ -111,7 +114,7 @@ $(Dummyfiles_filter_cc_taxonomy): %.wang.gg.taxonomy.cc.count: %.fa
 	rm -f $(basename $<).*.wang.taxonomy \
 	&& $(Mothur) "#classify.seqs(fasta=$<, \
 	  template=$(Gene_db_cc), taxonomy=$(Gene_tax_cc), cutoff=50, \
-	  processors=1)" \
+	  processors=$(Cpu))" \
 	&& mv $(basename $<).*.wang.taxonomy $(basename $<).wang.gg.taxonomy \
 	&& python $(Script_dir)/count-taxon.py \
 	  $(basename $<).wang.gg.taxonomy \
@@ -164,19 +167,24 @@ $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 
 	@echo "*** Starting mcclust"
 	(cd $(Clust_dir).sub.clu \
-	&& time java -jar $(Mcclust_jar) derep -a -o derep.fasta \
+	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
+	  -XX:ParallelGCThreads=$(Java_gc_threads) \
+	  -jar $(Mcclust_jar) derep -a -o derep.fasta \
 	  $(Name).names x combined_seqs.afa \
-	&& time java -jar $(Mcclust_jar) dmatrix -l 25 -o matrix.bin \
-	  -i $(Name).names -I derep.fasta \
-	&& time java -jar $(Mcclust_jar) cluster -i $(Name).names \
-	  -s $(Name).groups -o complete.clust -d matrix.bin \
+	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
+	  -XX:ParallelGCThreads=$(Java_gc_threads) \
+	  -jar $(Mcclust_jar) dmatrix -l 25 \
+          -o matrix.bin -i $(Name).names -I derep.fasta \
+	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
+	  -XX:ParallelGCThreads=$(Java_gc_threads) \
+	  -jar $(Mcclust_jar) cluster \
+          -i $(Name).names -s $(Name).groups -o complete.clust -d matrix.bin \
 	&& python $(Script_dir)/mcclust2mothur-list-cutoff.py complete.clust \
 	  $(Name).list 0.03 \
 	&& sed -i 's/:/_/g' $(Name).names $(Name).groups $(Name).list \
 	)
 	@echo "*** Replace ':' with '_' in seq names\
 	  (original illumina name has ':' in them)"
-
 
 make_biom: $(Diversity_dir)/$(Name).biom
 
@@ -224,7 +232,7 @@ $(Diversity_cc_dir)/$(Name).$(Otu_dist_cutoff).cons.taxonomy: \
 	{ cd $(Diversity_cc_dir) \
 	&& $(Mothur) "#classify.seqs(fasta=combined_seqs.fa, \
 	  template=$(Gene_db_cc), taxonomy=$(Gene_tax_cc), cutoff=50, \
-	  processors=1); \
+	  processors=$(Cpu)); \
 	  classify.otu(list=$(Name).list, label=$(Otu_dist_cutoff))" \
 	&& rm -f mothur.*.logfile; \
 	}
@@ -313,6 +321,12 @@ help:
 	# Len_cutoff: minimum lenght required for reads selected for 
 	#             clustering (default: 100)
 	# Phred: phred score system used in raw read (64 or 33)
+	# Cpu: maximum threads for each job; Maximum number for parallel jobs 
+	#      can be controled with  -j flag within make itself.
+	#      Cpu * (-j) should be less than available threads in machine
+	# Java_xmx: heap size for mcclust (e.g. 10000m or 10g; default: 10g)
+	# Java_gc_threads: threads number for Garbage Collector (should be
+	#                  maxium threas minus one (default: 1)
 
 	# Gene_db_cc: fasta sequence database of interest gene for copy
 	#             correction (greengene database)

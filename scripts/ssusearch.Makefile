@@ -4,7 +4,7 @@
 
 ### path of sequence file if not defined in CMD line. 
 Seqfile?=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/data/1c.fa
-
+Cpu?=1
 Phred?=64
 # tools, dirs, etc
 Script_dir?=./scripts
@@ -16,7 +16,7 @@ Mothur?=/mnt/home/guojiaro/Documents/software/mothur/Mothur.source/./mothur
 Gene?=ssu
 
 # refs
-Hmm?=../SSUsearch_db/Hmm.bacarc+euk_ssu.hmm
+Hmm?=../SSUsearch_db/Hmm.ssu.hmm
 Ali_template?=../SSUsearch_db/Ali_template.silva_ssu.fasta
 
 override Seqfile:=$(realpath $(Seqfile))
@@ -40,7 +40,13 @@ align_only: align_only_setup mothur_align
 .PHONY: qc hmmsearch mothur_align clean
 
 no_qc_setup: $(Seqfile)
-	ln -sf $(Seqfile) $(Qc_file)
+	Realfile=$(realpath $(Seqfile)) \
+	&& if file $$Realfile | grep -q "gzip compressed data" ; \
+	   then zcat $(Seqfile) > $(Qc_file); \
+	   elif file $$Realfile | grep -q "bzip2 compressed data"; \
+	   then bzcat $(Seqfile) > $(Qc_file); \
+	   else ln -sf $(Seqfile) $(Qc_file); \
+	   fi;
 
 align_only_setup: $(Seqfile)
 	ln -sf $(Seqfile) $(Hmmsearch_file)
@@ -76,20 +82,19 @@ se_qc_setup: $(Seqfile)
 hmmsearch: $(Qc_file)
 	@echo
 	@echo "*** Starting hmmsearch"
-	python $(Script_dir)/add-rc.py $(Qc_file) $(Tag).qc.RCadded
-	time $(Hmmsearch) --incE 10 --incdomE 10 --cpu 1 \
+	time $(Hmmsearch) --incE 10 --incdomE 10 --cpu $(Cpu) \
 		-A $(Tag).qc.$(Gene).sto \
 		-o $(Tag).qc.$(Gene).hmmout \
 		--tblout $(Tag).qc.$(Gene).hmmtblout \
 		--domtblout $(Tag).qc.$(Gene).hmmdomtblout \
-		$(Hmm) $(Tag).qc.RCadded
+		$(Hmm) $(Tag).qc
 	@echo "hmmsearch done.."
 	python $(Script_dir)/get-seq-from-hmmtblout.py \
 		$(Tag).qc.$(Gene).hmmtblout \
-		$(Tag).qc.RCadded \
+		$(Tag).qc \
 		$(Tag).qc.$(Gene) \
 	|| { rm -f $(Tag).qc.$(Gene) && exit 1; }
-	rm -f $(Tag).qc.RCadded
+	rm -f $(Tag).qc
 	@echo "hmm filter and MSA conversion done.."
 
 mothur_align: $(Hmmsearch_file)
@@ -101,8 +106,8 @@ mothur_align: $(Hmmsearch_file)
 	# mothur does not allow tab between its flags, thus no indents here
 	time $(Mothur) "#align.seqs(\
 	candidate=$(Tag).qc.$(Gene).RFadded, \
-	template=$(Ali_template), search=suffix, threshold=0.5, \
-	flip=t, processors=1)"
+	template=$(Ali_template), threshold=0.5, \
+	flip=t, processors=$(Cpu))"
 	@rm -f mothur.*.logfile
 
 	python $(Script_dir)/mothur-align-report-parser.py \

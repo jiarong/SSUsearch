@@ -41,7 +41,7 @@ This pipeline requires: HMMER3.1, mothur, RDP mcclust, FLASH and python pandas, 
 
 	# test if tools are properly installed
 	cd ..
-	Make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
+	make -f Makefile tool_check Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR
 
 In the above, variables are set in command line arguments. It is better to modify the value of these variables to absolute path of binaries in Makefile, so there is no need to put them in argument in future. If tools are installed system wide, just use **hmmsearch**, **mothur** and **flash** for the values of these three variables. 
 
@@ -53,7 +53,7 @@ Several databases and hidden markov models are needed:
 	wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
 	tar -xzvf SSUsearch_db.tgz
 
-Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to *absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
+Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to **absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
 
 Other than wgs data files, **a design file** is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
 
@@ -64,7 +64,7 @@ Other than wgs data files, **a design file** is also needed for diversity analys
 	# check design file
 	cat test/SS.design
 	# run the pipeline
-	make -f Makefile Seqfiles="test/data/1c.fa test/data/1d.fa test/data/2c.fa test/data/2d.fa" Design=test/SS.design Script_dir=./scripts Method=ssusearch_no_qc Method=ssusearch_no_qc Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR 
+	make -f Makefile Seqfiles="test/data/1c.fa test/data/1d.fa test/data/2c.fa test/data/2d.fa" Design=test/SS.design Script_dir=./scripts SSUsearch_db=./SSUsearch_db Method=ssusearch_no_qc Method=ssusearch_no_qc Hmmsearch=$HMMSEARCH_BIN Mothur=$MOTHUR_BIN Flash=$FLASH_BIN Mcclust_jar=$MCCLUST_JAR 
 
 Taxonomy results are here:
 
