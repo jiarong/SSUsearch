@@ -288,7 +288,11 @@ setup:
 tool_check:
 	@$(foreach cmd, $(Flash) $(Hmmsearch) $(Mothur), hash $(cmd) 2>/dev/null || { echo "$(cmd) not found. Please place $(cmd) in PATH or update variable in this script"; exit 1; };)
 	@(java -jar $(Mcclust_jar) &> /dev/null); if [ ! $$? -eq 0 ]; then echo "$(Mcclust_jar) is not valid jar file." && exit 1; fi
-	@echo -e "try: import sys,pandas,scipy,matplotlib,screed\nexcept ImportError: print '*** Make sure pandas,scipy,matplotlib and screed are installed';sys.exit(1)"|python
+	@python -c 'import numpy' &> /dev/null || { echo "numpy is not installed" && exit 1; }
+	@python -c 'import scipy' &> /dev/null || { echo "scipy is not installed" && exit 1; }
+	@python -c 'import pandas' &> /dev/null || { echo "pandas is not installed" && exit 1; }
+	@python -c 'import matplotlib' &> /dev/null || { echo "matplotlib is not installed" && exit 1; }
+	@python -c 'import screed' &> /dev/null || { echo "screed is not installed" && exit 1; }
 	@echo "*** Dependencies are installed"
 
 help:
