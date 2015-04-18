@@ -7,9 +7,6 @@ import screed
 from screed import fasta
 import re
 
-#script to manipulate MSA, cut seqs, and primer region check
-#by gjr; Apr 28, 11
-
 def getRef(fp, n_ref):
     refs = {}
     reads = {}
@@ -17,11 +14,7 @@ def getRef(fp, n_ref):
     for record in fasta.fasta_iter(fp):
         name = record['name']
         seq = record['sequence']
-        #
-        # ref seq name changed due to some 454 seqs have 'RF' in names
-        #
         if 'ReFeReNcE' in name:
-        #if 'RF' in name:
             refs[name] = seq
             cnt += 1 
         if cnt >= n_ref:
@@ -31,13 +24,10 @@ def getRef(fp, n_ref):
         print 'not enough ReFeReNcE seqs'
         sys.exit(1)
 
-    #get profile
     template = refs.values()[0].upper()  #use the first refSeq as template
     profile = []
     length = len(template)
     for i in range(length):
-        ###in this case 'nnnn' at the beginning or end of seq should treated as indels (0)
-        ###more generally 'n' should be treat as a base (1)
         if template[i] == 'N' or not template[i].isalpha():
             profile.append(0)
         else:
@@ -69,11 +59,7 @@ def cutMSA(fp, start, end):
     fp.seek(0,0)
     for record in fasta.fasta_iter(fp):
         name = record['name']
-        #
-        # ref seq name changed due to some 454 seqs have 'RF' in names
-        #
         if 'ReFeReNcE' in name:
-        #if 'RF' in name:   #pass the ref seq
             continue
         seq = record['sequence']
         assert len(seq) == length, 'not afa format'
@@ -103,18 +89,14 @@ def getSeqPos(ref_profile, seq):
 def main():
     '''
     python <thisFile><file.afa><start><end><minLen>
-    longer scripts but more memory efficient
-    cut afa alignment for region
     '''
     if len(sys.argv) != 5:
-        print >> sys.stderr, \
-               'Usage: python %s <file.afa> <start> <end> <minLen>' \
-               %(os.path.basename(sys.argv[0]))
+        mes = 'Usage: python %s <file.afa> <start> <end> <minLen>'
+        print >> sys.stderr, mes %(os.path.basename(sys.argv[0]))
         sys.exit(1)
 
     # length cutoff
     minLen = int(sys.argv[4])
-    #
 
     fp = open(sys.argv[1])
     start = sys.argv[2]
@@ -142,9 +124,6 @@ def main():
     cnt = 0
     for record in screed.open(sys.argv[1]):
         name = record['name']
-        #
-        # ref seq name changed due to some 454 seqs have 'RF' in names
-        #
         if 'ReFeReNcE' in name:
             continue
         seq = record['sequence']
@@ -159,7 +138,8 @@ def main():
         print >> fw3, '>%s\n%s' %(name, subSeq)
         cnt += 1
 
-    print '%d sequences are matched to %s-%s region' %(cnt, sys.argv[2], sys.argv[3])
+    mes = '%d sequences are matched to %s-%s region' 
+    print >> sys.stderr, mes %(cnt, sys.argv[2], sys.argv[3])
+
 if __name__ == '__main__':
     main()        
-
