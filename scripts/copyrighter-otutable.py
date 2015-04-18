@@ -211,19 +211,18 @@ def main():
     df_shared = pandas.read_csv(sharedfile, sep='\t', index_col=False)
     df_shared = df_shared.ix[:,:-1]     # remove last column due trailing tab
 
-    subsample_size_list = df_shared.iloc[:,3:].sum(axis=1)
-    assert len(set(subsample_size_list)) == 1, \
-        '### samples are subsampled to the same # of reads'
+    subsample_size_list_before = df_shared.iloc[:,3:].sum(axis=1)
+
     # even the sample depth to original
-    #sample_depth = int(subsample_size_list[0])
+    sample_depth = int(min(subsample_size_list_before))
 
     for key in df_shared.columns[3:]:
         copy = d_otucopy[key]
         df_shared[key] = df_shared[key]/copy
 
-    subsample_size_list = df_shared.iloc[:,3:].sum(axis=1)
+    subsample_size_list_after = df_shared.iloc[:,3:].sum(axis=1)
     # even the sample depth to max after correction
-    sample_depth = int(max(subsample_size_list))
+    #sample_depth = int(max(subsample_size_list_after))
 
     for i in df_shared.index:
         abund_series = df_shared.iloc[i,3:]
