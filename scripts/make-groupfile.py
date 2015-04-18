@@ -36,7 +36,9 @@ def main():
     for f in lis:
         for n, record in enumerate(screed.open(f)):
             name = record['name']
-            fw.write('{}\t{}\n'.format(name, os.path.basename(f)))
+            fname = os.path.basename(f)
+            group = fname.split('.',1)[0]
+            fw.write('{}\t{}\n'.format(name, group))
 
 if __name__ == '__main__':
     main()
