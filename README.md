@@ -1,7 +1,56 @@
 SSUsearch
 =========
 
-SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The ssusearch_pe_qc method also need FLASH for PE merging. The pipeline is implemented in Makefile.
+SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline is implemented in Makefile. Several key features:
+
+1. unsupervised community analysis with shotgun data
+
+2. Scalibility: 5 Gb peak mem and 30 CPU hours on 60 Gb data.
+
+
+Pipeline tutorial
+------------------
+
+The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-947f7bfc** and add more storage according to your data size (the default is 20 Gb).
+
+If you want to run the notebooks on your computer, ipython (v4) with notebook dependencies are needed.
+
+If you already have Python:
+
+	pip install "ipython[notebook]"
+
+If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux 64-bits installer. At the time of this writing it is https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh 
+
+        wget -c https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh
+
+        bash Anaconda-2.2.0-Linux-x86_64.sh 
+
+Accept the license
+Choose an installation directory (default is fine)
+Add to default path at the end of installation
+Then 
+
+	source ~/.bashrc
+
+Ipython is ready to go :)
+
+Download SSUsearch:
+
+	git clone https://github.com/jiarong/SSUsearch
+
+Go to notebook directory:
+
+	cd SSUsearch/notebooks
+
+Start ipython notebook: 
+
+	ipython notebook
+
+In your default web browser, you will see a page showing several *.ipynb links.
+
+First open overview.ipynb, and follow the instructions there. You will need to change the data directory setting (those on the notebooks are for running on amazon EC2 instances).
+
+
 
 Install dependencies
 --------------------
