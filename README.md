@@ -1,7 +1,7 @@
 SSUsearch
 =========
 
-SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline is implemented in Makefile. Several key features:
+SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline is implemented in Makefile. Two key features:
 
 1. unsupervised community analysis with shotgun data
 
@@ -21,9 +21,9 @@ If you already have Python:
 
 If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux 64-bits installer. At the time of this writing it is https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh 
 
-        wget -c https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh
+	wget -c https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh
 
-        bash Anaconda-2.2.0-Linux-x86_64.sh 
+	bash Anaconda-2.2.0-Linux-x86_64.sh 
 
 Accept the license
 Choose an installation directory (default is fine)
@@ -48,8 +48,12 @@ Start ipython notebook:
 
 In your default web browser, you will see a page showing several *.ipynb links.
 
-First open overview.ipynb, and follow the instructions there. You will need to change the data directory setting (those on the notebooks are for running on amazon EC2 instances).
+First open overview.ipynb, and follow the instructions there. **You will need to change the data directory setting** (those on the notebooks are for running on amazon EC2 instances).
 
+
+Makefile implementation 
+-----------------------
+There is also a Makefile implemention shown below. It is great for automation but not as easy to read and modify. (I am not interested in maintaining api or wrapers.) Thus the above notebooks are recommended to run the pipeline.
 
 
 Install dependencies
