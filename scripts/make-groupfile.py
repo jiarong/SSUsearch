@@ -13,7 +13,7 @@ def main():
     usage: python <thisFile><sampleFile><seqFile1><seqFile2>...
     '''
     if len(sys.argv) < 3:
-        mes = 'Usage: python {} <seq1> <seq2> ..'
+        mes = 'Usage: python {} <file.groups> <seq1> <seq2> ..'
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))
         sys.exit(1)
 
