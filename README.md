@@ -25,9 +25,10 @@ If you are new to Python, go to http://continuum.io/downloads and copy the link 
 
 	bash Anaconda-2.2.0-Linux-x86_64.sh 
 
-Accept the license
-Choose an installation directory (default is fine)
-Add to default path at the end of installation
+Accept the license.
+Choose an installation directory (default is fine). 
+Add to default path at the end of installation. 
+
 Then 
 
 	source ~/.bashrc

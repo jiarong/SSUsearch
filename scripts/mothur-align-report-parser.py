@@ -7,8 +7,6 @@ import sys
 import os
 import screed
 
-MINID = 50
-
 def parser(f):
     '''
     [0]QueryName	[1]QueryLength	[2]TemplateName	[3]TemplateLength	[4]SearchMethod	[5]SearchScore	[6]AlignmentMethod	[7]QueryStart	[8]QueryEnd	[9]TemplateStart	[10]TemplateEnd	[11]PairwiseAlignmentLength	[12]GapsInQuery	[13]GapsInTemplate	[14]LongestInsert	[15]SimBtwnQuery&Template
@@ -25,16 +23,14 @@ def parser(f):
 
     return d
 
-def main():
-    if len(sys.argv) != 5:
-        mes = ('Usage: python {} <mothurAlign.report> '
-                                  '<file.align> '
-                                  '<outfile.filter> '
-                                  'identity_cutoff')
+if __name__ == '__main__':
+    if len(sys.argv) != 4:
+        mes = ('Usage: python'
+               '{} <mothurAlign.report> <file.align> <outfile.filter>')
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))
         sys.exit(1)
 
-    MINID = float(sys.argv[4])
+    MINID = 50
     d = parser(sys.argv[1])
     d_match = {}
     st_goodSeqs = set()
@@ -54,18 +50,18 @@ def main():
         else:
             pass
 
-        if (ID2 >= MINID):
+        if ID2 >= MINID: #for illu shotgun
             st_goodSeqs.add(qu)
 
-    mes = '%d bad seqs out of %d total are removed from alignment' 
-    print >> sys.stderr, mes %((len(d)-len(st_goodSeqs)), len(d))
-    with open(sys.argv[3], 'wb') as fw:
-        for n, record in enumerate(screed.open(sys.argv[2])):
-            name = record['name']
-            if name not in st_goodSeqs:
-                continue
-            seq = record['sequence']
-            fw.write('>%s\n%s\n' %(name, seq))
+    print >> sys.stderr, '%d bad seqs removed from alignment' %((len(d)-len(st_goodSeqs)))
+    fw = open(sys.argv[3], 'wb')
+    totalSeq = 0
+    for n, record in enumerate(screed.open(sys.argv[2])):
+        name = record['name']
+        totalSeq += 1
+        if name not in st_goodSeqs:
+            continue
+        seq = record['sequence']
+        fw.write('>%s\n%s\n' %(name, seq))
 
-if __name__ == '__main__':
-    main()
+    print '%d in %d sequences removed due to bad alignment' %((totalSeq-len(st_goodSeqs)), (totalSeq))
