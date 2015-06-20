@@ -3,15 +3,15 @@ SSUsearch
 
 SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline is implemented in Makefile. Two key features:
 
-1. unsupervised community analysis with shotgun data
+1. unsupervised (OTU based) community analysis with shotgun data
 
-2. Scalibility: 5 Gb peak mem and 30 CPU hours on 60 Gb data.
+2. Scalibility: 5 Gb peak mem and 5 CPU hours on about 40 Gb data.
 
 
 Pipeline tutorial
 ------------------
 
-The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-947f7bfc** and add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebook could be accessed through https (some introduciton [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html))
+The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-947f7bfc** and add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebook could be accessed through https. Password to access https is **openscience**. There are some introduciton [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html)
 
 If you want to run the notebooks on your computer, ipython (v4) with notebook dependencies are needed.
 

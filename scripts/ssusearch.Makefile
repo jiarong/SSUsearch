@@ -37,7 +37,12 @@ ssusearch_se_qc: se_qc_setup hmmsearch mothur_align
 ssusearch_pe_qc: pe_qc_setup hmmsearch mothur_align
 align_only: align_only_setup mothur_align
 
-.PHONY: qc hmmsearch mothur_align clean
+### this target is for testing search
+search_only: no_qc_setup hmmsearch
+
+.PHONY: no_qc_setup se_qc_setup pe_qc_setup align_only_setup \
+	hmmsearch mothur_align clean \
+	ssusearch_no_qc ssusearch_se_qc ssusearch_pe_qc align_only search_only
 
 no_qc_setup: $(Seqfile)
 	Realfile=$(realpath $(Seqfile)) \
@@ -90,8 +95,8 @@ hmmsearch: $(Qc_file)
 		$(Hmm) $(Tag).qc
 	@echo "hmmsearch done.."
 	python $(Script_dir)/get-seq-from-hmmtblout.py \
-		$(Tag).qc.$(Gene).hmmtblout \
-		$(Tag).qc \
+		$(Tag).qc.$(Gene).hmmdomtblout \
+		$(Tag).qc.$(Gene).sto \
 		$(Tag).qc.$(Gene) \
 	|| { rm -f $(Tag).qc.$(Gene) && exit 1; }
 	rm -f $(Tag).qc
