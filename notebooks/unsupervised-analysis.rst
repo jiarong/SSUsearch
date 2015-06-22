@@ -4,53 +4,59 @@ set another directory for unsupervised analysis
 
 .. code:: python
 
-    mkdir -p /usr/local/notebooks/workdir/clust
+    pwd
 
-.. code:: python
-
-    cd /usr/local/notebooks/workdir/clust
 
 
 .. parsed-literal::
 
-    /usr/local/notebooks/workdir/clust
+    u'/home/guojiaro/SSUsearch/notebooks'
+
+
+
+.. code:: python
+
+    mkdir -p ./workdir/clust
+.. code:: python
+
+    cd ./workdir/clust
+
+.. parsed-literal::
+
+    /home/guojiaro/SSUsearch/notebooks/workdir/clust
 
 
 .. code:: python
 
     Prefix='SS'    # name for the analysis run
-    Script_dir='/usr/local/notebooks/external_tools/SSUsearch/scripts'
-    Wkdir='/usr/local/notebooks/workdir'
-    Mcclust_jar='/usr/local/notebooks/external_tools/Clustering/dist/Clustering.jar'
+    Script_dir='./external_tools/SSUsearch/scripts'
+    Wkdir='./workdir'
+    Mcclust_jar='./external_tools/Clustering/dist/Clustering.jar'
     Java_xmx='10g'
     Java_gc_threads='2'
-    Otu_dist_cutoff='0.03'
-    Design='/usr/local/notebooks/data/test/SS.design'
-
+    Otu_dist_cutoff='0.05'
+    Design='./data/test/SS.design'
 
 .. code:: python
 
     import os
     os.environ.update(
         {'Prefix':Prefix, 
-         'Script_dir':Script_dir, 
-         'Wkdir':Wkdir, 
-         'Mcclust_jar':Mcclust_jar, 
+         'Script_dir': os.path.abspath(Script_dir), 
+         'Wkdir': os.path.abspath(Wkdir), 
+         'Mcclust_jar': os.path.abspath(Mcclust_jar), 
          'Java_xmx':Java_xmx, 
          'Java_gc_threads':Java_gc_threads, 
          'Otu_dist_cutoff':Otu_dist_cutoff, 
-         'Design':Design})
-
+         'Design': os.path.abspath(Design)})
 .. code:: python
 
     cat $Wkdir/*.ssu.out/*.forclust > combined_seqs.afa
-
 .. code:: python
 
     # make group file for mcclust and mothur. 
     # first part of the file basename will be the group label, e.g. file "aa.bb.cc" will have "aa" as group label.
     !python $Script_dir/make-groupfile.py $Prefix.groups $Wkdir/*.ssu.out/*.forclust
-
 
 .. parsed-literal::
 
@@ -62,10 +68,9 @@ set another directory for unsupervised analysis
     !echo "*** Starting mcclust derep"
     !time java -Xmx$Java_xmx -XX:+UseParallelOldGC -XX:ParallelGCThreads=$Java_gc_threads \
         -jar $Mcclust_jar derep -a -o derep.fasta \
-        $Prefix.names temp.txt combined_seqs.afa
+        temp.mcclust.names temp.txt combined_seqs.afa
         
     !rm temp.txt
-
 
 .. parsed-literal::
 
@@ -80,10 +85,21 @@ set another directory for unsupervised analysis
 
 .. code:: python
 
+    # convert mcclust names to mothur names
+    !python $Script_dir/mcclust2mothur_names_file.py temp.mcclust.names temp.mothur.names
+.. code:: python
+
+    echo "starting preclust.."
+    ### output: derep.precluster.fasta, derep.precluster.names
+    !mothur "#pre.cluster(fasta=derep.fasta, diffs=1, name=temp.mothur.names)"
+.. code:: python
+
+    !python $Script_dir/mothur2mcclust_names_file.py derep.precluster.names $Prefix.names
+.. code:: python
+
     !time java -Xmx$Java_xmx -XX:+UseParallelOldGC -XX:ParallelGCThreads=$Java_gc_threads \
         -jar $Mcclust_jar dmatrix \
-        -l 25 -o matrix.bin -i $Prefix.names -I derep.fasta
-
+        -l 25 -o matrix.bin -i $Prefix.names -I derep.precluster.fasta
 
 .. parsed-literal::
 
@@ -105,13 +121,12 @@ set another directory for unsupervised analysis
 .. code:: python
 
     !time java -Xmx$Java_xmx -XX:+UseParallelOldGC -XX:ParallelGCThreads=$Java_gc_threads \
-        -jar $Mcclust_jar cluster \
+        -jar $Mcclust_jar cluster -m upgma \
         -i $Prefix.names -s $Prefix.groups -o complete.clust -d matrix.bin
     
     !python $Script_dir/mcclust2mothur-list-cutoff.py complete.clust $Prefix.list $Otu_dist_cutoff
     !sed -i 's/:/_/g' $Prefix.names $Prefix.groups $Prefix.list
     !echo "*** Replace ':' with '_' in seq names (original illumina name has ':' in them)"
-
 
 .. parsed-literal::
 
@@ -130,7 +145,6 @@ set another directory for unsupervised analysis
 
     !java -jar $Mcclust_jar rep-seqs -c -l -s complete.clust $Otu_dist_cutoff combined_seqs.afa
     !mv complete.clust_rep_seqs.fasta otu_rep_align.fa
-
 .. code:: python
 
     !mothur "#make.shared(list=$Prefix.list, group=$Prefix.groups, label=$Otu_dist_cutoff);"
@@ -138,7 +152,6 @@ set another directory for unsupervised analysis
     !mothur "#classify.otu(list=$Prefix.list, taxonomy=$Prefix.taxonomy, label=$Otu_dist_cutoff)"
     !mothur "#make.biom(shared=$Prefix.shared, constaxonomy=$Prefix.$Otu_dist_cutoff.cons.taxonomy)"
     !mv $Prefix.$Otu_dist_cutoff.biom $Prefix.biom
-
 
 .. parsed-literal::
 
@@ -262,7 +275,6 @@ set another directory for unsupervised analysis
 
     # clean up tempfiles
     !rm -f mothur.*.logfile *rabund complete* derep.fasta matrix.bin nonoverlapping.bin temp.*
-
 With SS.groups, SS.names and SS.list, most diversity analysis can be done by mothur. You can look at `mothur wiki <http://www.mothur.org/wiki/454_SOP>`_ for details (Do not forgot to do even sampling before beta-diversity analysis).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -277,7 +289,6 @@ SS.biom file can used in most tools. (qiime and rdp)
     !mothur "#make.shared(biom=$Prefix.biom); sub.sample(shared=$Prefix.shared); summary.single(calc=nseqs-coverage-sobs-chao-shannon-invsimpson); dist.shared(calc=braycurtis); pcoa(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist); nmds(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist); amova(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist, design=$Design); tree.shared(calc=braycurtis); unifrac.weighted(tree=$Prefix.userLabel.subsample.braycurtis.userLabel.tre, group=$Design, random=T)"
     !rm -f mothur.*.logfile; 
     !rm -f *.rabund
-
 
 .. parsed-literal::
 
@@ -441,7 +452,6 @@ SS.biom file can used in most tools. (qiime and rdp)
 .. code:: python
 
     !echo "This part of pipeline finishes successfully :)"
-
 
 .. parsed-literal::
 

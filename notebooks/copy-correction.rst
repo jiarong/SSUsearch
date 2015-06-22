@@ -4,52 +4,58 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
 
 .. code:: python
 
-    ### set up directory
-    !mkdir -p /usr/local/notebooks/workdir/copy_correction
+    pwd
 
-.. code:: python
-
-    cd /usr/local/notebooks/workdir/copy_correction
 
 
 .. parsed-literal::
 
-    /usr/local/notebooks/workdir/copy_correction
+    u'/home/guojiaro/SSUsearch/notebooks'
+
+
+
+.. code:: python
+
+    ### set up directory
+    !mkdir -p ./workdir/copy_correction
+.. code:: python
+
+    cd ./workdir/copy_correction
+
+.. parsed-literal::
+
+    /home/guojiaro/SSUsearch/notebooks/workdir/copy_correction
 
 
 .. code:: python
 
     Prefix='SS'    # name for the analysis run
-    Script_dir='/usr/local/notebooks/external_tools/SSUsearch/scripts'
-    Wkdir='/usr/local/notebooks/workdir'
-    Design='/usr/local/notebooks/data/test/SS.design'
-    Otu_dist_cutoff='0.03'
-    Copy_db='/usr/local/notebooks/data/SSUsearch_db/Copy_db.copyrighter.txt'
-
+    Script_dir='./external_tools/SSUsearch/scripts'
+    Wkdir='./workdir'
+    Design='./data/test/SS.design'
+    Otu_dist_cutoff='0.05'
+    Copy_db='./data/SSUsearch_db/Copy_db.copyrighter.txt'
 .. code:: python
 
     import os
     os.environ.update(
-        {'Prefix':Prefix, 
-         'Script_dir':Script_dir, 
-         'Wkdir':Wkdir, 
+        {'Prefix':Prefix,
+         'Script_dir': os.path.abspath(Script_dir), 
+         'Wkdir': os.path.abspath(Wkdir), 
          'Otu_dist_cutoff':Otu_dist_cutoff,
-         'Design':Design, 
-         'Copy_db':Copy_db})
-
+         'Design': os.path.abspath(Design), 
+         'Copy_db': os.path.abspath(Copy_db)})
 .. code:: python
 
     # get input files from '/usr/local/notebooks/workdir/clust'
     !ln -sf $Wkdir/clust/$Prefix.biom
     !ln -sf $Wkdir/clust/$Prefix.list
 
-
 .. code:: python
 
     # get Greengene taxonomy
     !cat $Wkdir/*.ssu.out/*.gg.taxonomy > $Prefix.taxonomy
     !mothur "#classify.otu(list=$Prefix.list, taxonomy=$Prefix.taxonomy, label=$Otu_dist_cutoff)"
-
 
 .. parsed-literal::
 
@@ -106,7 +112,6 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     !mothur "#make.biom(shared=$Prefix.shared, constaxonomy=$Prefix.$Otu_dist_cutoff.cons.taxonomy);"
     !mv $Prefix.userLabel.biom $Prefix.biom
     !rm -f mothur.*.logfile
-
 
 .. parsed-literal::
 
@@ -197,7 +202,6 @@ SS.biom can be further used for diversity analysis, important but focus of this 
     !mothur "#make.shared(biom=$Prefix.biom); sub.sample(shared=$Prefix.shared); summary.single(calc=nseqs-coverage-sobs-chao-shannon-invsimpson); dist.shared(calc=braycurtis); pcoa(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist); nmds(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist); amova(phylip=$Prefix.userLabel.subsample.braycurtis.userLabel.lt.dist, design=$Design); tree.shared(calc=braycurtis); unifrac.weighted(tree=$Prefix.userLabel.subsample.braycurtis.userLabel.tre, group=$Design, random=T)"
     !rm -f mothur.*.logfile; 
     !rm -f *.rabund
-
 
 .. parsed-literal::
 

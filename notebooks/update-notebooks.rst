@@ -6,7 +6,6 @@
     !git clone https://github.com/jiarong/SSUsearch.git
     !cp SSUsearch/notebooks/* .
 
-
 .. parsed-literal::
 
     Cloning into SSUsearch...

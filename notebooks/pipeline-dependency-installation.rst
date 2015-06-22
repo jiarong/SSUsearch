@@ -22,12 +22,22 @@ setup installation directory
 
 .. code:: python
 
-    mkdir -p /usr/local/notebooks/external_tools
+    pwd
+
+
+
+.. parsed-literal::
+
+    u'/home/guojiaro/SSUsearch/notebooks'
+
+
 
 .. code:: python
 
-    cd /usr/local/notebooks/external_tools
+    mkdir -p ./external_tools
+.. code:: python
 
+    cd ./external_tools
 
 .. parsed-literal::
 
@@ -40,7 +50,6 @@ Install HMMER
 .. code:: python
 
     !wget -c http://selab.janelia.org/software/hmmer3/3.1b1/hmmer-3.1b1-linux-intel-x86_64.tar.gz -O hmmer-3.1b1-linux-intel-x86_64.tar.gz
-
 
 .. parsed-literal::
 
@@ -60,7 +69,6 @@ Install HMMER
 .. code:: python
 
     !tar -xzvf hmmer-3.1b1-linux-intel-x86_64.tar.gz
-
 
 .. parsed-literal::
 
@@ -779,14 +787,12 @@ Install HMMER
 .. code:: python
 
     cp hmmer-3.1b1-linux-intel-x86_64/binaries/hmmsearch /usr/local/bin
-
 Install mothur
 ~~~~~~~~~~~~~~
 
 .. code:: python
 
     !wget http://www.mothur.org/w/images/8/88/Mothur.cen_64.zip -O mothur.zip
-
 
 .. parsed-literal::
 
@@ -806,7 +812,6 @@ Install mothur
 .. code:: python
 
     !unzip mothur.zip
-
 
 .. parsed-literal::
 
@@ -859,14 +864,12 @@ Install mothur
 .. code:: python
 
     cp mothur/mothur /usr/local/bin
-
 Install FLASH
 ~~~~~~~~~~~~~
 
 .. code:: python
 
     !wget -c http://sourceforge.net/projects/flashpage/files/FLASH-1.2.11.tar.gz/download -O FLASH-1.2.11.tar.gz
-
 
 .. parsed-literal::
 
@@ -897,7 +900,6 @@ Install FLASH
 
     !tar -xzvf FLASH-1.2.11.tar.gz
 
-
 .. parsed-literal::
 
     FLASH-1.2.11/
@@ -925,7 +927,6 @@ Install FLASH
     # ! can trigger subshell
     !cd FLASH-1.2.11/ && make
 
-
 .. parsed-literal::
 
     cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o flash.o flash.c
@@ -941,14 +942,12 @@ Install FLASH
 .. code:: python
 
     cp FLASH-1.2.11/flash /usr/local/bin
-
 Install RDP mcclust tool
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
     !wget http://lyorn.idyll.org/~gjr/public2/misc/Clustering.tar.gz
-
 
 .. parsed-literal::
 
@@ -968,7 +967,6 @@ Install RDP mcclust tool
 .. code:: python
 
     !tar -xzvf Clustering.tar.gz
-
 
 .. parsed-literal::
 
@@ -1299,11 +1297,9 @@ Comment out following cells if already have the packages installed
 
     %%script bash
     source ~/.bashrc
-
 .. code:: python
 
     !pip install -U pip
-
 
 .. parsed-literal::
 
@@ -1313,7 +1309,6 @@ Comment out following cells if already have the packages installed
 .. code:: python
 
     !pip install screed
-
 
 .. parsed-literal::
 
@@ -1325,7 +1320,6 @@ Comment out following cells if already have the packages installed
 
     !pip install brewer2mpl
 
-
 .. parsed-literal::
 
     Requirement already satisfied (use --upgrade to upgrade): brewer2mpl in /usr/local/anaconda/lib/python2.7/site-packages
@@ -1334,7 +1328,6 @@ Comment out following cells if already have the packages installed
 .. code:: python
 
     !pip install biom-format
-
 
 .. parsed-literal::
 
@@ -1361,7 +1354,6 @@ packages installed: https://store.continuum.io/cshop/anaconda/
 .. code:: python
 
     # !pip install numpy matplotlib scipy pandas
-
 install SSUsearch
 ~~~~~~~~~~~~~~~~~
 
@@ -1370,28 +1362,35 @@ install SSUsearch
     !rm -rf SSUsearch
     !git clone https://github.com/jiarong/SSUsearch.git
 
-
 .. parsed-literal::
 
-    Cloning into SSUsearch...
-    remote: Counting objects: 232, done.[K
-    remote: Compressing objects: 100% (21/21), done.[K
-    remote: Total 232 (delta 8), reused 0 (delta 0), pack-reused 211[K
-    Receiving objects: 100% (232/232), 105.38 KiB, done.
-    Resolving deltas: 100% (92/92), done.
+    Cloning into 'SSUsearch'...
+    remote: Counting objects: 295, done.[K
+    remote: Total 295 (delta 0), reused 0 (delta 0), pack-reused 295[K
+    Receiving objects: 100% (295/295), 150.92 KiB | 0 bytes/s, done.
+    Resolving deltas: 100% (133/133), done.
+    Checking connectivity... done
 
 
 .. code:: python
 
     ls
 
-
 .. parsed-literal::
 
-    [0m[01;34mClustering[0m/          [01;34mhmmer-3.1b1-linux-intel-x86_64[0m/        mothur.zip
-    Clustering.tar.gz    hmmer-3.1b1-linux-intel-x86_64.tar.gz  [01;34mSSUsearch[0m/
-    [01;34mFLASH-1.2.11[0m/        [01;34m__MACOSX[0m/
-    FLASH-1.2.11.tar.gz  [01;34mmothur[0m/
+    README.txt                              ssu-search-Copy1.rst
+    [34mSSUsearch[m[m/                              ssu-search-Copy2.ipynb
+    copy-correction.ipynb                   ssu-search-Copy2.rst
+    copy-correction.rst                     ssu-search-Copy3.ipynb
+    data-preparation.ipynb                  ssu-search-Copy3.rst
+    data-preparation.rst                    ssu-search-Copy4.ipynb
+    install-dropbox.ipynb                   ssu-search-Copy4.rst
+    install-dropbox.rst                     ssu-search.ipynb
+    overview.ipynb                          ssu-search.rst
+    overview.rst                            unsupervised-analysis.ipynb
+    pipeline-dependency-installation.ipynb  unsupervised-analysis.rst
+    pipeline-dependency-installation.rst    update-notebooks.rst
+    ssu-search-Copy1.ipynb
 
 
 check dependencies installed
@@ -1401,16 +1400,15 @@ check dependencies installed
 
     !make -f SSUsearch/Makefile tool_check Hmmsearch=hmmsearch Mothur=mothur Flash=flash Mcclust_jar=./Clustering/dist/Clustering.jar
 
-
 .. parsed-literal::
 
-    *** Dependencies are installed
+    flash not found. Please place flash in PATH or update variable in this script
+    make: *** [tool_check] Error 1
 
 
 .. code:: python
 
     ls
-
 
 .. parsed-literal::
 

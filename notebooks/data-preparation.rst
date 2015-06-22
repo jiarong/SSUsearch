@@ -4,16 +4,26 @@ Setup data directory
 
 .. code:: python
 
-    mkdir -p /usr/local/notebooks/data
+    pwd
 
-.. code:: python
-
-    cd /usr/local/notebooks/data
 
 
 .. parsed-literal::
 
-    /usr/local/notebooks/data
+    u'/home/guojiaro/SSUsearch/notebooks'
+
+
+
+.. code:: python
+
+    mkdir -p ./data
+.. code:: python
+
+    cd ./data
+
+.. parsed-literal::
+
+    /home/guojiaro/SSUsearch/notebooks/data
 
 
 Download database files
@@ -21,50 +31,40 @@ Download database files
 
 .. code:: python
 
-    !wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
-
+    !curl -O http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
 
 .. parsed-literal::
 
-    --2015-04-16 17:45:45--  http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
-    Resolving lyorn.idyll.org... 35.9.124.246
-    Connecting to lyorn.idyll.org|35.9.124.246|:80... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 122862729 (117M) [application/x-gzip]
-    Saving to: `SSUsearch_db.tgz.1'
-    
-    100%[======================================>] 122,862,729  497K/s   in 4m 12s  
-    
-    2015-04-16 17:49:56 (476 KB/s) - `SSUsearch_db.tgz.1' saved [122862729/122862729]
-    
+      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                     Dload  Upload   Total   Spent    Left  Speed
+    100  117M  100  117M    0     0   9.9M      0  0:00:11  0:00:11 --:--:-- 10.4M
 
 
 .. code:: python
 
     !tar -xzvf SSUsearch_db.tgz
 
-
 .. parsed-literal::
 
-    SSUsearch_db/
-    SSUsearch_db/Gene_db.silva_108_rep_set.fasta
-    SSUsearch_db/Gene_tax.silva_taxa_family.tax
-    SSUsearch_db/Gene_model_org.16s_ecoli_J01695.fasta
-    SSUsearch_db/Gene_db_cc.greengene_97_otus.fasta
-    SSUsearch_db/Gene_tax_cc.greengene_97_otus.tax
-    SSUsearch_db/Copy_db.copyrighter.txt
-    SSUsearch_db/Ali_template.silva_ssu.fasta
-    SSUsearch_db/readme
-    SSUsearch_db/Ali_template.silva_lsu.fasta
-    SSUsearch_db/Ali_template.test.fasta
-    SSUsearch_db/Ali_template.test_lsu.fasta
-    SSUsearch_db/Gene_db.lsu_silva_rep.fasta
-    SSUsearch_db/Gene_db.ssu_rdp_rep.fasta
-    SSUsearch_db/Gene_tax.lsu_silva_rep.tax
-    SSUsearch_db/Gene_tax.ssu_rdp_rep.tax
-    SSUsearch_db/Hmm.lsu.hmm
-    SSUsearch_db/clean.sh
-    SSUsearch_db/Hmm.ssu.hmm
+    x SSUsearch_db/
+    x SSUsearch_db/Gene_db.silva_108_rep_set.fasta
+    x SSUsearch_db/Gene_tax.silva_taxa_family.tax
+    x SSUsearch_db/Gene_model_org.16s_ecoli_J01695.fasta
+    x SSUsearch_db/Gene_db_cc.greengene_97_otus.fasta
+    x SSUsearch_db/Gene_tax_cc.greengene_97_otus.tax
+    x SSUsearch_db/Copy_db.copyrighter.txt
+    x SSUsearch_db/Ali_template.silva_ssu.fasta
+    x SSUsearch_db/readme
+    x SSUsearch_db/Ali_template.silva_lsu.fasta
+    x SSUsearch_db/Ali_template.test.fasta
+    x SSUsearch_db/Ali_template.test_lsu.fasta
+    x SSUsearch_db/Gene_db.lsu_silva_rep.fasta
+    x SSUsearch_db/Gene_db.ssu_rdp_rep.fasta
+    x SSUsearch_db/Gene_tax.lsu_silva_rep.tax
+    x SSUsearch_db/Gene_tax.ssu_rdp_rep.tax
+    x SSUsearch_db/Hmm.lsu.hmm
+    x SSUsearch_db/clean.sh
+    x SSUsearch_db/Hmm.ssu.hmm
 
 
 download a small test dataset
@@ -76,7 +76,6 @@ ATT: for real (larger) dataset, make sure there is enough disk space.
 .. code:: python
 
     !wget -r -np -nH --cut-dir=4 --reject="index.html*" http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch/test/
-
 
 .. parsed-literal::
 
@@ -361,10 +360,9 @@ ATT: for real (larger) dataset, make sure there is enough disk space.
 
     ls test/data/
 
-
 .. parsed-literal::
 
-    1c.fa  1d.fa  2c.fa  2d.fa
+    ls: test/data/: No such file or directory
 
 
 **This tutorial assumes that you ready finished quality trimming, and

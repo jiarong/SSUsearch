@@ -4,16 +4,14 @@ Set up working directory
 
 .. code:: python
 
-    mkdir -p /usr/local/notebooks/workdir
-
+    mkdir -p ./workdir
 .. code:: python
 
-    cd /usr/local/notebooks/workdir
-
+    cd ./workdir
 
 .. parsed-literal::
 
-    /usr/local/notebooks/workdir
+    /home/guojiaro/SSUsearch/notebooks/workdir
 
 
 .. code:: python
@@ -21,10 +19,9 @@ Set up working directory
     #check seqfile files to process in data directory
     !ls /usr/local/notebooks/data/test/data
 
-
 .. parsed-literal::
 
-    1c.fa  1d.fa  2c.fa  2d.fa
+    ls: /usr/local/notebooks/data/test/data: No such file or directory
 
 
 README
@@ -50,7 +47,6 @@ Here we will process one file at a time; set the "Seqfile" variable to the seqfi
 .. code:: python
 
     Seqfile='/usr/local/notebooks/data/test/data/2c.fa'
-
 Other parameters to set
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -72,13 +68,11 @@ Other parameters to set
     
     Gene_tax_cc='/usr/local/notebooks/data/SSUsearch_db/Gene_tax_cc.greengene_97_otus.tax' # greengene 2012.10 ref for copy correction
     Gene_db_cc='/usr/local/notebooks/data/SSUsearch_db/Gene_db_cc.greengene_97_otus.fasta'
-
 .. code:: python
 
     import os
     Filename=os.path.basename(Seqfile)
     Tag=Filename.split('.')[0]
-
 .. code:: python
 
     import os
@@ -99,12 +93,10 @@ Other parameters to set
          'Gene_db':Gene_db, 
          'Gene_tax_cc':Gene_tax_cc, 
          'Gene_db_cc':Gene_db_cc})
-
 .. code:: python
 
     !echo "*** make sure: parameters are right"
     !echo "Seqfile: $Seqfile\nCpu: $Cpu\nFilename: $Filename\nTag: $Tag"
-
 
 .. parsed-literal::
 
@@ -118,11 +110,9 @@ Other parameters to set
 .. code:: python
 
     mkdir -p $Tag.ssu.out
-
 .. code:: python
 
     ### start hmmsearch
-
 .. code:: python
 
     !echo "*** hmmsearch starting"
@@ -131,7 +121,6 @@ Other parameters to set
       -o /dev/null \
       $Hmm $Seqfile
     !echo "*** hmmsearch finished"
-
 
 .. parsed-literal::
 
@@ -147,7 +136,6 @@ Other parameters to set
         $Tag.ssu.out/$Tag.qc.$Gene.hmmtblout \
         $Seqfile \
         $Tag.ssu.out/$Tag.qc.$Gene
-
 
 .. parsed-literal::
 
@@ -166,7 +154,6 @@ Pass hits to mothur aligner
     !time mothur "#align.seqs(candidate=$Tag.ssu.out/$Tag.qc.$Gene.RFadded, template=$Ali_template, threshold=0.5, flip=t, processors=$Cpu)"
     
     !rm -f mothur.*.logfile
-
 
 .. parsed-literal::
 
@@ -227,13 +214,12 @@ Get aligned seqs that have > 50% matched to references
 
 .. code:: python
 
-    !python $Script_dir/mothur-align-report-parser.py \
+    !python $Script_dir/mothur-align-report-parser-cutoff.py \
         $Tag.ssu.out/$Tag.qc.$Gene.align.report \
         $Tag.ssu.out/$Tag.qc.$Gene.align \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter \
         0.5
         
-
 
 .. parsed-literal::
 
@@ -243,7 +229,6 @@ Get aligned seqs that have > 50% matched to references
 .. code:: python
 
     !python $Script_dir/remove-gap.py $Tag.ssu.out/$Tag.qc.$Gene.align.filter $Tag.ssu.out/$Tag.qc.$Gene.align.filter.fa
-
 Search is done here (the computational intensive part). Hooray!
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -262,7 +247,6 @@ Extract the reads mapped 150bp region in V4 (577-727 in *E.coli* SSU rRNA gene p
     
     !mv $Tag.ssu.out/$Tag.qc.$Gene.align.filter."$Start"to"$End".cut.lenscreen $Tag.ssu.out/$Tag.forclust
 
-
 .. parsed-literal::
 
     50 sequences are matched to 577-727 region
@@ -277,7 +261,6 @@ Classify SSU rRNA gene seqs using SILVA
     !mothur "#classify.seqs(fasta=$Tag.ssu.out/$Tag.qc.$Gene.align.filter.fa, template=$Gene_db, taxonomy=$Gene_tax, cutoff=50, processors=$Cpu)"
     !mv $Tag.ssu.out/$Tag.qc.$Gene.align.filter.*.wang.taxonomy \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.silva.taxonomy
-
 
 .. parsed-literal::
 
@@ -339,7 +322,6 @@ Classify SSU rRNA gene seqs using SILVA
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.silva.taxonomy \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.silva.taxonomy.count
     !rm -f mothur.*.logfile
-
 Classify SSU rRNA gene seqs with Greengene for copy correction later
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -349,7 +331,6 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
     !mothur "#classify.seqs(fasta=$Tag.ssu.out/$Tag.qc.$Gene.align.filter.fa, template=$Gene_db_cc, taxonomy=$Gene_tax_cc, cutoff=50, processors=$Cpu)"
     !mv $Tag.ssu.out/$Tag.qc.$Gene.align.filter.*.wang.taxonomy \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.gg.taxonomy
-
 
 .. parsed-literal::
 
@@ -411,12 +392,10 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.gg.taxonomy \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.gg.taxonomy.count
     !rm -f mothur.*.logfile
-
 .. code:: python
 
     # check the output directory
     !ls $Tag.ssu.out
-
 
 .. parsed-literal::
 
