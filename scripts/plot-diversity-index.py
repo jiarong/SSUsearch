@@ -6,8 +6,8 @@ import sys, os
 
 import numpy
 import matplotlib
-#matplotlib.use('Agg')
-matplotlib.use('Pdf')
+matplotlib.use('Agg')
+#matplotlib.use('Pdf')
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
@@ -159,7 +159,8 @@ def main():
     fig.set_tight_layout(True)
     #plt.savefig('%s.png' %(sys.argv[1]))
     #plt.savefig('%s.div_index.pdf' %('+'.join(f_labels)))
-    plt.savefig('%s.pdf' %(outfile))
+    #plt.savefig('%s.pdf' %(outfile))
+    plt.savefig('%s.png' %(outfile))
 
 if __name__ == '__main__':
     main()

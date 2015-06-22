@@ -8,7 +8,8 @@ from operator import itemgetter, attrgetter
 import numpy
 
 import matplotlib
-matplotlib.use('Pdf')
+#matplotlib.use('Pdf')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, LinearLocator,\
   LogLocator, MaxNLocator, AutoLocator, AutoMinorLocator, FormatStrFormatter
@@ -234,8 +235,8 @@ def main():
     #ax.yaxis.set_major_locator(majorLocator)
     #ax.yaxis.set_minor_locator(minorLocator)
 
-    #plt.savefig('{}.png'.format(outfile))
-    plt.savefig('{}.pdf'.format(outfile))
+    plt.savefig('{}.png'.format(outfile))
+    #plt.savefig('{}.pdf'.format(outfile))
 
 if __name__ == '__main__':
     main()
