@@ -4,14 +4,11 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
 
 .. code:: python
 
-    pwd
-
-
+    cd /usr/local/notebooks
 
 .. parsed-literal::
 
-    u'/home/guojiaro/SSUsearch/notebooks'
-
+    /usr/local/notebooks
 
 
 .. code:: python
@@ -20,17 +17,8 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     !mkdir -p ./workdir/copy_correction
 .. code:: python
 
-    cd ./workdir/copy_correction
-
-.. parsed-literal::
-
-    /home/guojiaro/SSUsearch/notebooks/workdir/copy_correction
-
-
-.. code:: python
-
     Prefix='SS'    # name for the analysis run
-    Script_dir='./external_tools/SSUsearch/scripts'
+    Script_dir='./SSUsearch/scripts'
     Wkdir='./workdir'
     Design='./data/test/SS.design'
     Otu_dist_cutoff='0.05'
@@ -38,13 +26,27 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
 .. code:: python
 
     import os
+    Script_dir=os.path.abspath(Script_dir)
+    Wkdir=os.path.abspath(Wkdir)
+    Design=os.path.abspath(Design)
+    Copy_db=os.path.abspath(Copy_db)
+    
     os.environ.update(
         {'Prefix':Prefix,
-         'Script_dir': os.path.abspath(Script_dir), 
-         'Wkdir': os.path.abspath(Wkdir), 
+         'Script_dir': Script_dir, 
+         'Wkdir': Wkdir, 
          'Otu_dist_cutoff':Otu_dist_cutoff,
-         'Design': os.path.abspath(Design), 
-         'Copy_db': os.path.abspath(Copy_db)})
+         'Design': Design, 
+         'Copy_db': Copy_db})
+.. code:: python
+
+    cd ./workdir/copy_correction
+
+.. parsed-literal::
+
+    /usr/local/notebooks/workdir/copy_correction
+
+
 .. code:: python
 
     # get input files from '/usr/local/notebooks/workdir/clust'
@@ -56,6 +58,8 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     # get Greengene taxonomy
     !cat $Wkdir/*.ssu.out/*.gg.taxonomy > $Prefix.taxonomy
     !mothur "#classify.otu(list=$Prefix.list, taxonomy=$Prefix.taxonomy, label=$Otu_dist_cutoff)"
+    !mv SS.0.03.cons.taxonomy SS.cons.taxonomy
+    !mv SS.0.03.cons.tax.summary SS.cons.tax.summary
 
 .. parsed-literal::
 
@@ -87,8 +91,9 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     
     
     
-    mothur > classify.otu(list=SS.list, taxonomy=SS.taxonomy, label=0.03)
+    mothur > classify.otu(list=SS.list, taxonomy=SS.taxonomy, label=0.05)
     reftaxonomy is not required, but if given will keep the rankIDs in the summary file static.
+    Your file does not include the label 0.05. I will use 0.03.
     0.03	147
     
     Output File Names: 
@@ -105,11 +110,11 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     
     # do copy correction and even sampling
     !python $Script_dir/copyrighter-otutable.py $Copy_db \
-        $Prefix.$Otu_dist_cutoff.cons.taxonomy \
+        $Prefix.cons.taxonomy \
         $Prefix.shared $Prefix.cc.shared
         
     !mv $Prefix.cc.shared $Prefix.shared
-    !mothur "#make.biom(shared=$Prefix.shared, constaxonomy=$Prefix.$Otu_dist_cutoff.cons.taxonomy);"
+    !mothur "#make.biom(shared=$Prefix.shared, constaxonomy=$Prefix.cons.taxonomy);"
     !mv $Prefix.userLabel.biom $Prefix.biom
     !rm -f mothur.*.logfile
 
@@ -184,7 +189,7 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     
     
     
-    mothur > make.biom(shared=SS.shared, constaxonomy=SS.0.03.cons.taxonomy)
+    mothur > make.biom(shared=SS.shared, constaxonomy=SS.cons.taxonomy)
     userLabel
     
     Output File Names: 
@@ -194,8 +199,8 @@ Copy corrections is based on `copyrighter <http://www.ncbi.nlm.nih.gov/pubmed/24
     mothur > quit()
 
 
-SS.biom can be further used for diversity analysis, important but focus of this tutorial (details see `mothur wiki <http://www.mothur.org/wiki/454_SOP>`_).
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SS.biom can be further used for diversity analysis, important but not focus of this tutorial (details see `mothur wiki <http://www.mothur.org/wiki/454_SOP>`_).
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: python
 
@@ -289,8 +294,8 @@ SS.biom can be further used for diversity analysis, important but focus of this 
     mothur > pcoa(phylip=SS.userLabel.subsample.braycurtis.userLabel.lt.dist)
     
     Processing...
-    Rsq 1 axis: 0.749418
-    Rsq 2 axis: 0.926937
+    Rsq 1 axis: 0.4
+    Rsq 2 axis: 0.989613
     Rsq 3 axis: 1
     
     Output File Names: 
@@ -312,8 +317,8 @@ SS.biom can be further used for diversity analysis, important but focus of this 
     10
     
     Number of dimensions:	2
-    Lowest stress :	0.115236
-    R-squared for configuration:	0.8053
+    Lowest stress :	0.152963
+    R-squared for configuration:	0.360718
     
     Output File Names: 
     SS.userLabel.subsample.braycurtis.userLabel.lt.nmds.iters
@@ -323,12 +328,12 @@ SS.biom can be further used for diversity analysis, important but focus of this 
     
     mothur > amova(phylip=SS.userLabel.subsample.braycurtis.userLabel.lt.dist, design=/usr/local/notebooks/data/test/SS.design)
     c-d	Among	Within	Total
-    SS	0.433674	0.867347	1.30102
+    SS	0.433674	1	1.43367
     df	1	2	3
-    MS	0.433674	0.433674
+    MS	0.433674	0.5
     
-    Fs:	1
-    p-value: 0.656
+    Fs:	0.867347
+    p-value: 1
     
     Experiment-wise error rate: 0.05
     If you have borderline P-values, you should try increasing the number of iterations
@@ -351,7 +356,7 @@ SS.biom can be further used for diversity analysis, important but focus of this 
     
     Using 1 processors.
     Tree#	Groups	WScore	WSig
-    1	c-d	0.981481	<0.0010
+    1	c-d	0.928571	<0.0010
     It took 0 secs to run unifrac.weighted.
     
     Output File Names: 

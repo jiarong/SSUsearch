@@ -4,14 +4,11 @@ set another directory for unsupervised analysis
 
 .. code:: python
 
-    pwd
-
-
+    cd /usr/local/notebooks
 
 .. parsed-literal::
 
-    u'/home/guojiaro/SSUsearch/notebooks'
-
+    /usr/local/notebooks
 
 
 .. code:: python
@@ -19,17 +16,8 @@ set another directory for unsupervised analysis
     mkdir -p ./workdir/clust
 .. code:: python
 
-    cd ./workdir/clust
-
-.. parsed-literal::
-
-    /home/guojiaro/SSUsearch/notebooks/workdir/clust
-
-
-.. code:: python
-
     Prefix='SS'    # name for the analysis run
-    Script_dir='./external_tools/SSUsearch/scripts'
+    Script_dir='./SSUsearch/scripts'
     Wkdir='./workdir'
     Mcclust_jar='./external_tools/Clustering/dist/Clustering.jar'
     Java_xmx='10g'
@@ -39,16 +27,31 @@ set another directory for unsupervised analysis
 
 .. code:: python
 
+    # get absolute path
     import os
+    Script_dir=os.path.abspath(Script_dir)
+    Wkdir=os.path.abspath(Wkdir)
+    Mcclust_jar=os.path.abspath(Mcclust_jar)
+    Design=os.path.abspath(Design)
+    
     os.environ.update(
         {'Prefix':Prefix, 
-         'Script_dir': os.path.abspath(Script_dir), 
-         'Wkdir': os.path.abspath(Wkdir), 
-         'Mcclust_jar': os.path.abspath(Mcclust_jar), 
+         'Script_dir': Script_dir, 
+         'Wkdir': Wkdir, 
+         'Mcclust_jar': Mcclust_jar, 
          'Java_xmx':Java_xmx, 
          'Java_gc_threads':Java_gc_threads, 
          'Otu_dist_cutoff':Otu_dist_cutoff, 
-         'Design': os.path.abspath(Design)})
+         'Design': Design})
+.. code:: python
+
+    cd ./workdir/clust
+
+.. parsed-literal::
+
+    /usr/local/notebooks/workdir/clust
+
+
 .. code:: python
 
     cat $Wkdir/*.ssu.out/*.forclust > combined_seqs.afa
@@ -78,9 +81,9 @@ set another directory for unsupervised analysis
     Processing combined_seqs.afa
     Total sequences: 199
     Unique sequences: 174
-    Dereplication complete: 368
-    0.57user 0.12system 0:00.47elapsed 147%CPU (0avgtext+0avgdata 355728maxresident)k
-    0inputs+192outputs (0major+22898minor)pagefaults 0swaps
+    Dereplication complete: 499
+    0.62user 0.14system 0:00.84elapsed 90%CPU (0avgtext+0avgdata 354992maxresident)k
+    1936inputs+192outputs (1major+23117minor)pagefaults 0swaps
 
 
 .. code:: python
@@ -89,9 +92,61 @@ set another directory for unsupervised analysis
     !python $Script_dir/mcclust2mothur_names_file.py temp.mcclust.names temp.mothur.names
 .. code:: python
 
-    echo "starting preclust.."
+    !echo "starting preclust.."
     ### output: derep.precluster.fasta, derep.precluster.names
     !mothur "#pre.cluster(fasta=derep.fasta, diffs=1, name=temp.mothur.names)"
+
+.. parsed-literal::
+
+    starting preclust..
+    [H[2J
+    
+    
+    
+    
+    
+    mothur v.1.34.4
+    Last updated: 12/22/2014
+    
+    by
+    Patrick D. Schloss
+    
+    Department of Microbiology & Immunology
+    University of Michigan
+    pschloss@umich.edu
+    http://www.mothur.org
+    
+    When using, please cite:
+    Schloss, P.D., et al., Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.
+    
+    Distributed under the GNU General Public License
+    
+    Type 'help()' for information on the commands that are available
+    
+    Type 'quit()' to exit program
+    
+    
+    
+    mothur > pre.cluster(fasta=derep.fasta, diffs=1, name=temp.mothur.names)
+    
+    Using 1 processors.
+    0	174	0
+    100	165	9
+    174	163	11
+    Total number of sequences before precluster was 174.
+    pre.cluster removed 11 sequences.
+    
+    It took 0 secs to cluster 174 sequences.
+    
+    Output File Names: 
+    derep.precluster.fasta
+    derep.precluster.names
+    derep.precluster.map
+    
+    
+    mothur > quit()
+
+
 .. code:: python
 
     !python $Script_dir/mothur2mcclust_names_file.py derep.precluster.names $Prefix.names
@@ -105,17 +160,17 @@ set another directory for unsupervised analysis
 
     Reading sequences(memratio=1.2895267219085598E-4)...
     Using distance model edu.msu.cme.rdp.alignment.pairwise.rna.UncorrectedDistanceModel
-    Read 174 Nucleotide sequences (memratio=3.869057932748428E-4)
-    Reading ID Mapping from file /usr/local/notebooks/workdir/clust/SS.names
-    Read mapping for 199 sequences (memratio=3.869057932748428E-4)
-    Starting distance computations, predicted max edges=30276, at=Sat Apr 18 06:38:13 UTC 2015
-    Dumping 15051 edges to partial_matrix0 FINAL EDGES (memory ratio=0.001979570661990768)
-    Matrix edges computed: 163
+    Read 163 Nucleotide sequences (memratio=2.579355191410434E-4)
+    Reading ID Mapping from file /usr/local/notebooks/SS.names
+    Read mapping for 199 sequences (memratio=3.8690076414828753E-4)
+    Starting distance computations, predicted max edges=26569, at=Mon Jun 22 21:42:46 UTC 2015
+    Dumping 13203 edges to partial_matrix0 FINAL EDGES (memory ratio=0.001850005274547931)
+    Matrix edges computed: 129
     Maximum distance: 0.5238095238095238
     Splits: 1
-    Partition files merged: 6
-    0.62user 0.12system 0:00.37elapsed 203%CPU (0avgtext+0avgdata 239424maxresident)k
-    0inputs+424outputs (0major+17364minor)pagefaults 0swaps
+    Partition files merged: 102
+    0.60user 0.08system 0:00.55elapsed 124%CPU (0avgtext+0avgdata 201776maxresident)k
+    1872inputs+376outputs (0major+14881minor)pagefaults 0swaps
 
 
 .. code:: python
@@ -130,10 +185,12 @@ set another directory for unsupervised analysis
 
 .. parsed-literal::
 
-    Doing complete linkage clustering with step 0.009999999776482582 (realstep=100)
-    Clustering complete: 341
-    0.82user 0.16system 0:00.48elapsed 201%CPU (0avgtext+0avgdata 329744maxresident)k
-    0inputs+1088outputs (0major+24243minor)pagefaults 0swaps
+    lambda=0
+    Clustering complete: 619
+    Lookaheads performed: 0
+    Time spent Looking ahead: 0
+    1.33user 0.15system 0:00.79elapsed 188%CPU (0avgtext+0avgdata 284992maxresident)k
+    368inputs+744outputs (0major+20127minor)pagefaults 0swaps
     File(s):	1c 1d 2c 2d 
     
     Sequences:	50 49 50 50 
@@ -183,8 +240,8 @@ set another directory for unsupervised analysis
     
     
     
-    mothur > make.shared(list=SS.list, group=SS.groups, label=0.03)
-    0.03
+    mothur > make.shared(list=SS.list, group=SS.groups, label=0.05)
+    0.05
     
     Output File Names: 
     SS.shared
@@ -223,13 +280,13 @@ set another directory for unsupervised analysis
     
     
     
-    mothur > classify.otu(list=SS.list, taxonomy=SS.taxonomy, label=0.03)
+    mothur > classify.otu(list=SS.list, taxonomy=SS.taxonomy, label=0.05)
     reftaxonomy is not required, but if given will keep the rankIDs in the summary file static.
-    0.03	147
+    0.05	130
     
     Output File Names: 
-    SS.0.03.cons.taxonomy
-    SS.0.03.cons.tax.summary
+    SS.0.05.cons.taxonomy
+    SS.0.05.cons.tax.summary
     
     
     mothur > quit()
@@ -261,11 +318,11 @@ set another directory for unsupervised analysis
     
     
     
-    mothur > make.biom(shared=SS.shared, constaxonomy=SS.0.03.cons.taxonomy)
-    0.03
+    mothur > make.biom(shared=SS.shared, constaxonomy=SS.0.05.cons.taxonomy)
+    0.05
     
     Output File Names: 
-    SS.0.03.biom
+    SS.0.05.biom
     
     
     mothur > quit()
@@ -376,8 +433,8 @@ SS.biom file can used in most tools. (qiime and rdp)
     mothur > pcoa(phylip=SS.userLabel.subsample.braycurtis.userLabel.lt.dist)
     
     Processing...
-    Rsq 1 axis: 0.718058
-    Rsq 2 axis: 0.827489
+    Rsq 1 axis: 0.91053
+    Rsq 2 axis: 0.726899
     Rsq 3 axis: 1
     
     Output File Names: 
@@ -399,8 +456,8 @@ SS.biom file can used in most tools. (qiime and rdp)
     10
     
     Number of dimensions:	2
-    Lowest stress :	0.152534
-    R-squared for configuration:	0.377017
+    Lowest stress :	0.15928
+    R-squared for configuration:	0.314006
     
     Output File Names: 
     SS.userLabel.subsample.braycurtis.userLabel.lt.nmds.iters
@@ -410,12 +467,12 @@ SS.biom file can used in most tools. (qiime and rdp)
     
     mothur > amova(phylip=SS.userLabel.subsample.braycurtis.userLabel.lt.dist, design=/usr/local/notebooks/data/test/SS.design)
     c-d	Among	Within	Total
-    SS	0.409934	0.722407	1.13234
+    SS	0.357247	0.673053	1.0303
     df	1	2	3
-    MS	0.409934	0.361203
+    MS	0.357247	0.336526
     
-    Fs:	1.13491
-    p-value: 0.304
+    Fs:	1.06157
+    p-value: 0.349
     
     Experiment-wise error rate: 0.05
     If you have borderline P-values, you should try increasing the number of iterations
@@ -438,7 +495,7 @@ SS.biom file can used in most tools. (qiime and rdp)
     
     Using 1 processors.
     Tree#	Groups	WScore	WSig
-    1	c-d	0.963687	<0.0010
+    1	c-d	0.942529	<0.0010
     It took 0 secs to run unifrac.weighted.
     
     Output File Names: 
@@ -456,5 +513,65 @@ SS.biom file can used in most tools. (qiime and rdp)
 .. parsed-literal::
 
     This part of pipeline finishes successfully :)
+
+
+
+.. code:: python
+
+    ### some simple visualization
+.. code:: python
+
+    # alpha diveristy index
+    !python $Script_dir/plot-diversity-index.py "userLabel" "chao,shannon,invsimpson" "c,d" "SS.userLabel.subsample.groups.summary" "test" "test.alpha" 
+
+.. parsed-literal::
+
+    2 samples collect for Kw c
+    2 samples collect for Kw d
+    2 samples collect for Kw c
+    2 samples collect for Kw d
+    2 samples collect for Kw c
+    2 samples collect for Kw d
+
+
+.. code:: python
+
+    from IPython.display import Image
+    Image('test.alpha.png')
+
+
+
+.. image:: unsupervised-analysis_files/unsupervised-analysis_23_0.png
+
+
+
+.. code:: python
+
+    # taxon distribution
+    !python $Script_dir/plot-taxa-count.py 2 test.taxa.dist ../*.ssu.out/*.silva.taxonomy.count
+.. code:: python
+
+    from IPython.display import Image
+    Image('test.taxa.dist.png')
+
+
+
+.. image:: unsupervised-analysis_files/unsupervised-analysis_25_0.png
+
+
+
+.. code:: python
+
+    # ordination
+    !python $Script_dir/plot-pcoa.py  SS.userLabel.subsample.braycurtis.userLabel.lt.pcoa.axes  SS.userLabel.subsample.braycurtis.userLabel.lt.pcoa.loadings  test.beta.pcoa
+.. code:: python
+
+    from IPython.display import Image
+    Image('test.beta.pcoa.png')
+
+
+
+.. image:: unsupervised-analysis_files/unsupervised-analysis_27_0.png
+
 
 

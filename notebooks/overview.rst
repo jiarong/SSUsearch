@@ -29,16 +29,15 @@ Following are step by step tutorial for this pipeline:
     # update the notebooks
     !rm -rf SSUsearch
     !git clone https://github.com/jiarong/SSUsearch.git
-    !cp SSUsearch/notebooks/* .
+    !cp SSUsearch/notebooks/*.ipynb .
 
 .. parsed-literal::
 
     Cloning into SSUsearch...
-    remote: Counting objects: 232, done.[K
-    remote: Compressing objects: 100% (21/21), done.[K
-    remote: Total 232 (delta 8), reused 0 (delta 0), pack-reused 211[K
-    Receiving objects: 100% (232/232), 105.38 KiB, done.
-    Resolving deltas: 100% (92/92), done.
-    cp: cannot stat `SSUsearch/notebooks/*': No such file or directory
+    remote: Counting objects: 323, done.[K
+    remote: Compressing objects: 100% (28/28), done.[K
+    remote: Total 323 (delta 14), reused 0 (delta 0), pack-reused 295[K
+    Receiving objects: 100% (323/323), 197.67 KiB, done.
+    Resolving deltas: 100% (147/147), done.
 
 

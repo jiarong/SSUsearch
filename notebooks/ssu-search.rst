@@ -4,14 +4,11 @@ Set up working directory
 
 .. code:: python
 
-    pwd
-
-
+    cd /usr/local/notebooks
 
 .. parsed-literal::
 
-    u'/home/guojiaro/SSUsearch/notebooks'
-
+    /usr/local/notebooks
 
 
 .. code:: python
@@ -19,21 +16,12 @@ Set up working directory
     mkdir -p ./workdir
 .. code:: python
 
-    cd ./workdir
-
-.. parsed-literal::
-
-    /home/guojiaro/SSUsearch/notebooks/workdir
-
-
-.. code:: python
-
     #check seqfile files to process in data directory (make sure you still remember the data directory)
     !ls ./data/test/data
 
 .. parsed-literal::
 
-    ls: ./data/test/data: No such file or directory
+    1c.fa  1d.fa  2c.fa  2d.fa
 
 
 README
@@ -79,7 +67,7 @@ Other parameters to set
     Cpu='2'   # number of maxixum threads for search and alignment
     Hmm='./data/SSUsearch_db/Hmm.ssu.hmm'   # hmm model for ssu
     Gene='ssu'
-    Script_dir='./external_tools/SSUsearch/scripts'
+    Script_dir='./SSUsearch/scripts'
     Gene_model_org='./data/SSUsearch_db/Gene_model_org.16s_ecoli_J01695.fasta'
     Ali_template='./data/SSUsearch_db/Ali_template.silva_ssu.fasta'
     
@@ -101,12 +89,22 @@ Other parameters to set
 .. code:: python
 
     import os
+    Hmm=os.path.abspath(Hmm)
+    Seqfile=os.path.abspath(Seqfile)
+    Script_dir=os.path.abspath(Script_dir)
+    Gene_model_org=os.path.abspath(Gene_model_org)
+    Ali_template=os.path.abspath(Ali_template)
+    Gene_tax=os.path.abspath(Gene_tax)
+    Gene_db=os.path.abspath(Gene_db)
+    Gene_tax_cc=os.path.abspath(Gene_tax_cc)
+    Gene_db_cc=os.path.abspath(Gene_db_cc)
+    
     os.environ.update(
         {'Cpu':Cpu, 
          'Hmm':os.path.abspath(Hmm), 
          'Gene':Gene, 
          'Seqfile':os.path.abspath(Seqfile), 
-         'Filename':os.path.abspath(Filename), 
+         'Filename':Filename, 
          'Tag':Tag, 
          'Script_dir':os.path.abspath(Script_dir), 
          'Gene_model_org':os.path.abspath(Gene_model_org), 
@@ -134,6 +132,15 @@ Other parameters to set
 
 .. code:: python
 
+    cd workdir
+
+.. parsed-literal::
+
+    /usr/local/notebooks/workdir
+
+
+.. code:: python
+
     mkdir -p $Tag.ssu.out
 .. code:: python
 
@@ -142,29 +149,30 @@ Other parameters to set
 
     !echo "*** hmmsearch starting"
     !time hmmsearch --incE 10 --incdomE 10 --cpu $Cpu \
-      --tblout $Tag.ssu.out/$Tag.qc.$Gene.hmmtblout \
-      -o /dev/null \
+      --domtblout $Tag.ssu.out/$Tag.qc.$Gene.hmmdomtblout \
+      -o /dev/null -A $Tag.ssu.out/$Tag.qc.$Gene.sto \
       $Hmm $Seqfile
     !echo "*** hmmsearch finished"
 
 .. parsed-literal::
 
     *** hmmsearch starting
-    0.96user 0.04system 0:01.03elapsed 97%CPU (0avgtext+0avgdata 65072maxresident)k
-    4632inputs+40outputs (11major+7576minor)pagefaults 0swaps
+    0.95user 0.04system 0:00.99elapsed 99%CPU (0avgtext+0avgdata 65712maxresident)k
+    0inputs+1080outputs (0major+7774minor)pagefaults 0swaps
     *** hmmsearch finished
 
 
 .. code:: python
 
-    !python $Script_dir/get-seq-from-hmmtblout.py \
-        $Tag.ssu.out/$Tag.qc.$Gene.hmmtblout \
-        $Seqfile \
+    !python $Script_dir/get-seq-from-hmmout.py \
+        $Tag.ssu.out/$Tag.qc.$Gene.hmmdomtblout \
+        $Tag.ssu.out/$Tag.qc.$Gene.sto \
         $Tag.ssu.out/$Tag.qc.$Gene
 
 .. parsed-literal::
 
-    50 hits at 10 cutoff
+    parsing hmmdotblout done..
+    50 of 114 seqs are kept after hmm parser
 
 
 Pass hits to mothur aligner
@@ -218,8 +226,8 @@ Pass hits to mothur aligner
     Reading in the /usr/local/notebooks/data/SSUsearch_db/Ali_template.silva_ssu.fasta template sequences...	DONE.
     It took 25 to read  18491 sequences.
     Aligning sequences from 1c.ssu.out/1c.qc.ssu.RFadded ...
-    24
-    27
+    23
+    28
     It took 1 secs to align 51 sequences.
     
     
@@ -230,8 +238,8 @@ Pass hits to mothur aligner
     [WARNING]: your sequence names contained ':'.  I changed them to '_' to avoid problems in your downstream analysis.
     
     mothur > quit()
-    35.06user 2.70system 0:37.33elapsed 101%CPU (0avgtext+0avgdata 4891712maxresident)k
-    24inputs+289144outputs (0major+403292minor)pagefaults 0swaps
+    26.96user 2.61system 0:29.14elapsed 101%CPU (0avgtext+0avgdata 4881984maxresident)k
+    0inputs+7792outputs (0major+399013minor)pagefaults 0swaps
 
 
 Get aligned seqs that have > 50% matched to references
@@ -274,7 +282,7 @@ Extract the reads mapped 150bp region in V4 (577-727 in *E.coli* SSU rRNA gene p
 
 .. parsed-literal::
 
-    50 sequences are matched to 577-727 region
+    28 sequences are matched to 577-727 region
 
 
 Classify SSU rRNA gene seqs using SILVA
@@ -320,21 +328,17 @@ Classify SSU rRNA gene seqs using SILVA
     mothur > classify.seqs(fasta=1c.ssu.out/1c.qc.ssu.align.filter.fa, template=/usr/local/notebooks/data/SSUsearch_db/Gene_db.silva_108_rep_set.fasta, taxonomy=/usr/local/notebooks/data/SSUsearch_db/Gene_tax.silva_taxa_family.tax, cutoff=50, processors=2)
     
     Using 2 processors.
-    Generating search database...    DONE.
-    It took 78 seconds generate search database. 
-    
-    Reading in the /usr/local/notebooks/data/SSUsearch_db/Gene_tax.silva_taxa_family.tax taxonomy...	DONE.
-    Calculating template taxonomy tree...     DONE.
-    Calculating template probabilities...     DONE.
-    It took 286 seconds get probabilities. 
+    Reading template taxonomy...     DONE.
+    Reading template probabilities...     DONE.
+    It took 20 seconds get probabilities. 
     Classifying sequences from 1c.ssu.out/1c.qc.ssu.align.filter.fa ...
     Processing sequence: 25
     Processing sequence: 25
     
-    It took 1 secs to classify 50 sequences.
+    It took 0 secs to classify 50 sequences.
     
     
-    It took 0 secs to create the summary file for 50 sequences.
+    It took 1 secs to create the summary file for 50 sequences.
     
     
     Output File Names: 
@@ -343,8 +347,6 @@ Classify SSU rRNA gene seqs using SILVA
     
     
     mothur > quit()
-    /bin/sh: Script_dir: not found
-    python: can't open file '/count-taxon.py': [Errno 2] No such file or directory
 
 
 .. code:: python
@@ -353,12 +355,6 @@ Classify SSU rRNA gene seqs using SILVA
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.silva.taxonomy \
         $Tag.ssu.out/$Tag.qc.$Gene.align.filter.wang.silva.taxonomy.count
     !rm -f mothur.*.logfile
-
-.. parsed-literal::
-
-    mv: cannot stat `1c.ssu.out/1c.qc.ssu.align.filter.*.wang.taxonomy': No such file or directory
-
-
 Classify SSU rRNA gene seqs with Greengene for copy correction later
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -402,13 +398,9 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
     mothur > classify.seqs(fasta=1c.ssu.out/1c.qc.ssu.align.filter.fa, template=/usr/local/notebooks/data/SSUsearch_db/Gene_db_cc.greengene_97_otus.fasta, taxonomy=/usr/local/notebooks/data/SSUsearch_db/Gene_tax_cc.greengene_97_otus.tax, cutoff=50, processors=2)
     
     Using 2 processors.
-    Generating search database...    DONE.
-    It took 60 seconds generate search database. 
-    
-    Reading in the /usr/local/notebooks/data/SSUsearch_db/Gene_tax_cc.greengene_97_otus.tax taxonomy...	DONE.
-    Calculating template taxonomy tree...     DONE.
-    Calculating template probabilities...     DONE.
-    It took 276 seconds get probabilities. 
+    Reading template taxonomy...     DONE.
+    Reading template probabilities...     DONE.
+    It took 14 seconds get probabilities. 
     Classifying sequences from 1c.ssu.out/1c.qc.ssu.align.filter.fa ...
     Processing sequence: 25
     Processing sequence: 25
@@ -425,8 +417,6 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
     
     
     mothur > quit()
-    /bin/sh: Script_dir: not found
-    python: can't open file '/count-taxon.py': [Errno 2] No such file or directory
 
 
 .. code:: python
@@ -443,6 +433,8 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
 .. parsed-literal::
 
     1c.577to727
+    1c.cut
+    1c.forclust
     1c.qc.ssu
     1c.qc.ssu.align
     1c.qc.ssu.align.filter
@@ -456,8 +448,11 @@ Classify SSU rRNA gene seqs with Greengene for copy correction later
     1c.qc.ssu.align.filter.wang.silva.taxonomy
     1c.qc.ssu.align.filter.wang.silva.taxonomy.count
     1c.qc.ssu.align.report
+    1c.qc.ssu.hmmdomtblout
+    1c.qc.ssu.hmmdomtblout.parsedToDictWithScore.pickle
     1c.qc.ssu.hmmtblout
     1c.qc.ssu.RFadded
+    1c.qc.ssu.sto
 
 
 This part of pipeline (working with one sequence file) finishes here. Next we will combine samples for community analysis (see unsupervised analysis).

@@ -4,14 +4,11 @@ Setup data directory
 
 .. code:: python
 
-    pwd
-
-
+    cd /usr/local/notebooks
 
 .. parsed-literal::
 
-    u'/home/guojiaro/SSUsearch/notebooks'
-
+    /usr/local/notebooks
 
 
 .. code:: python
@@ -23,7 +20,7 @@ Setup data directory
 
 .. parsed-literal::
 
-    /home/guojiaro/SSUsearch/notebooks/data
+    /usr/local/notebooks/data
 
 
 Download database files
@@ -365,8 +362,8 @@ ATT: for real (larger) dataset, make sure there is enough disk space.
     ls: test/data/: No such file or directory
 
 
-**This tutorial assumes that you ready finished quality trimming, and
-also paired end merge, if you paired end reads overlap.**
+This tutorial assumes that you ready finished quality trimming, and also paired end merge, if you paired end reads overlap.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For quality trimming, we recommend
 `trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>`_ written
@@ -377,3 +374,4 @@ in C.
 For paired end reads merging, we recommend
 `pandseq <https://github.com/neufeld/pandaseq>`_ or
 `flash <http://ccb.jhu.edu/software/FLASH/>`_
+

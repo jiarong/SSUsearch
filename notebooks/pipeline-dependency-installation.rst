@@ -10,7 +10,6 @@ This pipeline requires:
 -  HMMER3.1
 -  mothur
 -  RDP mcclust
--  FLASH
 -  python pandas, numpy, scipy, matplotlib, and screed package.
 
 Following steps should work for linux machines. If you are running this
@@ -22,14 +21,11 @@ setup installation directory
 
 .. code:: python
 
-    pwd
-
-
+    cd /usr/local/notebooks
 
 .. parsed-literal::
 
-    u'/home/guojiaro/SSUsearch/notebooks'
-
+    /usr/local/notebooks
 
 
 .. code:: python
@@ -44,6 +40,9 @@ setup installation directory
     /usr/local/notebooks/external_tools
 
 
+.. code:: python
+
+    mkdir -p ./bin
 Install HMMER
 ~~~~~~~~~~~~~
 
@@ -787,6 +786,9 @@ Install HMMER
 .. code:: python
 
     cp hmmer-3.1b1-linux-intel-x86_64/binaries/hmmsearch /usr/local/bin
+.. code:: python
+
+    cp hmmer-3.1b1-linux-intel-x86_64/binaries/hmmsearch ./bin
 Install mothur
 ~~~~~~~~~~~~~~
 
@@ -864,84 +866,9 @@ Install mothur
 .. code:: python
 
     cp mothur/mothur /usr/local/bin
-Install FLASH
-~~~~~~~~~~~~~
-
 .. code:: python
 
-    !wget -c http://sourceforge.net/projects/flashpage/files/FLASH-1.2.11.tar.gz/download -O FLASH-1.2.11.tar.gz
-
-.. parsed-literal::
-
-    --2015-04-11 19:46:14--  http://sourceforge.net/projects/flashpage/files/FLASH-1.2.11.tar.gz/download
-    Resolving sourceforge.net... 216.34.181.60
-    Connecting to sourceforge.net|216.34.181.60|:80... connected.
-    HTTP request sent, awaiting response... 302 Found
-    Location: http://downloads.sourceforge.net/project/flashpage/FLASH-1.2.11.tar.gz?r=&ts=1428781574&use_mirror=iweb [following]
-    --2015-04-11 19:46:14--  http://downloads.sourceforge.net/project/flashpage/FLASH-1.2.11.tar.gz?r=&ts=1428781574&use_mirror=iweb
-    Resolving downloads.sourceforge.net... 216.34.181.59
-    Connecting to downloads.sourceforge.net|216.34.181.59|:80... connected.
-    HTTP request sent, awaiting response... 302 Found
-    Location: http://iweb.dl.sourceforge.net/project/flashpage/FLASH-1.2.11.tar.gz [following]
-    --2015-04-11 19:46:14--  http://iweb.dl.sourceforge.net/project/flashpage/FLASH-1.2.11.tar.gz
-    Resolving iweb.dl.sourceforge.net... 70.38.0.134, 2607:f748:10:12::5f:2
-    Connecting to iweb.dl.sourceforge.net|70.38.0.134|:80... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 48889 (48K) [application/x-gzip]
-    Saving to: `FLASH-1.2.11.tar.gz'
-    
-    100%[======================================>] 48,889      --.-K/s   in 0.08s   
-    
-    2015-04-11 19:46:15 (620 KB/s) - `FLASH-1.2.11.tar.gz' saved [48889/48889]
-    
-
-
-.. code:: python
-
-    !tar -xzvf FLASH-1.2.11.tar.gz
-
-.. parsed-literal::
-
-    FLASH-1.2.11/
-    FLASH-1.2.11/COPYING
-    FLASH-1.2.11/Makefile
-    FLASH-1.2.11/NEWS
-    FLASH-1.2.11/README
-    FLASH-1.2.11/combine_reads.c
-    FLASH-1.2.11/combine_reads.h
-    FLASH-1.2.11/flash.c
-    FLASH-1.2.11/iostream.c
-    FLASH-1.2.11/iostream.h
-    FLASH-1.2.11/read.h
-    FLASH-1.2.11/read_io.c
-    FLASH-1.2.11/read_io.h
-    FLASH-1.2.11/read_queue.c
-    FLASH-1.2.11/read_queue.h
-    FLASH-1.2.11/read_util.c
-    FLASH-1.2.11/util.c
-    FLASH-1.2.11/util.h
-
-
-.. code:: python
-
-    # ! can trigger subshell
-    !cd FLASH-1.2.11/ && make
-
-.. parsed-literal::
-
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o flash.o flash.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o combine_reads.o combine_reads.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o iostream.o iostream.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o read_io.o read_io.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o read_queue.o read_queue.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o read_util.o read_util.c
-    cc -O2 -Wall -std=c99 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64   -c -o util.o util.c
-    cc   flash.o combine_reads.o iostream.o read_io.o read_queue.o read_util.o util.o  -lz -lpthread -o flash
-
-
-.. code:: python
-
-    cp FLASH-1.2.11/flash /usr/local/bin
+    cp mothur/mothur ./bin
 Install RDP mcclust tool
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1345,54 +1272,15 @@ Comment out following cells if already have the packages installed
     Successfully installed biom-format-2.1.3 pyqi-0.3.2
 
 
-install numpy, matplotlib, scipy, and pandas
+Install numpy, matplotlib, scipy, and pandas
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can install anaconda that have most popular python
-packages installed: https://store.continuum.io/cshop/anaconda/
+Alternatively, you can install **anaconda** that have most popular
+python packages installed: https://store.continuum.io/cshop/anaconda/
 
 .. code:: python
 
     # !pip install numpy matplotlib scipy pandas
-install SSUsearch
-~~~~~~~~~~~~~~~~~
-
-.. code:: python
-
-    !rm -rf SSUsearch
-    !git clone https://github.com/jiarong/SSUsearch.git
-
-.. parsed-literal::
-
-    Cloning into 'SSUsearch'...
-    remote: Counting objects: 295, done.[K
-    remote: Total 295 (delta 0), reused 0 (delta 0), pack-reused 295[K
-    Receiving objects: 100% (295/295), 150.92 KiB | 0 bytes/s, done.
-    Resolving deltas: 100% (133/133), done.
-    Checking connectivity... done
-
-
-.. code:: python
-
-    ls
-
-.. parsed-literal::
-
-    README.txt                              ssu-search-Copy1.rst
-    [34mSSUsearch[m[m/                              ssu-search-Copy2.ipynb
-    copy-correction.ipynb                   ssu-search-Copy2.rst
-    copy-correction.rst                     ssu-search-Copy3.ipynb
-    data-preparation.ipynb                  ssu-search-Copy3.rst
-    data-preparation.rst                    ssu-search-Copy4.ipynb
-    install-dropbox.ipynb                   ssu-search-Copy4.rst
-    install-dropbox.rst                     ssu-search.ipynb
-    overview.ipynb                          ssu-search.rst
-    overview.rst                            unsupervised-analysis.ipynb
-    pipeline-dependency-installation.ipynb  unsupervised-analysis.rst
-    pipeline-dependency-installation.rst    update-notebooks.rst
-    ssu-search-Copy1.ipynb
-
-
 check dependencies installed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1402,19 +1290,6 @@ check dependencies installed
 
 .. parsed-literal::
 
-    flash not found. Please place flash in PATH or update variable in this script
-    make: *** [tool_check] Error 1
-
-
-.. code:: python
-
-    ls
-
-.. parsed-literal::
-
-    [0m[01;34mClustering[0m/          [01;34mhmmer-3.1b1-linux-intel-x86_64[0m/        mothur.zip
-    Clustering.tar.gz    hmmer-3.1b1-linux-intel-x86_64.tar.gz  [01;34mSSUsearch[0m/
-    [01;34mFLASH-1.2.11[0m/        [01;34m__MACOSX[0m/
-    FLASH-1.2.11.tar.gz  [01;34mmothur[0m/
+    *** Dependencies are installed
 
 
