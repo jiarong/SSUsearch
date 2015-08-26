@@ -47,10 +47,11 @@ Start ipython notebook:
 
 	ipython notebook
 
-In your default web browser, you will see a page showing several *.ipynb links.
+In your default web browser, you will see a page showing several \*.ipynb links.
 
 First open overview.ipynb, and follow the instructions there. **You will need to change the data directory setting** (those on the notebooks are for running on amazon EC2 instances).
 
+If you prefer to run the tutorial in terminal, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
 
 Makefile implementation 
 -----------------------
