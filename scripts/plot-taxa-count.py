@@ -19,7 +19,7 @@ from operator import itemgetter, attrgetter
 import numpy
 import matplotlib
 #matplotlib.use('Pdf')
-matplotlib.use('WXAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, LinearLocator,\
   LogLocator, MaxNLocator, AutoLocator, AutoMinorLocator, FormatStrFormatter
