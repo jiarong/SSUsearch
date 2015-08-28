@@ -2,6 +2,17 @@
 # make rarefaction plot for version 1.32.1
 # by gjr
 
+"""
+Plot diversity index
+
+python plot-diversity-index.py
+                    cutoff "divInd1,divInd2.." "kw1,kw2.."\
+                    "<V2.groups.summary>,<V4.groups.summary>.."\
+                    "V2,V4.."\
+                    <outfile>
+
+"""
+
 import sys, os
 
 import numpy
@@ -12,7 +23,23 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
 
+
 def readData(f):
+    """
+    Parse alpha diversity summary file (.groups.summary)
+    Plot alpha diversity index
+
+    Parameters:
+    -----------
+    f : str
+        file name of alpha diversity summary file
+
+    Returns:
+    generator
+        a generator with sample label, cutoff, mean of diversity
+
+    """
+
     for n, line in enumerate(open(f)):
         if n==0 and line.startswith('numsampled'):
             print >> sys.stderr, 'row header detected: %s' %line

@@ -1,6 +1,12 @@
 #! /usr/bin/env python
 # get minimum seq number in a dir
 
+"""
+Get minimum seq number among sequence files in a directory
+
+% python count-min.py <seqdir>
+"""
+
 import sys
 import os
 import glob

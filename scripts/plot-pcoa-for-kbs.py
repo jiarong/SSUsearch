@@ -3,6 +3,16 @@
 # sample name format "T1M7"
 # by gjr; 021514
 
+"""
+Plot PCoA results from pcoa in mothur
+*** This script is not general, only applies to KBS samples
+
+% python plot-pcoa-for-kbs.py <file.pcoa.axis> \
+                                <file.pcoa.loadings>\
+                                "KW1,KW2,.." \
+                                <outfile>
+"""
+
 import sys, os
 import matplotlib
 #matplotlib.use('Agg')

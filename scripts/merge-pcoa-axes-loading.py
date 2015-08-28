@@ -2,12 +2,17 @@
 # combine .axes and .loading file from mothur pcoa analysis for Qiime Procrustes
 # by gjr; May 28, 12
 
+"""
+Combine .axes and .loading file from mothur pcoa analysis 
+for Qiime Procrustes analysis
+
+% python merge-pcoa-axes-loading.py <file.axes> <file.loading> <file.out>
+"""
+
 import sys, os
 
 def main():
-    '''
-    usage: python<thisFile><.axes><.loading> <file.out>
-    '''
+
     if len(sys.argv) != 4:
         print >> sys.stderr, \
                'Usage: python %s <file.axes> <file.loading> <file.out>'\

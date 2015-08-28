@@ -2,6 +2,11 @@
 # convert fastq to fasta
 # by gjr; Oct 4, 11
 
+"""
+Convert fastq to fasta
+
+% python fq2fa.py <file.fastq> <file.fasta> 
+"""
 
 import sys, os
 import screed

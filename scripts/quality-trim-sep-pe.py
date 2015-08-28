@@ -1,5 +1,18 @@
 #!/usr/bin python
 
+"""
+Quality trimming for paired end reads: 
+    1) remove read segment quality control indicator 
+    2) discard reads with "N"
+
+% python quality-trim-se.py phred <input_fastq_file> basename
+
+phred is either 33 or 64
+
+Output files are basename.1 and basename.2
+
+"""
+
 import sys
 import os
 

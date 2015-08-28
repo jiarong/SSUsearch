@@ -3,17 +3,21 @@
 # mcclust does not take muti seq files when seqs in aligned fasta format
 # by gjr; Jan 30, 12
 
+"""
+Make group file for mcclust (called sample file) and mothur
+
+% python make-groupfile.py <samplefile> <seqfile1> [ <seqfile2> ... ]
+"""
+
 import sys
 import os
 
 import screed
 
 def main():
-    '''
-    usage: python <thisFile><sampleFile><seqFile1><seqFile2>...
-    '''
+
     if len(sys.argv) < 3:
-        mes = 'Usage: python {} <file.groups> <seq1> <seq2> ..'
+        mes = 'Usage: python {} <file.groups> <seqfile1> [ <seqfile2> ... ]'
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))
         sys.exit(1)
 

@@ -2,6 +2,19 @@
 # plot for R2 for OTU abundance of two samples
 # by gjr; 04/07/14
 
+"""
+Plot for R2 for OTU abundance of two samples using OTU table (.shared file)
+
+% python plot-otu-corr-r2.py \ 
+                OTUabunCutoff \ 
+                <file.shared> \ 
+                <outfile> \ 
+                "KW1,KW2" \ 
+                "KW1,KW3"
+
+Only two KeyWords "KW1,KW2" allowed for each pair 
+"""
+
 import sys, os
 from collections import Counter
 import numpy
@@ -16,6 +29,21 @@ almost_black='#262626'
 shape_list = ['+', '.', 'x', 'v', 's']
 
 def readData(f):
+    """
+    Parse OTU table (.shared file)
+
+    Parameters:
+    -----------
+    f : str
+        file name of .shared file
+
+    Returns:
+    --------
+    dict
+        a dictionary with sample label as key (str)
+        and a list of abundance for each OTU as value (list)
+    """
+
     container = {}
     for n, line in enumerate(open(f)):
         if line.startswith('#'):
@@ -26,9 +54,22 @@ def readData(f):
     return container
 
 def get_r2(xs, ys):
-    '''
-    get the R2 of xs and ys fitting to y = x
-    '''
+    """
+    Get the R2 of xs and ys fitting to y = x
+    defined here
+
+    Parameters:
+    -----------
+    xs : list
+        a list of abundance for each OTU
+    ys : list
+        a list of abundance for each OTU
+
+    Returns:
+    --------
+    float
+        R^2 of xs and ys
+    """
     y_bar = numpy.average(ys)
     y_hat = xs  # fiting to y = x
     ss_reg = numpy.sum((y_hat - y_bar)**2)
@@ -38,7 +79,22 @@ def get_r2(xs, ys):
     return ss_reg*1.0/ss_tot
 
 def get_r2_scipy(xs, ys):
-    """ Return R^2 where x and y are array-like."""
+    """
+    Get the R2 of xs and ys fitting to y = x
+    using scipy
+
+    Parameters:
+    -----------
+    xs : list
+        a list of abundance for each OTU
+    ys : list
+        a list of abundance for each OTU
+
+    Returns:
+    --------
+    float
+        R^2 of xs and ys
+    """
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(xs, ys)
     return r_value**2

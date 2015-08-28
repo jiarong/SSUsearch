@@ -2,7 +2,11 @@
 # count the taxon number from mothur taxonomy file
 # by gjr; 080614
 
-# Usage: python <thisFile> <sample.gg.taxonomy> <outfile.table>
+"""
+Count the taxon number for each taxon in mothur taxonomy file
+
+% python <thisFile> <sample.gg.taxonomy> <outfile.table>
+"""
 
 import sys
 import os
@@ -13,74 +17,21 @@ EXCLUDE = []
 LEVELS = 7
 
 
-def read_refcopy(f):
-    # This function can read copyrighter # tax_string table
-
-    d_refcopy = {}
-    for n, line in enumerate(open(f)):
-        if line.startswith('#'):
-            continue
-
-        line = line.rstrip()
-        if line == '':
-            continue
-
-        _lis = line.split('\t')
-        taxa, num, = _lis[:2]
-        skip = False
-        for word in EXCLUDE:
-            if word in taxa:
-                skip = True
-                break
-
-        if skip:
-            continue 
-
-        # the parsing of taxa works for both mothur output and this
-        taxa = taxa.rstrip(';')    # for mothur classfy.seqs output
-        lis = taxa.split(';')
-        lis2 = []
-        for item in lis:
-            item = item.strip()    # for copyrigher copy table ' ;' separater
-            if item.endswith(')'):
-                item = item.rsplit('(', 1)[0].strip()
-
-            # remove taxon level prefix, e.g. 'p__Firmicutes'
-            if '__' in item:
-                item = item.split('__', 1)[1]
-
-            #item = item.strip('"')
-
-            # green gene taxonomy has sapce
-            item = item.replace(' ', '_')
-
-            item = item.lower()
-            if item == '':
-                item = 'Unclassifed'
-            elif item == 'unknown':
-                item = 'Unclassifed'
-            elif item == 'other':
-                item = 'Unclassifed'
-            elif item == 'unassigned':
-                item = 'Unclassifed'
-
-            item = item.capitalize()
-            lis2.append(item)
-
-        length = len(lis2)
-        assert length <= LEVELS, '> {} levels found ({})'.format(
-            LEVELS, length)
-        if length != LEVELS:
-            lis2 = lis2 + ['Unclassified']*(LEVELS - length)
-
-        tu = tuple(lis2)
-        d_refcopy[tu] = float(num)
-
-    return d_refcopy
-
-
 def read_mothur_taxonomy(f):
-    # read in mothur classify.seqs output
+    """
+    Parse mothur classify.seqs output
+
+    Parameters:
+    -----------
+    f : str
+        file name of .taxonomy file from classify.seqs
+
+    Returns:
+    --------
+    generator
+        an iterable (generator) of tuples (each level of taxonomy)
+
+    """
     for n, line in enumerate(open(f)):
         if line.startswith('#'):
             continue

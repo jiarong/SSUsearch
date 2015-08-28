@@ -2,6 +2,12 @@
 # parse output of mc clust, convert to mothurList file
 # by gjr; Feb 22, 12
 
+"""
+Convert mcclust.clust to mothur.list
+
+% python mcclust2mothur-list-cutoff.py <mcclust.file> <mothur.list> cutoff
+
+"""
 
 import sys
 import os
@@ -9,6 +15,23 @@ import os
 import screed
 
 def makeMothurListFile(f,listFile,target_cutoff):
+    """
+    Convert mcclust.clust to mothur.list
+
+    Parameters:
+    -----------
+    f : str
+        clustering result (.clust file) from mcclust
+    listFile : str
+        mothur list file name
+    target_cutoff: str
+        distance cutoff used for OTU (e.g., 0.03)
+
+    Returns:
+    --------
+    None
+    """
+    
     fp = open(f)
     fw = open(listFile, 'w')
     target_cutoff = float(target_cutoff)
@@ -66,10 +89,7 @@ def makeMothurListFile(f,listFile,target_cutoff):
                 d[cluNum] = Sname
 
 def main():
-    '''
-    Usage: python <thisFile> <mcclust.file> <mothur.list> cutoff
-    convert mcclust.clust to mothur.list
-    '''
+
     if len(sys.argv) != 4:
         mes = 'Usage: python {} <mcclust.file> <mothur.list> cutoff'
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))

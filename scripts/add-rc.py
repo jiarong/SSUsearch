@@ -2,25 +2,30 @@
 # add reverse complement to DNA seq fasta file, just for hmmer DNA search
 # Jul 13, 11; by gjr
 
+"""
+add reverse complement to DNA seq fasta file, just for hmmer DNA search
+
+"""
 import sys
 import string
 import time
 import os
 import fileinput
-
 import screed
 
 transTable=string.maketrans('ATGC','TACG')
 
 def reverseComp(seq):
+    """
+    return reverse complement DNA sequence
+
+    """
     temp = seq.translate(transTable)
     rc = temp[::-1]
     return rc 
 
 if __name__ == '__main__':
-    '''
-    make sure the seq files are in scratch
-    '''
+
     if len(sys.argv) != 3:
         mes = 'Usage: python {} <seqfile> <seqfile-with-rc>'
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))

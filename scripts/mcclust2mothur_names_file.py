@@ -2,6 +2,12 @@
 # convert between mothur and mcclust names file
 # by gjr; 042215
 
+"""
+Convert between mothur and mcclust names file
+
+% python mcclust2mothur_names_file.py <infile.names> <outfile.names>
+"""
+
 import sys
 import os
 

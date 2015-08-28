@@ -1,7 +1,12 @@
 #! /usr/bin/env python
-# plot for PCoA for qiime
-# sample name format "T1M7"
 # by gjr; 021514
+
+"""
+Plot PCoA results from pcoa in mothur
+
+% python plot-pcoa.py <file.pcoa.axis> <file.pcoa.loadings> <outfile>
+
+"""
 
 import sys, os
 import matplotlib

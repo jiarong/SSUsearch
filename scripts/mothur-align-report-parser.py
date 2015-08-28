@@ -2,12 +2,34 @@
 # parse the mothur aligner report
 # by gjr; Mar 25, 11;
 
+"""
+Parse .report output from mothur.align
+Filter sequences based on percentage identity in .report file
+
+% python mothur-align-report-parser-cutoff.py \
+        <mothurAlign.report> <file.align> <outfile.filter>
+
+"""
 
 import sys
 import os
 import screed
 
 def parser(f):
+    """
+    Parser for .align file from mothur.align
+
+    Parameters:
+    -----------
+    f : str
+        file name of .align file from mothur.algin
+
+    Returns:
+    --------
+    dict
+        a dictionary with query (read) name as key (str) 
+        and all other info as value (list)
+    """
     '''
     [0]QueryName	[1]QueryLength	[2]TemplateName	[3]TemplateLength	[4]SearchMethod	[5]SearchScore	[6]AlignmentMethod	[7]QueryStart	[8]QueryEnd	[9]TemplateStart	[10]TemplateEnd	[11]PairwiseAlignmentLength	[12]GapsInQuery	[13]GapsInTemplate	[14]LongestInsert	[15]SimBtwnQuery&Template
     '''
@@ -25,7 +47,7 @@ def parser(f):
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        mes = ('Usage: python'
+        mes = ('Usage: python '
                '{} <mothurAlign.report> <file.align> <outfile.filter>')
         print >> sys.stderr, mes.format(os.path.basename(sys.argv[0]))
         sys.exit(1)

@@ -2,14 +2,18 @@
 # remove gaps - or . in aligned fasta file
 # by gjr; Aug 12, 11 
 
+"""
+Remove gaps in aligned sequence file
+
+% python remove-gap.py <gaped.file> <nogap.file>
+
+"""
 import sys
 import screed
 from screed import fasta
 
 def main():
-    '''
-    #remove gaps in seqs
-    '''
+
     if len(sys.argv) != 3:
         print >> sys.stderr, 'Usage: python %s <gaped.file> <nogap.file>' \
                                  %sys.argv[0]

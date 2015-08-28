@@ -2,6 +2,12 @@
 # parse tabular output from HMMER
 # by gjr; May 5, 11
 
+"""
+Extract the hmm hits seq from shotgun data
+
+% python get-seq-from-hmmtblout.py <hmmtblout> <seqDB> <targetGene.fa>
+"""
+
 import sys
 import os
 import screed
@@ -10,9 +16,21 @@ N = 10
 M = None
 
 def getDict_domain(fp):
-    '''
-    still need to verify the position of item in list
-    '''
+    """
+    Parse .hmmtblout file from hmmsearch
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .hmmtblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score as value (tuple)
+
+    """
     d = {}
     for line in fp:
         if line.startswith('#'):
@@ -33,6 +51,21 @@ def getDict_domain(fp):
     return d
 
 def getDict_wholeSeq(fp):
+    """
+    Parse .tblout file from hmmsearch
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .tblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score as value (tuple)
+
+    """
     d = {}
     for line in fp:
         if line.startswith('#'):
@@ -53,10 +86,7 @@ def getDict_wholeSeq(fp):
     return d
 
 def main():
-    '''
-    python <thisFile><hmmtblout><seqDB><targetGene.fa>
-    extract the hmm hits seq from shotgun data
-    '''
+
     if len(sys.argv) != 4:
         mes = 'Usage: python %s <hmmtblout><seqdb><target_gene.fa>'
         print >> sys.stderr, mes %(os.path.basename(sys.argv[0]))

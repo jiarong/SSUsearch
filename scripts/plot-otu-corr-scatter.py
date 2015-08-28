@@ -2,6 +2,14 @@
 # plot for OTU scatter plot for two samples
 # by gjr; 04/06/14
 
+"""
+Plot for OTU scatter plot for two samples using OTU table (.shared file)
+
+% python plot-otu-corr-scatter.py <file.shared> <outfile> "KW1,KW2"
+
+Only two KeyWords allowed: "KW1,KW2"
+"""
+
 import sys, os
 from collections import Counter
 import numpy as np
@@ -14,6 +22,20 @@ import matplotlib.pyplot as plt
 almost_black='#262626'
 
 def readData(f):
+    """
+    Parse OTU table (.shared file)
+
+    Parameters:
+    -----------
+    f : str
+        file name of .shared file
+
+    Returns:
+    --------
+    dict
+        a dictionary with sample label as key (str)
+        and a list of abundance for each OTU as value (list)
+    """
     container = {}
     for n, line in enumerate(open(f)):
         if line.startswith('#'):

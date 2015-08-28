@@ -2,21 +2,30 @@
 # make plot of copyrighter.py output table
 # by gjr
 
+"""
+Plot taxonomy percentage bar plot from taxon count table (from count-taxon.py)
+
+
+% python plot-taxa-count.py level <outfile> \
+                                    <file1.taxonomy> [ <file2.taxonomy> ... ]
+
+"""
+
+
+
 import sys, os, itertools, collections
 from operator import itemgetter, attrgetter
 
 import numpy
-
 import matplotlib
 #matplotlib.use('Pdf')
-matplotlib.use('Agg')
+matplotlib.use('WXAgg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, LinearLocator,\
   LogLocator, MaxNLocator, AutoLocator, AutoMinorLocator, FormatStrFormatter
 from pylab import LogFormatter
 import matplotlib.colors as colors
 import matplotlib.cm as cm
-
 import brewer2mpl
 
 
@@ -26,6 +35,20 @@ TOP=10
 #ORDER=True  #reverse the order
 ORDER=False  #normal order
 def readData(f):
+    """
+    Parse taxon count table (from count-taxon.py)
+
+    Parameters:
+    -----------
+    f : str
+        file name of taxon count table
+
+    Returns:
+    --------
+    tuple
+        a list of taxons and a list of their counts
+
+    """
     taxa_lis = []
     num_lis = []
     for n, line in enumerate(open(f)):

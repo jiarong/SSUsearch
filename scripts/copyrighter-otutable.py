@@ -3,8 +3,15 @@
 #   copyrigter.
 # by gjr; 080614
 
-# Usage: python <thisFile> <copy.table> <SS.cons.taxonomy> <SS.shared> 
-#   <outfile.table>
+"""
+Correct ssu rRNA gene copy number based on the taxon copy number table from
+copyrigter.
+
+% python copyrighter-otutable.py \ 
+                        <copy.table> <SS.cons.taxonomy> \ 
+                        <SS.shared> <outfile.table>
+
+"""
 
 import sys
 import os
@@ -17,7 +24,21 @@ LEVELS = 7
 
 
 def read_refcopy(f):
-    # This function can read copyrighter # tax_string table
+    """
+    Parse a taxon string to copy number table
+    Return a dictionary with taxon as key and copy number as value
+
+    Parameters
+    ----------
+    f : str
+    	filename of taxon string to copy number table
+
+    Returns
+    -------
+    dictionary:
+        with taxon as key and copy number as value
+
+    """
 
     d_refcopy = {}
     for n, line in enumerate(open(f)):
@@ -77,7 +98,20 @@ def read_refcopy(f):
 
 
 def read_mothur_taxonomy(f):
-    # read in mothur classify.seqs output
+    """
+    Parse mothur classify.seqs output
+
+    Parameters:
+    -----------
+    f : str
+        file name of .taxonomy file from classify.seqs
+
+    Returns:
+    --------
+    generator
+        an iterable (generator) of tuples (each level of taxonomy)
+
+    """
     for n, line in enumerate(open(f)):
         if line.startswith('#'):
             continue
@@ -125,7 +159,20 @@ def read_mothur_taxonomy(f):
 
 
 def read_mothur_cons_taxonomy(f):
-    # read in mothur classify.seqs output
+    """
+    Parse mothur classify.otu output
+
+    Parameters:
+    -----------
+    f : str
+        file name of .taxonomy file from classify.seqs
+
+    Returns:
+    --------
+    dict
+        an dictionary with otu (str) as key and taxonomy as value (tuple) 
+
+    """
     d_otu2tax = {}
     for n, line in enumerate(open(f)):
         # the first header line does not startswith "#" in v1.33

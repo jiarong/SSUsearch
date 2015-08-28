@@ -1,5 +1,12 @@
 # by gjr; May 2, 12
 
+"""
+Subsamples sequences files to N (the minumum)
+
+% python subsample.py <fastaFileDir> N <outdir>
+
+"""
+
 import sys
 import os
 import random
@@ -8,6 +15,23 @@ import glob
 import screed
 
 def getRseqsFromBigFile6(fastaFile, newF, N):
+    """
+    Randomly subsample N sequences
+
+    Parameters:
+    -----------
+    fastaFile : str
+        file name of original sequence file
+    newF : str
+        file name of sequence file after subsample
+    N : int
+        number of sequences to subsample
+
+    Returns:
+    --------
+    None
+
+    """
     # NOT using indexed screeDB, using fasta.fasta_iter
 
     ### can get len(db) by count '>' in fastaFile, db not necessary
@@ -38,15 +62,24 @@ def getRseqsFromBigFile6(fastaFile, newF, N):
             print >> outFp, '>%s\n%s' %(record['name'],
                                          record['sequence'])
         
-        '''
-        if n%100 == 0:
-            print '%d seqs scanned..' %(n)
-        if count%100 == 0 and triger:
-            print '%d sequences sampled' %(count)
-            triger = False
-        '''
 
 def getRseqsFromBigFile5(fastaFile, N):
+    """
+    Randomly subsample N sequences
+
+    Parameters:
+    -----------
+    fastaFile : str
+        file name of original sequence file
+    N : int
+        number of sequences to subsample
+
+    Returns:
+    --------
+    None
+
+    """
+
     # NOT using indexed screeDB, using fasta.fasta_iter
     outFp = open('%s.subSampled' %(fastaFile), 'wb')
     ### can get len(db) by count '>' in fastaFile, db not necessary
@@ -74,13 +107,6 @@ def getRseqsFromBigFile5(fastaFile, N):
             triger = True
             print >> outFp, '>%s\n%s' %(record['name'],
                                        record['sequence'])
-        '''
-        if n%1000 == 0:
-            print '%d seqs scanned..' %(n)
-        if count%1000 == 0 and triger:
-            print '%d sequences sampled' %(count)
-            triger = False
-        '''
 
 def main():
     if len(sys.argv) != 4:

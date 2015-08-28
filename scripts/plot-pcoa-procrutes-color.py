@@ -3,6 +3,17 @@
 # sample name format "T1M7"
 # by gjr; 021514
 
+"""
+Plot procrutes analysis from qiime
+
+% python plot-pcoa-procrutes-color.py \
+                                "file1.pcoa,file2.pcoa.." \
+                                "tag1,tag2,.." \
+                                "KW1,KW2,.." \
+                                <outfile>
+
+"""
+
 import sys, os
 import matplotlib
 #matplotlib.use('Agg')

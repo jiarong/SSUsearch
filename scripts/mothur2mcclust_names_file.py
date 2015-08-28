@@ -5,6 +5,12 @@
 import sys
 import os
 
+"""
+Convert between mothur and mcclust names file
+
+% python mothur2mcclust_names_file.py <infile.names> <outfile.names>
+"""
+
 def main():
     if len(sys.argv) != 3:
         mes = 'Usage: python {} <mothur.names> <mcclust.names>'

@@ -2,12 +2,40 @@
 # cut primer, primer analysis
 # by gjr;Apr 12, 11
 
+"""
+Cut a region in alignment based on start and end position in template sequence
+
+% python region-cut.py <file.afa> start end min_len
+
+"""
 import sys, os
 import screed
 from screed import fasta
 import re
 
 def getRef(fp, n_ref):
+    """
+    Get template sequence from .afa file and a gap profile of the aligned 
+    sequences (1 is a real base and 0 is a gap)
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of aligned sequence file (.afa)
+    n_ref : int
+        number of template sequence to collect
+
+    Returns:
+    --------
+    str
+        name of the first template sequence
+    str
+        aligned sequence
+    list
+        a gap profile of aligned sequence
+
+    """
+
     refs = {}
     reads = {}
     cnt = 0
@@ -36,9 +64,27 @@ def getRef(fp, n_ref):
     return name, template, profile  #return the ref seq and its mask profile
 
 def cutMSA(fp, start, end):
-    '''
-    cut MSA base on the coordination on ecoli 16s
-    '''
+    """
+    Cut a region in Multiple Sequence Alignment based on the start and end 
+    positions on template
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of aligned sequence file (.afa)
+    start : int
+        start position of target region
+    end : int
+        end position of end region
+
+    Returns:
+    --------
+    tuple
+        a tuple with tow items. First item is target region in tempalte 
+        and second item is a dictionary with sequence name as key 
+        and target region of that sequence as value
+
+    """
     fw = open('%s.%sto%s.cut' %(sys.argv[1], start, end), 'w')
     refName, template, profile = getRef(fp, 1)
 
@@ -71,8 +117,26 @@ def cutMSA(fp, start, end):
     return template[start1:(end1+1)], rows
 
 def getSeqPos(ref_profile, seq):
-    # get the start and end position when mapped to refSeq 
-    # seq to feed to the func should be afa format (e.x. one from mothurAligner)
+    """
+    Get the start and end position when mapped to refSeq.
+    Sequence to feed to the func should be afa format 
+    (e.x. one from mothurAligner).
+
+    Parameters:
+    -----------
+    ref_profile : list
+        a gap profile, 0 is gap and 1 is real base pair.
+    seq : str
+        align sequence
+
+    Returns:
+    --------
+    tuple
+        a tuple of two int. 
+        First one is start position and second one is end postion.
+
+    """
+
     profile = ref_profile
     length = len(profile)
     assert length == len(seq), 'check if afa format'
@@ -87,11 +151,9 @@ def getSeqPos(ref_profile, seq):
     return start, end
 
 def main():
-    '''
-    python <thisFile><file.afa><start><end><minLen>
-    '''
+
     if len(sys.argv) != 5:
-        mes = 'Usage: python %s <file.afa> <start> <end> <minLen>'
+        mes = 'Usage: python %s <file.afa> start end min_len'
         print >> sys.stderr, mes %(os.path.basename(sys.argv[0]))
         sys.exit(1)
 

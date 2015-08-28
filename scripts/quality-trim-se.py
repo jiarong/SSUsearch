@@ -1,5 +1,16 @@
 #!/usr/bin python
 
+"""
+Quality trimming for single end reads: 
+    1) remove read segment quality control indicator 
+    2) discard reads with "N"
+
+% python quality-trim-se.py phred <input_fastq_file> <outfile>
+
+phred is either 33 or 64
+
+"""
+
 import sys
 import os
 

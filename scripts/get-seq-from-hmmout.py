@@ -2,6 +2,13 @@
 # parse tabular output from HMMER, do identity filter and MSA convert
 # by gjr; Jan 25, 12
 
+"""
+Parse tabular output from HMMER, do length filter (30 bp minimum)
+Convert .sto to .fa
+
+% python get-seq-from-hmmout.py <hmmdomtblout> <hmmseqout.sto> <outfile.fa>
+"""
+
 import sys
 import os
 import screed
@@ -11,6 +18,22 @@ N = 10
 M = None
 
 def getDict_wholeSeq(fp):
+    """
+    Parse .tblout file from hmmsearch
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .tblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score as value (tuple)
+
+    """
+
     d = {}
     for line in fp:
         if line.startswith('#'):
@@ -32,6 +55,21 @@ def getDict_wholeSeq(fp):
 
 
 def getDict_domain(fp):
+    """
+    Parse .hmmtblout file from hmmsearch
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .hmmtblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score, read length as value (tuple)
+
+    """
     d = {}
     for line in fp:
         if line.startswith('#'):
@@ -53,6 +91,22 @@ def getDict_domain(fp):
     return d
 
 def getDict_domain_addFilter(fp):
+    """
+    Parse .hmmtblout file from hmmsearch
+    Filter hits based on read lenght and percent identity
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .hmmtblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score, identity, read length as value (tuple)
+
+    """
     # (>= 50% and >= 30bp) or (< 50% and > 80bp)
     d = {}
     for line in fp:
@@ -87,6 +141,22 @@ def getDict_domain_addFilter(fp):
     return d
 
 def getDict_domain_noIdenFilter(fp):
+    """
+    Parse .hmmtblout file from hmmsearch
+    Filter hits based on read lenght
+
+    Parameters:
+    -----------
+    fp : file object
+        file object of .hmmtblout file
+
+    Returns:
+    --------
+    dict:
+        a dictionary with sequence name as key (str)
+        and e-value, bit score, identity, read length as value (tuple)
+
+    """
     # >= 30bp
     d = {}
     for line in fp:
@@ -107,8 +177,6 @@ def getDict_domain_noIdenFilter(fp):
         if ali < 30:
             continue
         iden = ali/float(qlen)
-        #if ((iden < 0.5) and (ali < 80)):
-        #    continue
 
         if M:
             if bit < M:

@@ -2,10 +2,17 @@
 # convert between mothur and mcclust names file
 # by gjr; 042215
 
+"""
+convert between mothur and mcclust names file
+
+% python convert_names_file.py <infile.names> <outfile.names>
+"""
 import sys
 import os
 
+
 def main():
+
     if len(sys.argv) != 3:
         mes = 'Usage: python {} <infile.names> <outfile.names>'
         print >> sys.stderr, mes.format(sys.argv[0])
