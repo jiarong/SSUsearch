@@ -11,11 +11,11 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 Pipeline tutorial
 ------------------
 
-###Run on EC2 (easiest)
+### Run on EC2 (all platform, easiest)
 
 The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-97e31afc** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebook could be accessed through https using browser (**chrome or firefox NOT safari**). Password to access https is **openscience**. There are some introduciton [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html)
 
-###Run on your computer (linux)
+### Run on your computer (linux only)
 
 If you want to run the notebooks on your computer, ipython (v4) with notebook dependencies are needed.
 
@@ -109,10 +109,10 @@ An example:
 
 Several databases and hidden markov models are needed: 
 
-	wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
+	wget http://athyra.oxli.org/~gjr/public2/misc/SSUsearch_db.tgz
 	tar -xzvf SSUsearch_db.tgz
 
-Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to **absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
+Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali\_template.silva\_lsu.fasta is for Ali\_template. Set values of these parameters to **absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
 
 Other than wgs data files, **a design file** is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
 
