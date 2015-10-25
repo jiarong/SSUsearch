@@ -23,7 +23,7 @@ If you already have Python:
 
 	pip install "ipython[notebook]"
 
-If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux 64-bits installer. At the time of this writing it is https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh 
+If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux installer (pay attention to 64 or 32 bit version based on your cpu type). This tutorial use 64 bit version. At the time of this writing the 64 bit installer is [here](https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh).
 
 	wget -c https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh
 
@@ -59,7 +59,7 @@ If you prefer to run the tutorial in terminal, please go to http://microbial-eco
 
 Makefile implementation 
 -----------------------
-There is also a Makefile implemention shown below. It is great for automation but not as easy to read and modify. (I am not interested in maintaining api or wrapers.) Thus the above notebooks are recommended to run the pipeline.
+There is also a Makefile implemention shown below. It is great for automation but not as easy to read and modify. Plus I am not interested in maintaining api or wrapers. Thus the above notebooks are recommended to run the pipeline.
 
 
 Install dependencies
@@ -117,7 +117,7 @@ Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db
 Other than wgs data files, **a design file** is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
 
 	# download a test dataset and its design file
-	wget -r -np -nH --cut-dir=4 --reject="index.html*" http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch/test/
+	wget -r -np -nH --cut-dir=4 --reject="index.html*" http://athyra.oxli.org/~gjr/public2/misc/SSUsearch/test/
 	# check wgs data files
 	ls test/data/*.fa
 	# check design file
