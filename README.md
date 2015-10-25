@@ -45,7 +45,7 @@ Download SSUsearch:
 
 Go to notebook directory:
 
-	cd SSUsearch/notebooks
+	cd SSUsearch/notebooks-pc-linux
 
 Start ipython notebook: 
 
@@ -53,7 +53,7 @@ Start ipython notebook:
 
 In your default web browser, you will see a page showing several \*.ipynb links.
 
-First open overview.ipynb, and follow the instructions there. **You will need to change the data directory setting** (those on the notebooks are for running on amazon EC2 instances).
+First open overview.ipynb, and follow the instructions there. **You will need to change the data directory settings for your own data**.
 
 If you prefer to run the tutorial in terminal, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
 
