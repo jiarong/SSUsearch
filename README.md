@@ -11,11 +11,11 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 Pipeline tutorial
 ------------------
 
-###Run on EC2 (easiest)
+### Run on EC2 (all platform, easiest)
 
 The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-97e31afc** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebook could be accessed through https using browser (**chrome or firefox NOT safari**). Password to access https is **openscience**. There are some introduciton [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html)
 
-###Run on your computer
+### Run on your computer (linux only)
 
 If you want to run the notebooks on your computer, ipython (v4) with notebook dependencies are needed.
 
@@ -23,7 +23,7 @@ If you already have Python:
 
 	pip install "ipython[notebook]"
 
-If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux 64-bits installer. At the time of this writing it is https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh 
+If you are new to Python, go to http://continuum.io/downloads and copy the link for Linux installer (pay attention to 64 or 32 bit version based on your cpu type). This tutorial use 64 bit version. At the time of this writing the 64 bit installer is [here](https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh).
 
 	wget -c https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda-2.2.0-Linux-x86_64.sh
 
@@ -45,7 +45,7 @@ Download SSUsearch:
 
 Go to notebook directory:
 
-	cd SSUsearch/notebooks
+	cd SSUsearch/notebooks-pc-linux
 
 Start ipython notebook: 
 
@@ -53,13 +53,13 @@ Start ipython notebook:
 
 In your default web browser, you will see a page showing several \*.ipynb links.
 
-First open overview.ipynb, and follow the instructions there. **You will need to change the data directory setting** (those on the notebooks are for running on amazon EC2 instances).
+First open overview.ipynb, and follow the instructions there. **You will need to change the data directory settings for your own data**.
 
 If you prefer to run the tutorial in terminal, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
 
 Makefile implementation 
 -----------------------
-There is also a Makefile implemention shown below. It is great for automation but not as easy to read and modify. (I am not interested in maintaining api or wrapers.) Thus the above notebooks are recommended to run the pipeline.
+There is also a Makefile implemention shown below. It is great for automation but not as easy to read and modify. Plus I am not interested in maintaining api or wrapers. Thus the above notebooks are recommended to run the pipeline.
 
 
 Install dependencies
@@ -109,15 +109,15 @@ An example:
 
 Several databases and hidden markov models are needed: 
 
-	wget http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch_db.tgz
+	wget http://athyra.oxli.org/~gjr/public2/misc/SSUsearch_db.tgz
 	tar -xzvf SSUsearch_db.tgz
 
-Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali_template.silva_lsu.fasta is for Ali_template. Set values of these parameters to **absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
+Parameters related to databases are **Ali_template, Copy_db, Gene_db_cc, Gene_db, Gene_model_org, Gene_tax_cc, Gene_tax, and Hmm**. First part of each database files its variable in Makefile. e.g. Ali\_template.silva\_lsu.fasta is for Ali\_template. Set values of these parameters to **absolute paths** of their database in Makefile. Again, we can also set variables as commandline arguments. The default value should be OK for this tutorial if you follow the above steps.
 
 Other than wgs data files, **a design file** is also needed for diversity analysis in mothur. [Some description](http://www.mothur.org/wiki/Design_header_file) can be found in mothur wiki. Use the first column as sample tag and second as treatment. Sample tag is the first part of wgs data file names. e.g. For M1.fa.gz, the tag is M1.
 
 	# download a test dataset and its design file
-	wget -r -np -nH --cut-dir=4 --reject="index.html*" http://lyorn.idyll.org/~gjr/public2/misc/SSUsearch/test/
+	wget -r -np -nH --cut-dir=4 --reject="index.html*" http://athyra.oxli.org/~gjr/public2/misc/SSUsearch/test/
 	# check wgs data files
 	ls test/data/*.fa
 	# check design file
