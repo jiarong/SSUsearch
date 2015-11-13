@@ -18,6 +18,7 @@ Gene?=ssu
 # refs
 Hmm?=../SSUsearch_db/Hmm.ssu.hmm
 Ali_template?=../SSUsearch_db/Ali_template.silva_ssu.fasta
+Gene_model_org?=../SSUsearch_db/Gene_model_org.16s_ecoli_J01695.fasta
 
 override Seqfile:=$(realpath $(Seqfile))
 Seqfile_name:=$(notdir $(Seqfile))
