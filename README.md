@@ -41,6 +41,7 @@ Ipython is ready to go :)
 
 Download SSUsearch:
 
+	cd ~/Desktop
 	git clone https://github.com/jiarong/SSUsearch
 
 Go to notebook directory:
