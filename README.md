@@ -7,6 +7,8 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 
 2. Scalibility: 5 Gb peak mem and 5 CPU hours on about 40 Gb data.
 
+**The manuscript has been accepted in AEM (doi: 10.1128/AEM.02772-15). It is also available on [research gate](https://www.researchgate.net/publication/282945621_Microbial_community_analysis_with_ribosomal_gene_fragments_from_shotgun_metagenomes)**
+
 
 Pipeline tutorial
 ------------------
