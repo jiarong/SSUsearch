@@ -141,4 +141,6 @@ Makefile includes many variables for steps in pipeline. To see a full list of va
 
 	make -f Makefile help
 
-
+Notes
+------
+The soil datasets used in the paper are pair end merged long reads (longest is ~300 bp) and the default Start, End, and Len_cutoff are set for those datasets. For datasets have 100bp reads, Start=577, End=657, Len_cutoff=75 is recommended. Rule of thumb is to pick a region with more reads with larger overlap. Details are in "Testing  the  effect  of  target  region  size  and  variable  region  on clustering" of the paper.

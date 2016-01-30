@@ -172,9 +172,10 @@ def main():
         if profile[i] == 0:
             continue
         j = sum(profile[:i+1])
-        if j == int(start):
+        # the template sequence starts at E.coli postion 27
+        if j == int(start) - 27:
             start1 = i
-        if j == int(end):
+        if j == int(end) - 27:
             end1 = i
             break
 
