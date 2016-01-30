@@ -82,12 +82,12 @@ This pipeline requires: HMMER3.1, mothur, RDP mcclust, and python pandas, scipy,
 	unzip mothur.zip
 	MOTHUR_BIN=$(readlink -f mothur/mothur)
 
-	# RDP mcClust
+	# RDP McClust
 	# Updated version can be found github:  https://github.com/rdpstaff/RDPTools.git
 	# Here an older version is used
-	wget http://lyorn.idyll.org/~gjr/public2/misc/mcclust_20120119.tar.gz
-	tar -xzvf mcclust_20120119.tar.gz
-	MCCLUST_JAR=$(readlink -f mcclust/Clustering.jar)
+	wget https://s3.amazonaws.com/ssusearchdb/Clustering.tgz
+	tar -xzvf Clustering.tgz
+	MCCLUST_JAR=$(readlink -f Clustering/Clustering.jar)
 
 	# Python packages
 	# Use virtualenv (assuming virtualenv installed). virtualenv installation guide: https://virtualenv.pypa.io/en/latest/virtualenv.html#installation
