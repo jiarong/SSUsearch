@@ -87,7 +87,7 @@ This pipeline requires: HMMER3.1, mothur, RDP mcclust, and python pandas, scipy,
 	# Here an older version is used
 	wget https://s3.amazonaws.com/ssusearchdb/Clustering.tgz
 	tar -xzvf Clustering.tgz
-	MCCLUST_JAR=$(readlink -f Clustering/Clustering.jar)
+	MCCLUST_JAR=$(readlink -f Clustering/dist/Clustering.jar)
 
 	# Python packages
 	# Use virtualenv (assuming virtualenv installed). virtualenv installation guide: https://virtualenv.pypa.io/en/latest/virtualenv.html#installation
