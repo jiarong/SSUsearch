@@ -5,7 +5,7 @@
 ### path of sequence file if not defined in CMD line. 
 Seqfile?=/mnt/scratch/tg/g/dataForPaper/RNA/jobs/cluster/ssusearch/test/data/1c.fa
 Cpu?=1
-Phred?=64
+Phred?=33
 # tools, dirs, etc
 Script_dir?=./scripts
 Flash?=/mnt/home/guojiaro/Documents/software/QC/FLASH/flash
@@ -95,7 +95,7 @@ hmmsearch: $(Qc_file)
 		--domtblout $(Tag).qc.$(Gene).hmmdomtblout \
 		$(Hmm) $(Tag).qc
 	@echo "hmmsearch done.."
-	python $(Script_dir)/get-seq-from-hmmtblout.py \
+	python $(Script_dir)/get-seq-from-hmmout.py \
 		$(Tag).qc.$(Gene).hmmdomtblout \
 		$(Tag).qc.$(Gene).sto \
 		$(Tag).qc.$(Gene) \

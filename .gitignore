@@ -10,3 +10,5 @@ SSUsearch-db/
 SSUsearch_db/
 analysis_in_paper/
 notebooks/.ipynb_checkpoints/
+notebooks-pc-linux/.ipynb_checkpoints/
+*.tgz

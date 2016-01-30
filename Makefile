@@ -8,7 +8,7 @@ Script_dir:=./scripts
 
 Name=SS
 Gene=ssu
-Otu_dist_cutoff=0.03
+Otu_dist_cutoff=0.05
 Start=550
 #Start=1200
 #End=1350
@@ -154,9 +154,11 @@ $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 	|| { rm -rf $(Clust_dir) && exit 1; }
 
 	# even sampling
-	(Mincount=$$(python $(Script_dir)/count-min.py $(Clust_dir)) \
+	Mincount=$$(python $(Script_dir)/count-min.py $(Clust_dir)) \
 	&& python $(Script_dir)/subsample.py $(Clust_dir) $$Mincount \
-	  $(Clust_dir).sub) \
+	  $(Clust_dir).sub \
+	&& sed -i 's/:/_/g' $(Clust_dir).sub/* \
+	&& echo "*** Replace ':' with '_' in seq names (original illumina name has ':' in them)" \
 	|| { rm -rf $(Clust_dir).sub && exit 1; }
 
 	mkdir -p $(Clust_dir).sub.clu
@@ -166,25 +168,29 @@ $(Clust_dir).sub.clu/$(Name).list: $(Tagfiles)
 	  $(Clust_dir).sub.clu/$(Name).groups $(Clust_dir).sub
 
 	@echo "*** Starting mcclust"
-	(cd $(Clust_dir).sub.clu \
+	{ cd $(Clust_dir).sub.clu \
 	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
 	  -XX:ParallelGCThreads=$(Java_gc_threads) \
 	  -jar $(Mcclust_jar) derep -a -o derep.fasta \
-	  $(Name).names x combined_seqs.afa \
+	  temp.mcclust.names temp.txt combined_seqs.afa \
+	&& rm temp.txt \
+	&& python $(Script_dir)/mcclust2mothur_names_file.py \
+	  temp.mcclust.names temp.mothur.names \
+	&& $(Mothur) "#pre.cluster(fasta=derep.fasta, diffs=1, \
+	  name=temp.mothur.names)" \
+	&& python $(Script_dir)/mothur2mcclust_names_file.py \
+	  derep.precluster.names $(Name).names \
 	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
 	  -XX:ParallelGCThreads=$(Java_gc_threads) \
 	  -jar $(Mcclust_jar) dmatrix -l 25 \
-          -o matrix.bin -i $(Name).names -I derep.fasta \
+          -o matrix.bin -i $(Name).names -I derep.precluster.fasta \
 	&& time java -Xmx$(Java_xmx) -XX:+UseParallelOldGC \
 	  -XX:ParallelGCThreads=$(Java_gc_threads) \
 	  -jar $(Mcclust_jar) cluster \
           -i $(Name).names -s $(Name).groups -o complete.clust -d matrix.bin \
 	&& python $(Script_dir)/mcclust2mothur-list-cutoff.py complete.clust \
-	  $(Name).list 0.03 \
-	&& sed -i 's/:/_/g' $(Name).names $(Name).groups $(Name).list \
-	)
-	@echo "*** Replace ':' with '_' in seq names\
-	  (original illumina name has ':' in them)"
+	  $(Name).list $(Otu_dist_cutoff); \
+	}
 
 make_biom: $(Diversity_dir)/$(Name).biom
 
@@ -318,7 +324,7 @@ help:
 	# Gene_model_org: gene sequence of a organism as standard for
 	#                 gene position
  
-	# Otu_dist_cutoff: distance cutoff for OTU definition (default: 0.03)
+	# Otu_dist_cutoff: distance cutoff for OTU definition (default: 0.05)
 	# Start: start position of region selected for clustering 
 	#        (default: 550)
 	# End: end position of region selected for clustering (default: 700)
