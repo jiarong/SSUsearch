@@ -15,7 +15,7 @@ Pipeline tutorial
 
 ### Run on EC2 (all platform, easiest)
 
-The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-7c82af16** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebooks could be accessed through https using browser (**chrome or firefox NOT safari**). Briefly, connect into your machine by using "https://" plus your machine name or IP address, and accept the “broken certificate” message. Password to access https is **openscience**. There are some introduciton [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html)
+The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-7c82af16** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebooks could be accessed through https using browser (**chrome or firefox NOT safari**). Briefly, connect into your machine by using "https://" plus your machine name or IP address, and accept the “broken certificate” message. Password to access https is **openscience**. There are some introduction [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html).
 
 ### Run on your computer (linux only)
 
