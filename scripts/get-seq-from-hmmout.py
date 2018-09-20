@@ -12,7 +12,6 @@ Convert .sto to .fa
 import sys
 import os
 import screed
-import cPickle
 
 N = 10
 M = None
@@ -165,8 +164,6 @@ def getDict_domain_noIdenFilter(fp):
         line = line.strip()
         lis = line.split()
         name = lis[0]
-        #rm '-RC-' suffix
-        name = name.rstrip('-RC-')
         qlen = int(lis[2])
         e_val = float(lis[6])
         bit = float(lis[7])
@@ -201,11 +198,10 @@ if __name__ == '__main__':
     outfile = sys.argv[3]
     hmm = getDict_domain_noIdenFilter(open(hmmfile))  
     #dict of hmm hits, may take big memory if too many hits
-    cPickle.dump(hmm, open(sys.argv[1]+'.parsedToDictWithScore.pickle', 'w'))
     print >> sys.stderr, 'parsing hmmdotblout done..'
 
-    input_handle = open(infile, 'rU')
-    output_handle = open(outfile, 'wb')
+    input_handle = open(infile)
+    output_handle = open(outfile, 'w')
 
     cnt1 = 0
     cnt2 = 0
@@ -234,7 +230,7 @@ if __name__ == '__main__':
 
     for key in d_seq:
         id = key
-        name = id.rsplit('/',1)[0].rstrip('-RC-')
+        name = id.rsplit('/',1)[0]
         cnt1 += 1
         if (cnt1) % 1000 == 0:
             print >> sys.stderr, '%d seqs scanned..' %(cnt1)
