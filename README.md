@@ -13,6 +13,42 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 Pipeline tutorial
 ------------------
 
+### New! SSUsearch (1.0) is now powered by Snakemake and much easier to install and run.
+
+First clone this repo:
+```bash
+git clone https://github.com/jiarong/SSUsearch.git
+cd SSUsearch
+```
+
+Then download a test data
+```
+wget https://s3.amazonaws.com/ssusearchdb/test.tgz
+tar -xzvf test.tgz
+```
+You just need to prepare two files: `metadata.tsv` and `config.yaml` following the templates in the repo:
+
+The `metadata.tsv` file is metadata about samples with the following headers:
+- ID: sample name
+- GROUP: treatment that a sample belong to
+- R1: path for unmerged R1 of paired ends
+- R2: path unmerged R2 of paired ends
+- merged: path merged of paired ends
+- if relative paths are used, they should be relative to working direcory (WORKDIR in config.yaml file)
+- use NA or empty string ("") if no such a file
+
+The `config.yaml` file has parameter setting for tools in the pipeline. It is YAML format. The `metadata.tsv` path is also set in `config.yaml`.
+
+When the above two files are ready, you just need to run the following command:
+```
+./ssusearch --configfile config.yaml
+```
+
+You will see the output in a directory name after "Project" set in `config.yaml`
+
+---------------------
+
+
 ### Run on EC2 (all platform, easiest)
 
 The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-7c82af16** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebooks could be accessed through https using browser (**chrome or firefox NOT safari**). Briefly, connect into your machine by using "https://" plus your machine name or IP address, and accept the “broken certificate” message. Password to access https is **openscience**. There are some introduction [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html).

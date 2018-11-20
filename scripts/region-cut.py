@@ -164,7 +164,6 @@ def main():
     start = sys.argv[2]
     end = sys.argv[3]
 
-    fw = open('%s.%sto%s.cut' %(sys.argv[1], start, end), 'w')
     refName, template, profile = getRef(fp, 1)
 
     length = len(profile)

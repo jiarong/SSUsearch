@@ -1,0 +1,23 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+description: row of the metadata.tsv, representing experiment design info and sequence file paths
+type: object
+properties:
+  ID:
+    type: string
+    description: sample name/id
+  Group:
+    type: string
+    description: the treatment/condition that the sample belongs to.
+  R1:
+    type: string
+    description: path to first paired end FASTQ file
+  R2:
+    type: string
+    description: path to second paired end FASTQ file (leave empty in case of single-end)
+  Merged:
+    type: string
+    description: path to paired end merged FASTQ file (leave empty in case of single-end, or merging step skipped)
+required:
+  - ID
+  - Group 
+  - R1

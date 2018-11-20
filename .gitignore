@@ -6,9 +6,10 @@ diversity_cc.ssu
 test
 *.swp
 analysis-in-paper
-SSUsearch-db/
 SSUsearch_db/
 analysis_in_paper/
 notebooks/.ipynb_checkpoints
 notebooks-pc-linux/.ipynb_checkpoints
 *.tgz
+test.COMMANDS
+.snakemake

@@ -15,6 +15,7 @@ import collections
 #EXCLUDE = ['Archaea', 'Eukaryota', 'unknown']
 EXCLUDE = []
 LEVELS = 7
+NA='Unclassified'
 
 
 def read_mothur_taxonomy(f):
@@ -28,10 +29,13 @@ def read_mothur_taxonomy(f):
 
     Returns:
     --------
-    generator
-        an iterable (generator) of tuples (each level of taxonomy)
+    dictionary
+        an dictionary of read name and tuples (each level of taxonomy)
 
     """
+    na_lis = ['', 'unknown', 'Unclassified', 
+            'unclassified', 'other', 'unassigned']
+    d = {}
     for n, line in enumerate(open(f)):
         if line.startswith('#'):
             continue
@@ -66,21 +70,34 @@ def read_mothur_taxonomy(f):
             item = item.replace(' ', '_')
 
             item = item.lower()
-            if item == '':
-                item = 'Unclassifed'
-            elif item == 'unknown':
-                item = 'Unclassifed'
-            elif item == 'unclassified':
-                item = 'Unclassifed'
-            elif item == 'other':
-                item = 'Unclassifed'
-            elif item == 'unassigned':
-                item = 'Unclassifed'
+
+            if item in na_lis:
+                item = NA
 
             item = item.capitalize()
             lis2.append(item)
 
-        yield tuple(lis2)
+        t = tuple(lis2)
+        if name.endswith('/1'):
+            other = '{}/2'.format(name[:-2])
+            if other in d:
+                other_taxon = d[other]
+                if other_taxon.count(NA) > lis2.count(NA):
+                    _ = d.pop(other)
+                    d[name] = t
+            
+        elif name.endswith('/2'):
+            other = '{}/1'.format(name[:-2])
+            if other in d:
+                other_taxon = d[other]
+                if other_taxon.count(NA) > lis2.count(NA):
+                    _ = d.pop(other)
+                    d[name] = t
+
+        else:
+            d[name] = t
+
+    return d
 
 
 def main():
@@ -92,7 +109,9 @@ def main():
     taxonfile = sys.argv[1]
     outfile = sys.argv[2]
 
-    g_taxonomy = read_mothur_taxonomy(taxonfile)
+
+    d = read_mothur_taxonomy(taxonfile)
+    g_taxonomy = d.values()
     d_count = collections.Counter(g_taxonomy)
 
     with open(outfile, 'wb') as fw:

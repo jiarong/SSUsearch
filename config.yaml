@@ -1,0 +1,36 @@
+# This file should contain everything to configure the workflow on a global scale.
+# In case of sample based data are in metadata.tsv file that contains one row per sample and with following column headers. Also no comments (#) are allowed in it.
+#  ID: column in Metadata file for sample name
+#  Group: column in Metadata file for Group (treatment)
+#  R1: column in Metadata file for R1 rawdata path
+#  R2: column in METADATA file for R2 rawdata path
+#  Merged: column in Metadata file for Merged (by flash or pandaseq) rawdata path
+
+Project: test
+Metadata: metadata.tsv
+
+Workdir:  # same directory as Snakefile if not specified
+
+# --------------------------------
+# Parameters 
+# --------------------------------
+#
+### search step:
+Gene: ssu
+Cpu: 4
+# pick start and end of a region in V4 for de novo clustering
+# the default numbers are for 150bp reads
+# rule of thumb is pick a region with more reads with larger overlap
+# change to Start=577, End=657, Len_cutoff=75 for 100bp reads
+Start: 577
+End: 727
+Len_cutoff: 100 # min length for reads picked for the region
+
+### clust step
+Java_xmx: 4g  # increase this if your machine has more memory
+Java_gc_threads: 2
+Otu_dist_cutoff: 0.05
+
+
+# Refdir defaults to the same directory as Snakefile
+Refdir:
