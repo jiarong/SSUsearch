@@ -4,6 +4,7 @@ clust.ssu.sub
 clust.ssu.sub.clu
 diversity_cc.ssu
 test
+!test/test_data
 *.swp
 analysis-in-paper
 SSUsearch_db/
@@ -13,3 +14,4 @@ notebooks-pc-linux/.ipynb_checkpoints
 *.tgz
 test.COMMANDS
 .snakemake
+SSUsearch_db.save

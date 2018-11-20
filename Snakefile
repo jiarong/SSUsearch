@@ -95,9 +95,10 @@ rule all:
         # Subsequent target rules can be specified below. They should start with all_*.
         #
         expand('{project}/seqname_convert/{sample}.fa', project=Project, sample=Samples),
+        expand('{project}/search/{sample}/{sample}.forclust', project=Project, sample=Samples),
         expand('{project}/search/{sample}/{sample}.align.filter.wang.gg.taxonomy.count', project=Project, sample=Samples),
         expand('{project}/search/{sample}/{sample}.align.filter.wang.silva.taxonomy.count', project=Project, sample=Samples),
-        expand('{project}/search/{sample}/{sample}.forclust', project=Project, sample=Samples),
+        expand('{project}/taxa_summary/level.{i}.tsv', project=Project, i=[1,2,3,4,5]),
         expand('{project}/clust/{project}.biom', project=Project),
         expand('{project}/copy_correction/{project}.cc.biom', project=Project),
 
