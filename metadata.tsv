@@ -1,5 +1,5 @@
 ID	Group	R1	R2	Merged
-1c	1	test/data/1c_R1.fa	test/data/1c_R2.fa	test/data/1c_extended.fa
-1d	1	test/data/1d.fa	NA	NA
-2c	2	test/data/2c_cassava18_R1.fa	test/data/2c_cassava18_R2.fa	test/data/2c_cassava18_extended.fa
-2d	2	test/data/2d.fa	NA	NA
+1c	1	test/test_data/1c_R1.fa	test/test_data/1c_R2.fa	test/test_data/1c_extended.fa
+1d	1	test/test_data/1d.fa	NA	NA
+2c	2	test/test_data/2c_cassava18_R1.fa	test/test_data/2c_cassava18_R2.fa	test/test_data/2c_cassava18_extended.fa
+2d	2	test/test_data/2d.fa	NA	NA

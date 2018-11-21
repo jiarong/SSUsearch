@@ -21,11 +21,6 @@ git clone https://github.com/jiarong/SSUsearch.git
 cd SSUsearch
 ```
 
-Then download a test data
-```
-wget https://s3.amazonaws.com/ssusearchdb/test.tgz
-tar -xzvf test.tgz
-```
 You just need to prepare two files: `metadata.tsv` and `config.yaml` following the templates in the repo:
 
 The `metadata.tsv` file is metadata about samples with the following headers:
@@ -44,7 +39,9 @@ When the above two files are ready, you just need to run the following command:
 ./ssusearch --configfile config.yaml
 ```
 
-You will see the output in a directory name after "Project" set in `config.yaml`
+It will run ssusearch with test dataset included in the repo. All output are in a directory name by "Project" parameter in `config.yaml` (**test** in this case); `test/test.biom` and `test_cc.biom` (copy # corrected) can be used as input to mothur, QIIME and phyloseq for common community diversity analyses. 
+
+
 
 ---------------------
 
