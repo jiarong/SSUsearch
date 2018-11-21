@@ -39,9 +39,7 @@ if not os.path.exists(Refdir):
     print(mes)
     shell(
         """
-        cd {Downdir} \
-          && curl -O https://s3.amazonaws.com/ssusearchdb/SSUsearch_db.tgz \
-          && tar -xzvf SSUsearch_db.tgz
+        cd {Downdir} && curl https://zenodo.org/record/1492910/files/SSUsearch_db.tgz?download=1 -o SSUsearch_db.tgz && tar -xzvf SSUsearch_db.tgz
         """
         )
 
