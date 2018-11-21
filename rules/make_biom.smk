@@ -4,6 +4,8 @@ rule make_biom:
         clustfile='{project}/clust/complete.clust'.format(project=Project),
     output:
         '{project}/{project}.biom'.format(project=Project),
+        '{project}/clust/{project}.biom'.format(project=Project),
+        '{project}/clust/{project}.list'.format(project=Project),
     params:
         alltaxonomy=lambda wildcards, input: ' '.join(input.taxfiles)
     conda: 'envs/ssusearch.yaml'

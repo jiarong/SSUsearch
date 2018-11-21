@@ -1,7 +1,7 @@
 rule copy_correction:
     input:
         listfile='{project}/clust/{project}.list'.format(project=Project),
-        groupfile='{project}/clust/{project}.biom'.format(project=Project),
+        biomfile='{project}/clust/{project}.biom'.format(project=Project),
         taxfile=expand('{project}/search/{sample}/{sample}.align.filter.wang.gg.taxonomy', project=Project, sample=Samples),
     output:
         '{project}/{project}.cc.biom'.format(project=Project),
