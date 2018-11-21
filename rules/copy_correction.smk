@@ -4,7 +4,7 @@ rule copy_correction:
         groupfile='{project}/clust/{project}.biom'.format(project=Project),
         taxfile=expand('{project}/search/{sample}/{sample}.align.filter.wang.gg.taxonomy', project=Project, sample=Samples),
     output:
-        '{project}/copy_correction/{project}.cc.biom'.format(project=Project),
+        '{project}/{project}.cc.biom'.format(project=Project),
     conda: 'envs/ssusearch.yaml'
     shell:
         """
@@ -23,7 +23,7 @@ rule copy_correction:
                 taxonomy={Project}.gg.taxonomy, \
                 label={Otu_dist_cutoff})" \
         > /dev/null \
-        || ( echo -e "mothur classify.otu failed..\n"; exit 1; )
+        || ( echo -e "*** Rule copy_correction: classify.otu (mothur) failed; See details in {Project}/copy_correction/mothur.log\n"; exit 1; )
 
         mv {Project}.{Otu_dist_cutoff}.cons.taxonomy {Project}.cons.taxonomy
         mv {Project}.{Otu_dist_cutoff}.cons.tax.summary {Project}.cons.tax.summary
@@ -32,7 +32,7 @@ rule copy_correction:
             "#set.logfile(name=mothur.log, append=T); \
             make.shared(biom={Project}.biom)" \
         > /dev/null \
-        || ( echo -e "*** mothur make.shared failed..\n"; exit 1; )
+        || ( echo -e "*** Rule copy_correction: make.shared (mothur) failed; See details in {Project}/copy_correction/mothur.log\n"; exit 1; )
 
         python {Srcdir}/scripts/copyrighter-otutable.py {Copy_db_cc} {Project}.cons.taxonomy {Project}.shared {Project}.cc.shared
 
@@ -42,9 +42,9 @@ rule copy_correction:
                 shared={Project}.cc.shared, \
                 constaxonomy={Project}.cons.taxonomy);"\
         > /dev/null \
-        || ( echo -e "*** mothur make.biom failed..\n"; exit 1; )
+        || ( echo -e "*** Rule copy_correction: make.biom (mothur) failed; See details in {Project}/copy_correction/mothur.log\n"; exit 1; )
         mv {Project}.cc.userLabel.biom {Project}.cc.biom
-
+        cp {Project}.cc.biom ..
         ) 
         """
 

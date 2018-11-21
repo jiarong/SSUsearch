@@ -13,9 +13,17 @@ rule classify:
         (cd {Project}/search/{wildcards.sample}
         # silva tax
         rm -f {wildcards.sample}.align.filter.*.wang.taxonomy
-        mothur -q  "#set.logfile(name={wildcards.sample}.mothur.log, append=T); classify.seqs(fasta={wildcards.sample}.align.filter.fa, template={Gene_db}, taxonomy={Gene_tax}, cutoff=50, processors={threads})"
+        mothur -q  \
+            "#set.logfile(name={wildcards.sample}.mothur.log, append=T); \
+            classify.seqs(\
+                fasta={wildcards.sample}.align.filter.fa, \
+                template={Gene_db}, taxonomy={Gene_tax}, \
+                cutoff=50, processors={threads})" \
+        > /dev/null \
+        || ( echo -e "*** Rule classify: classify.seqs (mothur) with SILVA failed; See details in {wildcards.sample}.mothur.log\n"; exit 1; )
 
-        mv {wildcards.sample}.align.filter.*.wang.taxonomy {wildcards.sample}.align.filter.wang.silva.taxonomy
+        mv {wildcards.sample}.align.filter.*.wang.taxonomy \
+            {wildcards.sample}.align.filter.wang.silva.taxonomy
         
         python {Srcdir}/scripts/count-taxon.py \
             {wildcards.sample}.align.filter.wang.silva.taxonomy \
@@ -23,9 +31,17 @@ rule classify:
 
         # greengene tax
         rm -f {wildcards.sample}.align.filter.*.wang.taxonomy
-        mothur -q "#set.logfile(name={wildcards.sample}.mothur.log, append=T); classify.seqs(fasta={wildcards.sample}.align.filter.fa, template={Gene_db_cc}, taxonomy={Gene_tax_cc}, cutoff=50, processors={threads})"
+        mothur -q \
+            "#set.logfile(name={wildcards.sample}.mothur.log, append=T); \
+            classify.seqs(\
+                fasta={wildcards.sample}.align.filter.fa, \
+                template={Gene_db_cc}, taxonomy={Gene_tax_cc}, \
+                cutoff=50, processors={threads})" \
+        > /dev/null \
+        || ( echo -e "*** Rule classify: classify.seqs (mothur) with Greengene failed; See details in {wildcards.sample}.mothur.log\n"; exit 1; )
 
-        mv {wildcards.sample}.align.filter.*.wang.taxonomy {wildcards.sample}.align.filter.wang.gg.taxonomy
+        mv {wildcards.sample}.align.filter.*.wang.taxonomy \
+            {wildcards.sample}.align.filter.wang.gg.taxonomy
         python {Srcdir}/scripts/count-taxon.py \
             {wildcards.sample}.align.filter.wang.gg.taxonomy \
             {wildcards.sample}.align.filter.wang.gg.taxonomy.count
