@@ -3,7 +3,7 @@ clust.ssu
 clust.ssu.sub
 clust.ssu.sub.clu
 diversity_cc.ssu
-test
+test/*
 !test/test_data
 *.swp
 analysis-in-paper
