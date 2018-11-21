@@ -1,5 +1,7 @@
 SSUsearch
 =========
+[![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.0-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Build Status](https://travis-ci.org/jiarong/SSUsearch.svg?branch=master)](https://travis-ci.org/jiarong/SSUsearch)
 
 SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline has two key features:
 
