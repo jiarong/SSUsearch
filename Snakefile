@@ -64,9 +64,7 @@ Otu_dist_cutoff = config['Otu_dist_cutoff']
 Project = config['Project']
 print(Df)
 
-localrules:
-
-
+localrules: taxa_summary, make_biom, copy_correction, all
 
 include: 'rules/convert_seqname.smk'
 
@@ -97,8 +95,8 @@ rule all:
         expand('{project}/search/{sample}/{sample}.align.filter.wang.gg.taxonomy.count', project=Project, sample=Samples),
         expand('{project}/search/{sample}/{sample}.align.filter.wang.silva.taxonomy.count', project=Project, sample=Samples),
         expand('{project}/taxa_summary/level.{i}.tsv', project=Project, i=[1,2,3,4,5]),
-        expand('{project}/clust/{project}.biom', project=Project),
-        expand('{project}/copy_correction/{project}.cc.biom', project=Project),
+        expand('{project}/{project}.biom', project=Project),
+        expand('{project}/{project}.cc.biom', project=Project),
 
 
 ##### singularity #####
