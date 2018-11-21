@@ -44,6 +44,9 @@ When the above two files are ready, you just need to run the following command:
 It will run ssusearch with test dataset included in the repo. All output are in a directory name by "Project" parameter in `config.yaml` (**test** in this case); `test/test.biom` and `test_cc.biom` (copy # corrected) can be used as input to mothur, QIIME and phyloseq for common community diversity analyses. 
 
 
+--------------------
+
+If you prefer to run the pipeline step by step in command line, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
 
 ---------------------
 
@@ -93,7 +96,7 @@ In your default web browser, you will see a page showing several \*.ipynb links.
 
 First open overview.ipynb, and follow the instructions there. **You will need to change the data directory settings for your own data**.
 
-If you prefer to run the tutorial in terminal, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
+
 
 Makefile implementation (Deprecated) 
 ------------------------------------
