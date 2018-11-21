@@ -12,7 +12,7 @@ rule copy_correction:
         rm -f {Project}/copy_correction/{Project}.list \
             {Project}/copy_correction/{Project}.group
         cp {input.listfile} {Project}/copy_correction
-        cp {input.groupfile} {Project}/copy_correction
+        cp {input.biomfile} {Project}/copy_correction
         cat {input.taxfile} > {Project}/copy_correction/{Project}.gg.taxonomy
 
         (cd {Project}/copy_correction
