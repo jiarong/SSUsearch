@@ -17,7 +17,22 @@ Pipeline tutorial
 
 ### New! SSUsearch (1.0) is now powered by Snakemake and much easier to install and run.
 
-First clone this repo:
+#Step 1: Install dependencies
+
+Install conda: (skip if you have `conda`ready)
+```bash
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+bash miniconda.sh -b -p $HOME/miniconda
+export PATH="$HOME/miniconda/bin:$PATH"
+hash -r
+```
+
+Install snakemake: (skip if you have `snakemake`ready)
+```bash
+conda install snakemake
+```
+
+# Step 2: clone this repo and setp up `metadata.tsv` and `config.yaml`:
 ```bash
 git clone https://github.com/jiarong/SSUsearch.git
 cd SSUsearch
@@ -36,22 +51,32 @@ The `metadata.tsv` file is metadata about samples with the following headers:
 
 The `config.yaml` file has parameter setting for tools in the pipeline. It is YAML format. The `metadata.tsv` path is also set in `config.yaml`.
 
-When the above two files are ready, you just need to run the following command:
-```
+# Step 3: When the above two files are ready, you just need to run the following command.
+
+```bash
 ./ssusearch --configfile config.yaml
 ```
 
-It will run ssusearch with test dataset included in the repo. All output are in a directory name by "Project" parameter in `config.yaml` (**test** in this case); `test/test.biom` and `test_cc.biom` (copy # corrected) can be used as input to mothur, QIIME and phyloseq for common community diversity analyses. 
+It will run ssusearch with test dataset included in the repo. All output are in a directory name by "Project" parameter in `config.yaml` (**test** in this case); `test/test.biom` and `test_cc.biom` (copy # corrected) can be used as input to mothur, QIIME and phyloseq for common community diversity analyses. If you want conventional OTU table, use `test/clust/test.shared` (A.K.A shared file in mothur). Taxonomy classifications are in `test/taxa_summary/` directory.
 
+All snakemake make options are also allowed, e.g.
+```bash
+./ssusearch --configfile config.yaml --core 4
+```
+The above limit the maximum # of processes or threads to 4. See more workflow managemnt options in snakemake help (`snakemake -h`).
+
+
+# Notes
+The soil datasets used in the paper are pair end merged long reads (longest is ~300 bp) and the default Start, End, and Len\_cutoff are set for those datasets. For datasets have 100bp reads, Start=577, End=657, Len\_cutoff=75 is recommended. Rule of thumb is to pick a region with more reads with larger overlap. Details are in "Testing  the  effect  of  target  region  size  and  variable  region  on clustering" of the paper.
 
 --------------------
 
-If you prefer to run the pipeline step by step in command line, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
+If you prefer to run the pipeline step by step in linux command line, please go to http://microbial-ecology-protocols.readthedocs.org/en/latest/SSUsearch/overview.html
 
 ---------------------
 
 
-### Run on EC2 (all platform, easiest)
+### Run on EC2 (all platform)
 
 The tutorials are written in ipython notebook. The **easiest way to run it** is using amazon EC2 instances with ami **ami-7c82af16** and **add security groups https**. Add more storage according to your data size (the default is 20 Gb). [Here](http://ged.msu.edu/angus/tutorials-2012/start-up-an-ec2-instance.html) is tutorial on how to setup EC2 instances. Notebooks could be accessed through https using browser (**chrome or firefox NOT safari**). Briefly, connect into your machine by using "https://" plus your machine name or IP address, and accept the “broken certificate” message. Password to access https is **openscience**. There are some introduction [here](http://ged.msu.edu/angus/tutorials-2012/introducing-ipython-notebook.html).
 
@@ -178,7 +203,3 @@ This pipeline includes PCoA, beta-diversity indces, weighted UNIFRAC and AMOVA. 
 Makefile includes many variables for steps in pipeline. To see a full list of variables in Makefile:
 
 	make -f Makefile help
-
-Notes
-------
-The soil datasets used in the paper are pair end merged long reads (longest is ~300 bp) and the default Start, End, and Len_cutoff are set for those datasets. For datasets have 100bp reads, Start=577, End=657, Len_cutoff=75 is recommended. Rule of thumb is to pick a region with more reads with larger overlap. Details are in "Testing  the  effect  of  target  region  size  and  variable  region  on clustering" of the paper.
