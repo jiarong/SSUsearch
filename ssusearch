@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 """
 Execution script for snakemake workflows.
 """
@@ -8,9 +8,9 @@ import sys
 import pprint
 import subprocess
 
+__version__ = '1.0.0'
 
 thisdir = os.path.realpath(os.path.dirname(__file__))
-
 
 def main(args, unknown):
     # first, find the Snakefile
@@ -64,7 +64,8 @@ if __name__ == '__main__':
 
     parser.add_argument('-s', '--snakefile', default='Snakefile', help='default: %(default)s')
     parser.add_argument('--configfile', default='config.yaml', help='default: %(default)s')
-    parser.add_argument('-n', '--dry-run', action='store_true', help='default: %(default)s')
+    parser.add_argument('-n', '--dry-run', action='store_true', help='check workflow without actually running')
+    parser.add_argument('-v', '--version', action='version', version='{version}'.format(version=__version__))
     args, unknown = parser.parse_known_args()
 
     sys.exit(main(args, unknown))
