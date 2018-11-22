@@ -15,14 +15,14 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 Pipeline tutorial
 ------------------
 
-### New! SSUsearch (1.0) is now powered by Snakemake and much easier to install and run.
+## New! SSUsearch (1.0) is now powered by Snakemake and much easier to install and run.
 
-#Step 1: Install dependencies
+### Step 1: Install dependencies
 
 Install conda: (skip if you have `conda`ready)
 ```bash
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-bash miniconda.sh -b -p $HOME/miniconda
+bash miniconda.sh -b -p $HOME/miniconda  # follow the prompts and accept the defauts
 export PATH="$HOME/miniconda/bin:$PATH"
 hash -r
 ```
@@ -32,7 +32,7 @@ Install snakemake: (skip if you have `snakemake`ready)
 conda install snakemake
 ```
 
-# Step 2: clone this repo and setp up `metadata.tsv` and `config.yaml`:
+### Step 2: clone this repo and setp up `metadata.tsv` and `config.yaml`:
 ```bash
 git clone https://github.com/jiarong/SSUsearch.git
 cd SSUsearch
@@ -51,7 +51,7 @@ The `metadata.tsv` file is metadata about samples with the following headers:
 
 The `config.yaml` file has parameter setting for tools in the pipeline. It is YAML format. The `metadata.tsv` path is also set in `config.yaml`.
 
-# Step 3: When the above two files are ready, you just need to run the following command.
+### Step 3: When the above two files are ready, you just need to run the following command.
 
 ```bash
 ./ssusearch --configfile config.yaml
@@ -66,7 +66,7 @@ All snakemake make options are also allowed, e.g.
 The above limit the maximum # of processes or threads to 4. See more workflow managemnt options in snakemake help (`snakemake -h`).
 
 
-# Notes
+### Notes
 The soil datasets used in the paper are pair end merged long reads (longest is ~300 bp) and the default Start, End, and Len\_cutoff are set for those datasets. For datasets have 100bp reads, Start=577, End=657, Len\_cutoff=75 is recommended. Rule of thumb is to pick a region with more reads with larger overlap. Details are in "Testing  the  effect  of  target  region  size  and  variable  region  on clustering" of the paper.
 
 --------------------
