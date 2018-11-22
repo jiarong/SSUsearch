@@ -19,17 +19,17 @@ Pipeline tutorial
 
 ### Step 1: Install dependencies
 
-Install conda: (skip if you have `conda`ready)
+Install conda: (skip if you have `conda` ready)
 ```bash
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-bash miniconda.sh -b -p $HOME/miniconda  # follow the prompts and accept the defauts
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+bash miniconda.sh              # Make sure to "yes" to add the conda to your PATH
 export PATH="$HOME/miniconda/bin:$PATH"
 hash -r
 ```
 
 Install snakemake: (skip if you have `snakemake` version 4.8.0 or later ready)
 ```bash
-conda install snakemake
+conda install -c bioconda -c conda-forge snakemake
 ```
 
 ### Step 2: clone this repo and setp up `metadata.tsv` and `config.yaml`:
