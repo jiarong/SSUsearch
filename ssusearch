@@ -54,15 +54,17 @@ def main(args, unknown):
     return status
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='run snakemake workflows', usage='''ssusearch --snakefile <Snakefile> --configfile <config.yaml> [other snakemake params]
+    parser = argparse.ArgumentParser(
+            description='Run snakemake workflows using the given config file & metadata file.', 
+            usage="""
+*** ssusearch --snakefile <Snakefile> --configfile <config.yaml> [other snakemake params]
+*** All snakemake options are allowed. See details in snakemake help.
+            """
+    )
 
-Run snakemake workflows, using the given workflow file & config file.
-
-''')
-
-    parser.add_argument('-s', '--snakefile', default='Snakefile')
-    parser.add_argument('--configfile', default='config.yaml')
-    parser.add_argument('-n', '--dry-run', action='store_true')
+    parser.add_argument('-s', '--snakefile', default='Snakefile', help='default: %(default)s')
+    parser.add_argument('--configfile', default='config.yaml', help='default: %(default)s')
+    parser.add_argument('-n', '--dry-run', action='store_true', help='default: %(default)s')
     args, unknown = parser.parse_known_args()
 
     sys.exit(main(args, unknown))
