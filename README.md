@@ -27,7 +27,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 hash -r
 ```
 
-Install snakemake: (skip if you have `snakemake`ready)
+Install snakemake: (skip if you have `snakemake` version 4.8.0 or later ready)
 ```bash
 conda install snakemake
 ```
