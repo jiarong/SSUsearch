@@ -8,7 +8,6 @@ def sc_input(wildcards):
         if f == 'nan':
             continue
         d[name] = f
-    print(d)
     return d
 
 rule convert_seqname:
@@ -18,8 +17,6 @@ rule convert_seqname:
     conda: 'envs/ssusearch.yaml'
     shell:
         """
-        echo {input}
-
         mkdir -p {Project}/seqname_convert
         python {Srcdir}/scripts/convert_seqname.py {input} > {output}
         """

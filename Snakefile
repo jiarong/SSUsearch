@@ -25,23 +25,25 @@ Srcdir = srcdir('.') # directory where snakefile is
 if config['Refdir']:
     Refdir = config['Refdir']
 else:
-    Refdir = '{}/SSUsearch_db'.format(Srcdir)
+    Refdir = '{}'.format(Srcdir)
 
 Refdir = os.path.abspath(Refdir)
-Downdir = os.path.dirname(Refdir)
+Downdir = Refdir
+Refdir = '{}/SSUsearch_db'.format(Refdir)
 if not os.path.exists(Refdir):
     mes = (
         '*** SSUsearch_db has not been downloaded yet..\n'
         '*** Downloading to {} ..\n'
         '*** Make sure you have write permission..\n'
         '***   or else change "Refdir" in config file..\n'
-        ).format(Downdir)
+    ).format(Downdir)
     print(mes)
     shell(
         """
         cd {Downdir} && curl https://zenodo.org/record/1492910/files/SSUsearch_db.tgz?download=1 -o SSUsearch_db.tgz && tar -xzvf SSUsearch_db.tgz
         """
-        )
+    )
+
 
 Gene = config['Gene']
 Hmm = '{}/Hmm.{}.hmm'.format(Refdir, Gene)   # hmm model for ssu
@@ -62,7 +64,9 @@ Java_xmx = config['Java_xmx']  # increase this if your machine has more memory
 Java_gc_threads = config['Java_gc_threads']
 Otu_dist_cutoff = config['Otu_dist_cutoff']
 Project = config['Project']
-print(Df)
+
+print('Please double check the metadata info:')
+print(Df.to_string(index=False, justify='right'))
 
 localrules: taxa_summary, make_biom, copy_correction, all
 
