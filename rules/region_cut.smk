@@ -36,7 +36,8 @@ rule region_cut:
             {wildcards.sample}.align.filter \
             {Start} {End} {Len_cutoff}
         
-        mv {wildcards.sample}.align.filter.{Start}to{End}.cut.lenscreen \
-            {wildcards.sample}.forclust
+        python {Srcdir}/scripts/filter-pe.py \
+            {wildcards.sample}.align.filter.{Start}to{End}.cut.lenscreen \
+        > {wildcards.sample}.forclust
         )
         """
