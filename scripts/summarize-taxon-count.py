@@ -18,8 +18,7 @@ Summmary from taxon count table (from count-taxon.py)
 EXCLUDE = ['Archaea', 'Eukaryota', 'unknown']
 #EXCLUDE = []
 TOP=10
-#ORDER=True  #reverse the order
-ORDER=False  #normal order
+ORDER=True  # Most abundant to least abundant
 def readData(f):
     """
     Parse taxon count table (from count-taxon.py)
@@ -119,10 +118,8 @@ def main():
 
         lisSampOrder.append(samp)
 
-    items = sorted(dCombined.items(), key= itemgetter(1), reverse=True)
-    items =  items[:TOP]
-    if ORDER:
-        items.reverse()
+    items = sorted(dCombined.items(), key= itemgetter(1), reverse=ORDER)
+    #items =  items[:TOP]
     taxas, nums = zip(*items)
 
     d2 = {}
