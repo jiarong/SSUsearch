@@ -23,6 +23,7 @@ def main(args, unknown):
             sys.stderr.write('Error: cannot find Snakefile at {}\n'.format(snakefile))
             sys.exit(-1)
 
+    snakefile = os.path.abspath(snakefile)
     # next, find the workflow configfile, a.k.a config.yaml
     configfile = None
     if os.path.exists(args.configfile) and not os.path.isdir(args.configfile):
@@ -39,7 +40,7 @@ def main(args, unknown):
         sys.stderr.write('Error: cannot find paramsfile {}\n'.format(args.paramsfile))
         sys.exit(-1)
 
-    config = dict()
+    configfile = os.path.abspath(configfile)
 
     print('--------')
     print('Details:')

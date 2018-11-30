@@ -7,9 +7,9 @@
 #  Merged: column in Metadata file for Merged (by flash or pandaseq) rawdata path
 
 Project: test
-Metadata: metadata.tsv
+Metadata: metadata.tsv   # use absolute path if possible; relative path should be relative to Workdir, including paths within metadata.tsv.
 
-Workdir:  # same directory as Snakefile if not specified
+Workdir: # same directory as Snakefile if not specified
 
 # --------------------------------
 # Parameters 
@@ -17,7 +17,7 @@ Workdir:  # same directory as Snakefile if not specified
 #
 ### search step:
 Gene: ssu
-Cpu: 4
+Cpu: 4    # max threads for each process/task
 # pick start and end of a region in V4 for de novo clustering
 # the default numbers are for 150bp reads
 # rule of thumb is pick a region with more reads with larger overlap

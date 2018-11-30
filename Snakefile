@@ -11,8 +11,6 @@ VERSION = '1.0.0'
 ### set minimum snakemake version ###
 min_version('4.8.0')
 
-### load globals
-configfile: 'config.yaml'
 if config['Workdir']:
     workdir: config['Workdir']
 
