@@ -1,6 +1,6 @@
 SSUsearch
 =========
-[![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.0-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥5.2.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/jiarong/SSUsearch.svg?branch=master)](https://travis-ci.org/jiarong/SSUsearch)
 
 SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity analysis. THe pipeline requires HMMER3.1, mothur, RDP mcclust, and python numpy, pandas, scipy, matplotlib, and screed package. The pipeline has two key features:
@@ -27,7 +27,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 hash -r
 ```
 
-Install snakemake: (skip if you have `snakemake` version 4.8.0 or later ready)
+Install snakemake: (skip if you have `snakemake` version 5.2.0 or later ready)
 ```bash
 conda install -c bioconda -c conda-forge snakemake
 ```
@@ -46,8 +46,8 @@ The `metadata.tsv` file is metadata about samples with the following headers:
 - R1: path for unmerged R1 of paired ends
 - R2: path unmerged R2 of paired ends
 - merged: path merged of paired ends
-- if relative paths are used, they should be relative to working direcory (WORKDIR in config.yaml file)
-- use NA or empty string ("") if no such a file
+- **Try to use absolute paths to avoid troulbe; If relative paths are used, they should be relative to working direcory (WORKDIR in config.yaml file)**
+- ssuserch internally only pick one read from paired ends for clustering and taxonomy summary; it is very flexible on input formats: merged, unmerged, single ends are all allowed. Single end data can be put under R1. use NA or empty string ("") if no such a file.
 
 The `config.yaml` file has parameter setting for tools in the pipeline. It is YAML format. The `metadata.tsv` path is also set in `config.yaml`.
 
