@@ -48,7 +48,10 @@ def main(args, unknown):
     print('\tconfigfile: {}'.format(configfile))
     print('--------')
 
-    arg_list = ['snakemake', '--use-conda', '--snakefile', snakefile, '--configfile', configfile]
+    if args.dryrun:
+        arg_list = ['snakemake', '--use-conda', '--snakefile', snakefile, '--configfile', configfile, '--dryrun']
+    else:
+        arg_list = ['snakemake', '--use-conda', '--snakefile', snakefile, '--configfile', configfile]
     arg_list = arg_list + unknown
     # run!!
     status = subprocess.call(arg_list)
@@ -65,7 +68,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-s', '--snakefile', default='Snakefile', help='default: %(default)s')
     parser.add_argument('--configfile', default='config.yaml', help='default: %(default)s')
-    parser.add_argument('-n', '--dry-run', action='store_true', help='check workflow without actually running')
+    parser.add_argument('-n', '--dryrun', action='store_true', help='check workflow without actually running')
     parser.add_argument('-v', '--version', action='version', version='{version}'.format(version=__version__))
     args, unknown = parser.parse_known_args()
 
