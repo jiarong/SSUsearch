@@ -5,6 +5,7 @@ rule clust:
         '{project}/clust/complete.clust'.format(project=Project),
     params:
         allforclust=lambda wildcards, input: ' '.join(input)
+    threads: Java_gc_threads
     conda: 'envs/ssusearch.yaml'
     shell:
         """
@@ -16,7 +17,8 @@ rule clust:
         echo -e "*** Mcclust derep starting..\n"
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
             -XX:ParallelGCThreads={Java_gc_threads} \
-            derep -a -o derep.fasta temp.mcclust.names temp.txt combined_seqs.afa
+            derep -a -o derep.fasta temp.mcclust.names temp.txt combined_seqs.afa \
+            || ( echo -e "*** mcclust derep failed..\n"; exit 1; )
         rm temp.txt
         #Convert mcclust names to mothur names
         python {Srcdir}/scripts/mcclust2mothur_names_file.py temp.mcclust.names temp.mothur.names
@@ -37,12 +39,14 @@ rule clust:
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
             -XX:ParallelGCThreads={Java_gc_threads} \
             dmatrix -l 25 -o matrix.bin -i {Project}.names \
-            -I derep.precluster.fasta 2> /dev/null
+            -I derep.precluster.fasta 2> /dev/null \
+            || ( echo -e "*** mcclust dmatrix fail.."; exit 1; )
 
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
             -XX:ParallelGCThreads={Java_gc_threads} \
             cluster -m upgma -i {Project}.names -s {Project}.groups \
-            -o complete.clust -d matrix.bin 2> /dev/null
+            -o complete.clust -d matrix.bin 2> /dev/null  \
+            || ( echo -e "*** mcclust cluster fail.."; exit 1; )
 
         echo -e "*** Mccclust finished..\n"
         )
