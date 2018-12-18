@@ -7,9 +7,9 @@
 #  Merged: column in Metadata file for Merged (by flash or pandaseq) rawdata path
 
 Project: test
-Metadata: metadata.tsv   # use absolute path if possible; relative path should be relative to Workdir, including paths within metadata.tsv.
+Metadata: metadata.tsv   # use absolute path to avoid trouble; relative path should be relative to Workdir, including paths within metadata.tsv.
 
-Workdir: # same directory as Snakefile if not specified
+Workdir: # the directory where ssusearch is run if not specified
 
 # --------------------------------
 # Parameters 
@@ -27,7 +27,7 @@ End: 727
 Len_cutoff: 100 # min length for reads picked for the region
 
 ### clust step
-Java_xmx: 4g  # increase this if your machine has more memory
+Java_xmx: 4g  # depends on data size; Increase this if you see error like "java.lang.OutOfMemoryError"
 Java_gc_threads: 2
 Otu_dist_cutoff: 0.05
 
