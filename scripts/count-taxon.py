@@ -78,6 +78,7 @@ def read_mothur_taxonomy(f):
             lis2.append(item)
 
         t = tuple(lis2)
+
         if name.endswith('/1'):
             other = '{}/2'.format(name[:-2])
             if other in d:
@@ -85,6 +86,9 @@ def read_mothur_taxonomy(f):
                 if other_taxon.count(NA) > lis2.count(NA):
                     _ = d.pop(other)
                     d[name] = t
+
+            else:
+                d[name] = t
             
         elif name.endswith('/2'):
             other = '{}/1'.format(name[:-2])
@@ -93,6 +97,9 @@ def read_mothur_taxonomy(f):
                 if other_taxon.count(NA) > lis2.count(NA):
                     _ = d.pop(other)
                     d[name] = t
+
+            else:
+                d[name] = t
 
         else:
             d[name] = t
