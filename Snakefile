@@ -59,7 +59,6 @@ Start = config['Start']
 End = config['End']
 Len_cutoff = config['Len_cutoff']
 Java_xmx = config['Java_xmx']  # increase this if your machine has more memory
-Java_gc_threads = config['Java_gc_threads']
 Otu_dist_cutoff = config['Otu_dist_cutoff']
 Project = config['Project']
 

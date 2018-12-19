@@ -28,7 +28,6 @@ Len_cutoff: 100 # min length for reads picked for the region
 
 ### clust step
 Java_xmx: 4g  # depends on data size; Increase this if you see error like "java.lang.OutOfMemoryError"
-Java_gc_threads: 2
 Otu_dist_cutoff: 0.05
 
 

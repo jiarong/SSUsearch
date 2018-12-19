@@ -5,7 +5,7 @@ rule clust:
         '{project}/clust/complete.clust'.format(project=Project),
     params:
         allforclust=lambda wildcards, input: ' '.join(input)
-    threads: Java_gc_threads
+    threads: config['Cpu']
     conda: 'envs/ssusearch.yaml'
     shell:
         """
@@ -15,7 +15,7 @@ rule clust:
 
         (cd {Project}/clust
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
-            -XX:ParallelGCThreads={Java_gc_threads} \
+            -XX:ParallelGCThreads={threads} \
             derep -a -o derep.fasta temp.mcclust.names temp.txt combined_seqs.afa \
             || ( echo -e "*** mcclust derep failed..\n"; exit 1; )
         echo -e "*** Mcclust derep finished..\n"
@@ -37,7 +37,7 @@ rule clust:
 
 
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
-            -XX:ParallelGCThreads={Java_gc_threads} \
+            -XX:ParallelGCThreads={threads} \
             dmatrix -l 25 -o matrix.bin -i {Project}.names \
             -I derep.precluster.fasta 2> /dev/null \
             || ( echo -e "*** mcclust dmatrix fail.."; exit 1; )
@@ -45,7 +45,7 @@ rule clust:
 
 
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
-            -XX:ParallelGCThreads={Java_gc_threads} \
+            -XX:ParallelGCThreads={threads} \
             cluster -i {Project}.names -s {Project}.groups \
             -o complete.clust -d matrix.bin \
             || ( echo -e "*** mcclust cluster fail.."; rm -f complete.clust; exit 1; )
