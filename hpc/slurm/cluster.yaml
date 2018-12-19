@@ -1,0 +1,24 @@
+__default__:
+  time: '1:00:00'
+  mem: 4G
+  name: '{rule}'
+
+convert_seqname:
+  time: '4:00:00'
+  mem: 2G
+
+hmmsearch:
+  time: '4:00:00'
+  mem: 4G
+
+region_cut:
+  time: '1:00:00'
+  mem: 4G
+
+classify:
+  time: '1:00:00'
+  mem: 2G
+
+clust:
+  time: '4:00:00'
+  mem: 5G

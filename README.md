@@ -65,8 +65,25 @@ All snakemake make options are also allowed, e.g.
 ```
 The above limit the maximum # of processes or threads to 4. See more workflow managemnt options in snakemake help (`snakemake -h`).
 
+### Run on HPC
+
+SSUsearch can also easily run in computer clusters. The search step in the pipeline, most computationally instensive step, can be run parallelly for each sample. There is a convenient script in `hpc/slurm/submit.sub` for SLURM (used in MSU HPCC). You just need to modify the following vaviables in the script (using absolute paths):
+
+Workdir=.                                   # a working directory    
+SSUsearch=ssusearch                         # ssusearch file
+Configfile=config.yaml                      # config.yaml file
+Clust_config=hpc/slurm/cluster.yaml         # hpc/slurm/cluster.yaml file
+Jobscript=hpc/slurm/jobscript.sh            # hpc/slurm/jobscript.sh file
+
+Then submit the job:
+```bash
+sbatch hpc/slurm/submit.sub
+```
 
 ### Notes
+
+Installing dependencies is a part of the pipeline, done by conda. It only need to be done once for each working directory but it might be slow (>10 mins) depending on the network connection. If installation is interupted somehow, you need to delete the `.snakemake` directory in your working directory before running again.
+
 The soil datasets used in the paper are pair end merged long reads (longest is ~300 bp) and the default Start, End, and Len\_cutoff are set for those datasets. For datasets have 100bp reads, Start=577, End=657, Len\_cutoff=75 is recommended. Rule of thumb is to pick a region with more reads with larger overlap. Details are in "Testing  the  effect  of  target  region  size  and  variable  region  on clustering" of the paper.
 
 --------------------
