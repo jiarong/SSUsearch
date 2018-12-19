@@ -93,7 +93,7 @@ def makeMothurListFile(f,listFile,target_cutoff):
         mes = ('*** {} does not have clustering results with distance cutoff '
                 'as low as {}. Rerun with high Java_xmx might give clustering '
                 'results of cutoffs')
-        sys.stderr.write(mes.foramt(f, target_cutoff))
+        sys.stderr.write(mes.format(f, target_cutoff))
         sys.exit(1)
 
 def main():
