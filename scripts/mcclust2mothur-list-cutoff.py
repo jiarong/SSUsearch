@@ -87,12 +87,12 @@ def makeMothurListFile(f,listFile,target_cutoff):
                     d[cluNum] = Sname
 
     if _cutoff == None:
-        sys.stderr.write('*** {} is empty..'.format(f))
+        sys.stderr.write('*** ERROR {} is empty..'.format(f))
         sys.exit(1)
     elif _cutoff < target_cutoff:
-        mes = ('*** {} does not have clustering results with distance cutoff '
-                'as low as {}. Rerun with high Java_xmx might give clustering '
-                'results of cutoffs')
+        mes = ('*** ERROR {} does not have clustering results with distance '
+                'cutoff as low as {}. Rerun with high Java_xmx might give '
+                'clustering results of cutoffs')
         sys.stderr.write(mes.format(f, target_cutoff))
         sys.exit(1)
 
