@@ -46,9 +46,9 @@ rule clust:
 
         Clustering -Xmx{Java_xmx} -XX:+UseParallelOldGC \
             -XX:ParallelGCThreads={Java_gc_threads} \
-            cluster -m upgma -i {Project}.names -s {Project}.groups \
-            -o complete.clust -d matrix.bin  \
-            || ( echo -e "*** mcclust cluster fail.."; exit 1; )
+            cluster -i {Project}.names -s {Project}.groups \
+            -o complete.clust -d matrix.bin \
+            || ( echo -e "*** mcclust cluster fail.."; rm -f complete.clust; exit 1; )
         echo -e "*** Mcclust cluster finished..\n" 
         )
         """
