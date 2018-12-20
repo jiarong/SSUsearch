@@ -69,16 +69,20 @@ The above limit the maximum # of processes or threads to 4. See more workflow ma
 
 SSUsearch can also easily run in computer clusters. The search step in the pipeline, most computationally instensive step, can be run parallelly for each sample. There is a convenient script in `hpc/slurm/submit.sub` for SLURM (used in MSU HPCC). You just need to modify the following vaviables in the script (using absolute paths):
 
+```bash
 Workdir=.                                   # a working directory    
 SSUsearch=ssusearch                         # ssusearch file
 Configfile=config.yaml                      # config.yaml file
 Clust_config=hpc/slurm/cluster.yaml         # hpc/slurm/cluster.yaml file
 Jobscript=hpc/slurm/jobscript.sh            # hpc/slurm/jobscript.sh file
+```
 
 Then submit the job:
 ```bash
 sbatch hpc/slurm/submit.sub
 ```
+
+Results will be in `Workdir`.
 
 ### Notes
 
