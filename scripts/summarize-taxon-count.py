@@ -15,7 +15,8 @@ Summmary from taxon count table (from count-taxon.py)
 
 """
 
-EXCLUDE = ['Archaea', 'Eukaryota', 'unknown']
+#EXCLUDE = ['Archaea', 'Eukaryota', 'unknown']
+#EXCLUDE = ['unknown']
 #EXCLUDE = []
 TOP=10
 ORDER=True  # Most abundant to least abundant
