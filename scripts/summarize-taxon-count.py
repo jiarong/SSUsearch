@@ -127,15 +127,15 @@ def main():
         fw.write('Sample\t{}\n'.format('\t'.join(taxas)))
         for key in lisSampOrder:
             lis = []
-            for word, count in items[:TOP]:
+            for word, count in items:
                 pct = d[key].get(word, 0)
                 lis.append(pct*100)
-            fw.write('{}\t{}\n'.format(
-                key, 
-                '\t'.join(('{:.1f}'.format(x) for x in lis)
+            fw.write(
+                    '{}\t{}\n'.format(
+                        key, 
+                        '\t'.join(('{:.1f}'.format(x) for x in lis))
+                        )
                     )
-                )
-            )
             d2[key] = lis
 
 if __name__ == '__main__':
