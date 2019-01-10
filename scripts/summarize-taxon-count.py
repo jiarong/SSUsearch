@@ -134,7 +134,7 @@ def main():
             fw.write(
                     '{}\t{}\n'.format(
                         key, 
-                        '\t'.join(('{:.1f}'.format(x) for x in lis))
+                        '\t'.join(('{}'.format(x) for x in lis))
                         )
                     )
             d2[key] = lis
