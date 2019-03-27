@@ -28,9 +28,9 @@ $SSUsearch                                \
     --configfile $Configfile              \
     --cores 100                           \
     --local-cores 1                       \
-    --cluster-config $Clust_config         \
+    --cluster-config $Clust_config        \
     --js $Jobscript                       \
-    --cluster "$QSUB"                     \
+    --cluster \""$QSUB"\"                 \
     --use-conda                           \
     --latency-wait 120                    \
     --rerun-incomplete                    \

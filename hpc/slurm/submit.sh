@@ -25,6 +25,6 @@ $SSUsearch                               \
     --use-conda                          \
     --rerun-incomplete                   \
     --keep-going                         \
-    --cluster "$QSUB" $@                 \
+    --cluster \""$QSUB"\" $@             \
     |& tee $logdir/snakemake.log
 
