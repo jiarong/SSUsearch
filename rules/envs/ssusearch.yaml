@@ -34,7 +34,7 @@ dependencies:
   - jpeg=9c
   - kiwisolver=1.0.1
   - libffi=3.2.1
-  - libgcc-ng=7.2.0
+  - libgcc-ng
   - libgfortran-ng=7.2.0
   - libiconv=1.15
   - libpng=1.6.35
