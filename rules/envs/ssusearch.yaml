@@ -62,7 +62,7 @@ dependencies:
   - six=1.11.0
   - sqlite=3.25.3
   - subprocess32=3.5.3
-  - tk=8.6.8
+  - tk
   - tornado=5.1.1
   - wheel=0.32.2
   - xorg-libxau=1.0.8
