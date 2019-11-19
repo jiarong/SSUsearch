@@ -9,7 +9,7 @@ SSUsearch is pipeline for identify SSU rRNA gene and use them for diversity anal
 
 2. Scalibility: 5 Gb peak mem and 5 CPU hours on about 40 Gb data.
 
-**The manuscript has been accepted in AEM (doi: 10.1128/AEM.02772-15). It is also available on [research gate](https://www.researchgate.net/publication/282945621_Microbial_community_analysis_with_ribosomal_gene_fragments_from_shotgun_metagenomes).**
+**The manuscript has been published in AEM (doi: 10.1128/AEM.02772-15). It is also available on [research gate](https://www.researchgate.net/publication/282945621_Microbial_community_analysis_with_ribosomal_gene_fragments_from_shotgun_metagenomes).**
 
 
 Pipeline tutorial
@@ -42,12 +42,12 @@ You just need to prepare two files: `metadata.tsv` and `config.yaml` following t
 
 The `metadata.tsv` file is metadata about samples with the following headers:
 - ID: sample name
-- GROUP: treatment that a sample belong to
-- R1: path for unmerged R1 of paired ends
-- R2: path unmerged R2 of paired ends
-- merged: path merged of paired ends
+- GROUP: treatment that a sample belongs to
+- R1: path of unmerged R1 of paired ends
+- R2: path of unmerged R2 of paired ends
+- merged: path of merged paired ends
 - **Try to use absolute paths to avoid troulbe; If relative paths are used, they should be relative to working direcory (WORKDIR in config.yaml file)**
-- ssuserch internally only pick one read from paired ends for clustering and taxonomy summary; it is very flexible on input formats: merged, unmerged, single ends are all allowed. Single end data can be put under R1. use NA or empty string ("") if no such a file.
+- ssusearch internally only pick one read from paired ends for clustering and taxonomy summary; it is very flexible on input formats: merged, unmerged, single ends are all allowed. Single end data can be put under R1. use NA or empty string ("") if no such a file.
 
 The `config.yaml` file has parameter setting for tools in the pipeline. It is YAML format. The `metadata.tsv` path is also set in `config.yaml`.
 
